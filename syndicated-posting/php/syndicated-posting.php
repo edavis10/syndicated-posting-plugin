@@ -77,7 +77,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 <br style="clear: both;"/>
 
 </div>
-<?php // TODO: ?>
+<?php // TODO: Iterate through all items ?>
 <div class="wrap">
   <h2>Syndication Prospects</h2>
   <table class="widefat">
