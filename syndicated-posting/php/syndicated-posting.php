@@ -51,33 +51,33 @@ if (!class_exists("SyndicatedPostingPlugin")) {
    } ?>
 
 <div class="wrap">
-  <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>">
     <h2>Feeds &amp; Search Terms</h2>
-    <table class="widefat">
-      <tbody>
-        <tr>
-          <td>
-            Enter <strong>feed URLs</strong>, one per line or comma-separated
-          </td>
-          <td>
-            Enter <strong>search phrases</strong>, one per line or comma-separated
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <textarea name="spFeedUrls" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$spOptions['feed_urls']), 'SyndicatedPostingPlugin') ?></textarea>
-          </td>
-          <td>
-<textarea name="spSearchPhrases" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$spOptions['search_phrases']), 'SyndicatedPostingPlugin') ?></textarea>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <div class="submit">
-      <input type="submit" name="update_syndicatedPostingPluginSettings" value="<?php _e('Update Settings', 'SyndicatedPostingPlugin') ?>" /></div>
-  </form>
-</div>
+    <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" style="width:50%; float:left;">
+      <fieldset>
+        <legend>Enter <strong>feed URLs</strong>, one per line or comma-separated</legend>
+        <textarea name="spFeedUrls" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$spOptions['feed_urls']), 'SyndicatedPostingPlugin') ?></textarea>
 
+        <div class="submit" style="text-align:left">
+          <input type="submit" name="update_syndicatedPostingPluginSettings" value="<?php _e('Update Database', 'SyndicatedPostingPlugin') ?>" />
+        </div>
+      </fieldset>
+    </form>
+
+    <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>"  style="width:50%; float:left;">
+      <fieldset>
+        <legend>Enter <strong>search phrases</strong>, one per line or comma-separated</legend>
+        <textarea name="spSearchPhrases" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$spOptions['search_phrases']), 'SyndicatedPostingPlugin') ?></textarea>
+
+        <div class="submit" style="text-align:left">
+          <input type="submit" name="update_syndicatedPostingPluginSettings" value="<?php _e('Update Search', 'SyndicatedPostingPlugin') ?>" />
+        </div>
+      </fieldset>
+    </form>
+
+<br style="clear: both;"/>
+
+</div>
+<?php // TODO: ?>
 <div class="wrap">
   <h2>Syndication Prospects</h2>
   <table class="widefat">
