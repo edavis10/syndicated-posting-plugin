@@ -27,8 +27,38 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       update_option($this->adminOptionsName,$this->options);
     }
 
+    function pollFeeds() {
+      $this->getAdminOptions();
+      // Use the built in Magpie RSS parser that is in Wordpress
+      require(ABSPATH . WPINC . '/rss.php');
+      $feed = fetch_rss('http://feeds.feedburner.com/theadmin');
+      foreach ($feed->items as $item ) {
+        if ($this->newFeedItem($item) <= 0) {
+          $this->addPost($item);
+        } else {
+          // Skip item
+        }
+      }
+    }
+
+    // Add the feed item to the wp_posts database as a SyndicatedPost
+    function addPost($rss){
+      $post = new SyndicatedPost();
+      $post->fillFromRss($rss);
+      wp_insert_post($post);
+    }
+
+    // Check if the feed item is new to us based off the title
+    function newFeedItem($rss){
+      global $wpdb;
+      $post = $wpdb->get_var("SELECT COUNT(*) FROM wp_posts WHERE post_title = ('" . $rss['title'] . "');");
+      return $post;
+    }
+
     function printAdminPage() {
       $this->getAdminOptions();
+      // TODO: remove from here and schedule
+      $this->pollFeeds();
       $spOptions = $this->options;
       if (isset($_POST['update_syndicatedPostingPluginSettings'])) {
         if (isset($_POST['spFeedUrls'])) {

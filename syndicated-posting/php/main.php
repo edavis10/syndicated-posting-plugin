@@ -1,5 +1,6 @@
 <?php
 include ('syndicated-posting.php');
+include ('syndicated-post.php');
 
 if (class_exists("SyndicatedPostingPlugin")) {
   $sp_plugin = new SyndicatedPostingPlugin();
