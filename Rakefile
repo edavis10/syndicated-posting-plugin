@@ -5,7 +5,7 @@ PLUGIN_FOLDER = '/home/edavis/dev/Business/Customers/Shane-and-Peter/earthzine/w
 SRC_FOLDER = '/home/edavis/dev/Business/Customers/Shane-and-Peter/syndication-plugin/trunk'
 
 desc "Copy the plugin source to the plugin folder"
-task :copy do
+task :copy => [:remove] do
   cp_r("#{SRC_FOLDER}/syndicated-posting", "#{PLUGIN_FOLDER}")
 end
 
