@@ -12,9 +12,8 @@ if (!function_exists("SyndicatedPostingPlugin_admin")) {
     if (!isset($sp_plugin)) {
       return;
     }
-    // TODO: Change to management page
-    if (function_exists('add_options_page')) {
-      add_options_page('Syndication Posting', 'Syndication', 9, basename(__FILE__), array(&$sp_plugin, 'printAdminPage'));
+    if (function_exists('add_management_page')) {
+      add_management_page('Syndication Posting', 'Syndication', 9, basename(__FILE__), array(&$sp_plugin, 'printAdminPage'));
     }
   }
  }
