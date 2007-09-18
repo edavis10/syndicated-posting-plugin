@@ -32,11 +32,9 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       $spOptions = $this->options;
       if (isset($_POST['update_syndicatedPostingPluginSettings'])) {
         if (isset($_POST['spFeedUrls'])) {
-// TODO: escape values / apply_filters?
           $spOptions['feed_urls'] = apply_filters('contant_save_pre', $_POST['spFeedUrls']);
         }   
         if (isset($_POST['spSearchPhrases'])) {
-// TODO: escape values / apply_filters?
           $spOptions['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
         }   
         update_option($this->adminOptionsName, $spOptions);
