@@ -32,6 +32,13 @@ if (!class_exists("SyndicatedPost")) {
       }
 
       // Post date
+      /// RSS
+      if (!empty($rss['pubdate'])) {
+        $this->post_date = $wpdb->escape(date( 'Y-m-d H:i:s',strtotime($rss['pubdate'])));
+        $this->post_date_gmt = $wpdb->escape(date( 'Y-m-d H:i:s',strtotime($rss['pubdate'])));
+      }
+
+      /// ATOM
       if (!empty($rss['published'])) {
         $this->post_date = $wpdb->escape($rss['published']);
         $this->post_date_gmt = $wpdb->escape($rss['published']);
@@ -44,9 +51,16 @@ if (!class_exists("SyndicatedPost")) {
 
 
       // Author name
+      /// RSS
+      if (!empty($rss['dc']['creator'])) {
+        $this->meta_author = $wpdb->escape($rss['dc']['creator']);
+      }
+
+      /// ATOM
       if (!empty($rss['author_name'])) {
         $this->meta_author = $wpdb->escape($rss['author_name']);
       }
+
       // RSS feeds use Description
       if (!empty($rss['description'])) {
         $this->post_content = $wpdb->escape($rss['description']);
