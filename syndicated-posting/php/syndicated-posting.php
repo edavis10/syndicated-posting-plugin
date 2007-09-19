@@ -78,7 +78,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     function getFeedItems() {
       global $wpdb;
-      $posts = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'syndicate'", ARRAY_A);
+      $posts = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'syndicate' ORDER BY post_date DESC", ARRAY_A);
       return $posts;
     }
     
