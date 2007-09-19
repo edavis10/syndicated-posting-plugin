@@ -27,18 +27,35 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       update_option($this->adminOptionsName,$this->options);
     }
 
+    function getFeeds() {
+      $feeds = split(",",$this->options['feed_urls']);      
+      return $feeds;
+    }
+
     function pollFeeds() {
-      $this->getAdminOptions();
       // Use the built in Magpie RSS parser that is in Wordpress
       require(ABSPATH . WPINC . '/rss.php');
-      $feed = fetch_rss('http://feeds.feedburner.com/theadmin');
-      foreach ($feed->items as $item ) {
-        if ($this->newFeedItem($item) <= 0) {
-          $this->addPost($item);
-        } else {
-          // Skip item
+
+      $this->getAdminOptions();
+
+      // Get all the feeds
+      $feed_urls = $this->getFeeds();
+      foreach ($feed_urls as $feed_url)
+        {
+          $feed = fetch_rss($feed_url);
+
+          // Feed good?
+          if (!$feed == false) {
+
+            foreach ($feed->items as $item ) {
+              if ($this->newFeedItem($item) <= 0) {
+                $this->addPost($item);
+              } else {
+                // Skip item
+              }
+            }
+          }
         }
-      }
     }
 
     // Add the feed item to the wp_posts database as a SyndicatedPost
@@ -51,8 +68,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     // Check if the feed item is new to us based off the title
     function newFeedItem($rss){
       global $wpdb;
-      // TODO: escape data http://codex.wordpress.org/Function_Reference/wpdb_Class
-      $post = $wpdb->get_var("SELECT COUNT(*) FROM wp_posts WHERE post_title = ('" . $rss['title'] . "');");
+      $post = $wpdb->get_var("SELECT COUNT(*) FROM wp_posts WHERE post_title = ('" . $wpdb->escape($rss['title']) . "');");
       return $post;
     }
 
@@ -69,7 +85,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       $spOptions = $this->options;
       if (isset($_POST['update_syndicatedPostingPluginSettings'])) {
         if (isset($_POST['spFeedUrls'])) {
-          $spOptions['feed_urls'] = apply_filters('contant_save_pre', $_POST['spFeedUrls']);
+          $spOptions['feed_urls'] = apply_filters('content_save_pre', $_POST['spFeedUrls']);
         }   
         if (isset($_POST['spSearchPhrases'])) {
           $spOptions['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);

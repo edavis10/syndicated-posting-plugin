@@ -19,9 +19,11 @@ if (!class_exists("SyndicatedPost")) {
     }
 
     function fillFromRss($rss){
+      global $wpdb;
+
       // Title
       if (!empty($rss['title'])) {
-        $this->post_title = $rss['title'];
+        $this->post_title = $wpdb->escape($rss['title']);
       }
       
       // Link -> source link Article Url
@@ -30,7 +32,7 @@ if (!class_exists("SyndicatedPost")) {
 
       // Description TODO: ATOM feed data also
       if (!empty($rss['description'])) {
-        $this->post_content = $rss['description'];
+        $this->post_content = $wpdb->escape($rss['description']);
       }
 
       // GUID
