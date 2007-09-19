@@ -173,6 +173,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         // Found posts
         $css_class = '';
         foreach ($feed_posts as $post) {
+          // TODO: Check boundries, e.g. no author name so print an empty cell
           if($css_class == 'alternate') { $css_class = ''; } else { $css_class = 'alternate'; }
           $post_meta = $this->getFeedItemMeta($post['ID']);
 ?>        
