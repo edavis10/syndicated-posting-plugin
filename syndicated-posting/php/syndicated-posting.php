@@ -51,8 +51,15 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     // Check if the feed item is new to us based off the title
     function newFeedItem($rss){
       global $wpdb;
+      // TODO: escape data http://codex.wordpress.org/Function_Reference/wpdb_Class
       $post = $wpdb->get_var("SELECT COUNT(*) FROM wp_posts WHERE post_title = ('" . $rss['title'] . "');");
       return $post;
+    }
+
+    function getFeedItems() {
+      global $wpdb;
+      $posts = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'syndicate'", ARRAY_A);
+      return $posts;
     }
 
     function printAdminPage() {
@@ -107,7 +114,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 <br style="clear: both;"/>
 
 </div>
-<?php // TODO: Iterate through all items ?>
+
 <div class="wrap">
   <h2>Syndication Prospects</h2>
   <table class="widefat">
@@ -124,24 +131,34 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       </tr>
     </thead>
     <tbody id="the-list">
-      <tr class="alternate" id="post-54">
-	<td style="font-weight:bold">Earth Blog		</td>
-        <td>2007-07-31 4:55:25 am</td>
-	<td>Welcome to Earthzine!		</td>
-	<td>C.J. Man</td>
-	<td><a class="edit" rel="permalink" href="http://www.earthzine.org/2007/07/31/guns-germs-and-steel-by-jared-diamond/">View</a></td>
-	<td><a class="edit" href="post.php?action=edit&post=53">Syndicate</a></td>
-	<td><a onclick="return deleteSomething( 'post', 53, 'You are about to delete this post \'"Guns, Germs and Steel" by Jared Diamond\'.\n\'OK\' to delete, \'Cancel\' to stop.' );" class="delete" href="post.php?action=delete&post=53&_wpnonce=43b533e904">Delete</a></td>
+<?php
+                      $feed_posts = $this->getFeedItems();
+      if (!empty($feed_posts) && is_array($feed_posts)) {
+        // Found posts
+        $css_class = '';
+        foreach ($feed_posts as $post) {
+          if($css_class == 'alternate') { $css_class = ''; } else { $css_class = 'alternate'; }
+?>        
+          <tr class="<?php echo $css_class;?>" id="post-54">
+          <td style="font-weight:bold">Earth Blog		</td>
+             <td><?php echo strftime("%Y-%m-%d <br> %r", $post['post_date']) ?></td>
+	  <td><?php echo $post['post_title'] ?></td>
+	  <td>C.J. Man</td>
+	  <td><a class="edit" rel="permalink" href="http://www.earthzine.org/2007/07/31/guns-germs-and-steel-by-jared-diamond/">View</a></td>
+	  <td><a class="edit" href="post.php?action=edit&post=53">Syndicate</a></td>
+	  <td><a onclick="return deleteSomething( 'post', 53, 'You are about to delete this post \'"Guns, Germs and Steel" by Jared Diamond\'.\n\'OK\' to delete, \'Cancel\' to stop.' );" class="delete" href="post.php?action=delete&post=53&_wpnonce=43b533e904">Delete</a></td>
+        </tr>
+<?php
+            }
+        } else {
+          // No posts
+?>
+      <tr class=""  id="post-54">
+	<td colspan="7">No Prospects found.</td>
       </tr>
-      <tr class="" id="post-53">
-	<td style="font-weight:bold">Earth Blog		</td>
-        <td>2007-07-31 4:55:25 am</td>
-	<td>Welcome to Earthzine!		</td>
-	<td>C.J. Man</td>
-	<td><a class="edit" rel="permalink" href="http://www.earthzine.org/2007/07/31/guns-germs-and-steel-by-jared-diamond/">View</a></td>
-	<td><a class="edit" href="post.php?action=edit&post=53">Syndicate</a></td>
-	<td><a onclick="return deleteSomething( 'post', 53, 'You are about to delete this post \'"Guns, Germs and Steel" by Jared Diamond\'.\n\'OK\' to delete, \'Cancel\' to stop.' );" class="delete" href="post.php?action=delete&post=53&_wpnonce=43b533e904">Delete</a></td>
-      </tr>
+<?php
+        }
+?>
     </tbody>
 </table>
 </div>
