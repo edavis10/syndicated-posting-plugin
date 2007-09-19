@@ -63,7 +63,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     function addPost($rss){
       $post = new SyndicatedPost();
       $post->fillFromRss($rss);
-      wp_insert_post($post);
+      $post_id = wp_insert_post($post);
+      add_post_meta($post_id,'syndicated_author',$post->meta_author,true);
     }
 
     // Check if the feed item is new to us based off the title
@@ -77,6 +78,13 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       global $wpdb;
       $posts = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'syndicate'", ARRAY_A);
       return $posts;
+    }
+    
+    function getFeedItemMeta($post_id) {
+      global $wpdb;
+      // Author
+      $metas = $wpdb->get_row("SELECT * FROM wp_postmeta WHERE post_id = (" . $wpdb->escape($post_id) . ") AND meta_key = 'syndicated_author';", ARRAY_A);
+      return $metas;
     }
 
     function printAdminPage() {
@@ -155,12 +163,13 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         $css_class = '';
         foreach ($feed_posts as $post) {
           if($css_class == 'alternate') { $css_class = ''; } else { $css_class = 'alternate'; }
+          $post_meta = $this->getFeedItemMeta($post['ID']);
 ?>        
           <tr class="<?php echo $css_class;?>" id="post-54">
           <td style="font-weight:bold">Earth Blog		</td>
           <td><?php echo $post['post_date'] ?></td>
 	  <td><?php echo $post['post_title'] ?></td>
-	  <td>C.J. Man</td>
+	  <td><?php echo $post_meta['meta_value'] ?></td>
 	  <td><a class="edit" rel="permalink" href="http://www.earthzine.org/2007/07/31/guns-germs-and-steel-by-jared-diamond/">View</a></td>
 	  <td><a class="edit" href="post.php?action=edit&post=53">Syndicate</a></td>
 	  <td><a onclick="return deleteSomething( 'post', 53, 'You are about to delete this post \'"Guns, Germs and Steel" by Jared Diamond\'.\n\'OK\' to delete, \'Cancel\' to stop.' );" class="delete" href="post.php?action=delete&post=53&_wpnonce=43b533e904">Delete</a></td>

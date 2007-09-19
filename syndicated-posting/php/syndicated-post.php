@@ -13,6 +13,8 @@ if (!class_exists("SyndicatedPost")) {
     var $post_date_gmt;
     // TODO: Check
     var $post_type = 'syndicate';
+
+    var $meta_author;
     
 
     // Constructor
@@ -41,7 +43,9 @@ if (!class_exists("SyndicatedPost")) {
 
       // Author name
       // ['author_name']
-
+      if (!empty($rss['author_name'])) {
+        $this->meta_author = $wpdb->escape($rss['author_name']);
+      }
       // RSS feeds use Description
       if (!empty($rss['description'])) {
         $this->post_content = $wpdb->escape($rss['description']);
