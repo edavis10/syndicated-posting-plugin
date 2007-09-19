@@ -15,6 +15,7 @@ if (!class_exists("SyndicatedPost")) {
     var $post_type = 'syndicate';
 
     var $meta_author;
+    var $meta_link;
     
 
     // Constructor
@@ -36,8 +37,10 @@ if (!class_exists("SyndicatedPost")) {
         $this->post_date_gmt = $wpdb->escape($rss['published']);
       }
       
-      // Link -> source link Article Url
-      //['link']
+      // Source Link
+      if (!empty($rss['link'])) {
+        $this->meta_link = $wpdb->escape($rss['link']);
+      }
 
       // SOurce Pub title
 
