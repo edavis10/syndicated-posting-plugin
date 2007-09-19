@@ -48,9 +48,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           // Feed good?
           if (!$feed == false) {
             $feed_title = $feed->channel['title'];
+            $feed_link = $feed->channel['link'];
             foreach ($feed->items as $item ) {
               if ($this->newFeedItem($item) <= 0) {
-                $this->addPost($item, $feed_title);
+                $this->addPost($item, $feed_title,$feed_link);
               } else {
                 // Skip item
               }
@@ -60,13 +61,14 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     // Add the feed item to the wp_posts database as a SyndicatedPost
-    function addPost($rss, $title){
+    function addPost($rss, $title,$link){
       $post = new SyndicatedPost();
       $post->fillFromRss($rss);
       $post_id = wp_insert_post($post);
       add_post_meta($post_id,'syndicated_author',$post->meta_author,true);
-      add_post_meta($post_id,'syndicated_source_link',$post->meta_link,true);
+      add_post_meta($post_id,'syndicated_link',$post->meta_link,true);
       add_post_meta($post_id,'syndicated_source_title',$title,true);
+      add_post_meta($post_id,'syndicated_source_link',$link,true);
 
     }
 
@@ -175,9 +177,13 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           $post_meta = $this->getFeedItemMeta($post['ID']);
 ?>        
           <tr class="<?php echo $css_class;?>" id="post-54">
-          <td style="font-weight:bold"><a href="" target="_blank"><?php echo $post_meta['syndicated_source_title'] ?></a></td>
+          <td style="font-weight:bold">
+             <a href='<?php echo $post_meta['syndicated_source_link'] ?>' target="_blank">
+               <?php echo $post_meta['syndicated_source_title'] ?>
+             </a>
+          </td>
           <td><?php echo $post['post_date'] ?></td>
-	  <td><a href='<?php echo $post_meta['syndicated_source_link'] ?>' target="_blank"><?php echo $post['post_title'] ?></a></td>
+	  <td><a href='<?php echo $post_meta['syndicated_link'] ?>' target="_blank"><?php echo $post['post_title'] ?></a></td>
 	  <td><?php echo $post_meta['syndicated_author'] ?></td>
 	  <td><a class="edit" rel="permalink" href="http://www.earthzine.org/2007/07/31/guns-germs-and-steel-by-jared-diamond/">View</a></td>
 	  <td><a class="edit" href="post.php?action=edit&post=53">Syndicate</a></td>

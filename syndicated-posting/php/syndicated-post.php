@@ -37,15 +37,13 @@ if (!class_exists("SyndicatedPost")) {
         $this->post_date_gmt = $wpdb->escape($rss['published']);
       }
       
-      // Source Link
+      // Content Link
       if (!empty($rss['link'])) {
         $this->meta_link = $wpdb->escape($rss['link']);
       }
 
-      // SOurce Pub title
 
       // Author name
-      // ['author_name']
       if (!empty($rss['author_name'])) {
         $this->meta_author = $wpdb->escape($rss['author_name']);
       }
@@ -57,11 +55,6 @@ if (!class_exists("SyndicatedPost")) {
       // ATOM feeds use content
       if (!empty($rss['atom_content'])) {
         $this->post_content = $wpdb->escape($rss['atom_content']);
-      }
-
-      // GUID
-      if (!empty($rss['guid'])) {
-        //        $this->post_content = $rss['guid'];
       }
 
     }
