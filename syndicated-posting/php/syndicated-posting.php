@@ -40,14 +40,15 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
       // Get all the feeds
       $feed_urls = $this->getFeeds();
+
       foreach ($feed_urls as $feed_url)
         {
-          $feed = fetch_rss($feed_url);
+          $feed = fetch_rss(trim($feed_url));
 
           // Feed good?
           if (!$feed == false) {
-
             foreach ($feed->items as $item ) {
+
               if ($this->newFeedItem($item) <= 0) {
                 $this->addPost($item);
               } else {
@@ -157,7 +158,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 ?>        
           <tr class="<?php echo $css_class;?>" id="post-54">
           <td style="font-weight:bold">Earth Blog		</td>
-             <td><?php echo strftime("%Y-%m-%d <br> %r", $post['post_date']) ?></td>
+          <td><?php echo $post['post_date'] ?></td>
 	  <td><?php echo $post['post_title'] ?></td>
 	  <td>C.J. Man</td>
 	  <td><a class="edit" rel="permalink" href="http://www.earthzine.org/2007/07/31/guns-germs-and-steel-by-jared-diamond/">View</a></td>
