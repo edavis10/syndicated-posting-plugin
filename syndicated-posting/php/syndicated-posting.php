@@ -98,20 +98,56 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       return $post_meta;
     }
 
+    function copyFeedItemToPost($post_id) {
+      global $wpdb;
+      $feed_post = $wpdb->get_row("SELECT * FROM wp_posts WHERE id = (" . $wpdb->escape($post_id) . ");", ARRAY_A);
+      $feed_meta = $this->getFeedItemMeta($post_id);
+
+      $post = new SyndicatedPost();
+      $post->fillFromPost($feed_post,$feed_meta);
+
+      $post_id = wp_insert_post($post);
+      add_post_meta($post_id,'syndicated_author',$post->meta_author,true);
+      add_post_meta($post_id,'syndicated_link',$post->meta_link,true);
+      add_post_meta($post_id,'syndicated_source_title',$post->meta_source_title,true);
+      add_post_meta($post_id,'syndicated_source_link',$post->meta_source_link,true);
+      return $post_id;
+    }
+
+    function syndicateFeedItem($post_id) {
+      // Copy the feed item to a post with metadata
+      $new_post_id = $this->copyFeedItemToPost($post_id);
+      // Mark the feed item as syndicated
+      
+      // Redirect to the new post
+      echo $new_post_id;
+    }
+
     function printAdminPage() {
       $this->getAdminOptions();
       // TODO: remove from here and schedule
       $this->pollFeeds();
-      $spOptions = $this->options;
-      if (isset($_POST['update_syndicatedPostingPluginSettings'])) {
-        if (isset($_POST['spFeedUrls'])) {
-          $spOptions['feed_urls'] = apply_filters('content_save_pre', $_POST['spFeedUrls']);
-        }   
-        if (isset($_POST['spSearchPhrases'])) {
-          $spOptions['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
-        }   
-        update_option($this->adminOptionsName, $spOptions);
 
+      // Check if the page is calling itself from a syndicate action and has a numeric id set
+      if (isset($_GET['action']) && 
+          $_GET['action'] == 'syndicate' &&
+          isset($_GET['id']) &&
+          preg_match("/\d+/",$_GET['id'])) {
+        $this->syndicateFeedItem($_GET['id']);
+      } else {
+
+
+
+        $spOptions = $this->options;
+        if (isset($_POST['update_syndicatedPostingPluginSettings'])) {
+          if (isset($_POST['spFeedUrls'])) {
+            $spOptions['feed_urls'] = apply_filters('content_save_pre', $_POST['spFeedUrls']);
+          }   
+          if (isset($_POST['spSearchPhrases'])) {
+            $spOptions['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
+          }   
+          update_option($this->adminOptionsName, $spOptions);
+          
         ?>
 <div class="updated">
   <p>
@@ -121,7 +157,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
   </p>
 </div>
 <?php 
-   } ?>
+        }
+ ?>
 
 <div class="wrap">
     <h2>Feeds &amp; Search Terms</h2>
@@ -187,7 +224,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 	  <td><a href='<?php echo $post_meta['syndicated_link'] ?>' target="_blank"><?php echo $post['post_title'] ?></a></td>
 	  <td><?php echo $post_meta['syndicated_author'] ?></td>
 	  <td><a class="edit" rel="permalink" href='<?php echo $post_meta['syndicated_link']?>'>View</a></td>
-	  <td><a class="edit" href="post.php?action=edit&post=<?php echo $post['ID']?>">Syndicate</a></td>
+<!--	  <td><a class="edit" href="post.php?action=edit&post=<?php echo $post['ID']?>">Syndicate</a></td> -->
+          <td><a class="edit" href="<?php echo $_SERVER["REQUEST_URI"] . '&action=syndicate&id=' . $post['ID'] ; ?>">Syndicate</a></td> 
 	  <td><a onclick="return deleteSomething( 'post', 53, 'You are about to delete this post \'"Guns, Germs and Steel" by Jared Diamond\'.\n\'OK\' to delete, \'Cancel\' to stop.' );" class="delete" href="post.php?action=delete&post=53&_wpnonce=43b533e904">Delete</a></td>
         </tr>
 <?php
@@ -207,6 +245,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
  <?php
 
+        } // END syndication action check
     }
   } // End class
  }

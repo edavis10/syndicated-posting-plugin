@@ -16,6 +16,8 @@ if (!class_exists("SyndicatedPost")) {
 
     var $meta_author;
     var $meta_link;
+    var $meta_source_title;
+    var $meta_source_link;
     
 
     // Constructor
@@ -71,6 +73,43 @@ if (!class_exists("SyndicatedPost")) {
         $this->post_content = $wpdb->escape($rss['atom_content']);
       }
 
+    }
+
+
+    function fillFromPost($post,$meta){
+      global $wpdb;
+
+      // Title
+      if (!empty($post['post_title'])) {
+        $this->post_title = $wpdb->escape($post['post_title']);
+      }
+
+      // Content
+      if (!empty($post['post_content'])) {
+        $this->post_content = $wpdb->escape($post['post_content']);
+      }
+
+      // Syndicated Author
+      if (!empty($meta['syndicated_author'])) {
+        $this->meta_author = $wpdb->escape($meta['syndicated_author']);
+      }
+
+      // Syndicated Link
+      if (!empty($meta['syndicated_link'])) {
+        $this->meta_link = $wpdb->escape($meta['syndicated_link']);
+      }
+
+      // Syndicated Source Title
+      if (!empty($meta['syndicated_source_title'])) {
+        $this->meta_source_title = $wpdb->escape($meta['syndicated_source_title']);
+      }
+
+      // Syndicated Source Link
+      if (!empty($meta['syndicated_source_link'])) {
+        $this->meta_source_link = $wpdb->escape($meta['syndicated_source_link']);
+      }
+
+      $this->post_type = 'post';
     }
 
   }
