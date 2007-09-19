@@ -177,7 +177,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           if($css_class == 'alternate') { $css_class = ''; } else { $css_class = 'alternate'; }
           $post_meta = $this->getFeedItemMeta($post['ID']);
 ?>        
-          <tr class="<?php echo $css_class;?>" id="post-54">
+          <tr class="<?php echo $css_class;?>" id="post-<?php echo $post['ID'] ?>">
           <td style="font-weight:bold">
              <a href='<?php echo $post_meta['syndicated_source_link'] ?>' target="_blank">
                <?php echo $post_meta['syndicated_source_title'] ?>
@@ -186,8 +186,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           <td><?php echo $post['post_date'] ?></td>
 	  <td><a href='<?php echo $post_meta['syndicated_link'] ?>' target="_blank"><?php echo $post['post_title'] ?></a></td>
 	  <td><?php echo $post_meta['syndicated_author'] ?></td>
-	  <td><a class="edit" rel="permalink" href="http://www.earthzine.org/2007/07/31/guns-germs-and-steel-by-jared-diamond/">View</a></td>
-	  <td><a class="edit" href="post.php?action=edit&post=53">Syndicate</a></td>
+	  <td><a class="edit" rel="permalink" href='<?php echo $post_meta['syndicated_link']?>'>View</a></td>
+	  <td><a class="edit" href="post.php?action=edit&post=<?php echo $post['ID']?>">Syndicate</a></td>
 	  <td><a onclick="return deleteSomething( 'post', 53, 'You are about to delete this post \'"Guns, Germs and Steel" by Jared Diamond\'.\n\'OK\' to delete, \'Cancel\' to stop.' );" class="delete" href="post.php?action=delete&post=53&_wpnonce=43b533e904">Delete</a></td>
         </tr>
 <?php
