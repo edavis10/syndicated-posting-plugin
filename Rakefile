@@ -14,3 +14,4 @@ task :remove do
   rm_rf("#{PLUGIN_FOLDER}/syndicated-posting")
 end
 
+task :default => [:copy]
