@@ -196,20 +196,14 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
 
         // Form update
-        $spOptions = $this->options;
         if (isset($_POST['update_syndicatedPostingPluginSettings'])) {
           if (isset($_POST['spFeedUrls'])) {
-            $spOptions['feed_urls'] = apply_filters('content_save_pre', $_POST['spFeedUrls']);
+            $this->options['feed_urls'] = apply_filters('content_save_pre', $_POST['spFeedUrls']);
           }   
           if (isset($_POST['spSearchPhrases'])) {
-            $spOptions['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
+            $this->options['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
           }   
-          update_option($this->adminOptionsName, $spOptions);
-          // Since we saved the option, pull them back down.
-          // TODO: should remove extra call
-          $this->getAdminOptions();
-          $spOptions = $this->options;
-          
+          update_option($this->adminOptionsName, $this->options);
         ?>
 <div class="updated">
   <p>
@@ -246,7 +240,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" style="width:50%; float:left;">
       <fieldset>
         <legend>Enter <strong>feed URLs</strong>, one per line or comma-separated</legend>
-        <textarea name="spFeedUrls" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$spOptions['feed_urls']), 'SyndicatedPostingPlugin') ?></textarea>
+        <textarea name="spFeedUrls" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$this->options['feed_urls']), 'SyndicatedPostingPlugin') ?></textarea>
 
         <div class="submit" style="text-align:left">
           <input type="submit" name="update_syndicatedPostingPluginSettings" value="<?php _e('Update Database', 'SyndicatedPostingPlugin') ?>" />
@@ -257,7 +251,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>"  style="width:50%; float:left;">
       <fieldset>
         <legend>Enter <strong>search phrases</strong>, one per line or comma-separated</legend>
-        <textarea name="spSearchPhrases" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$spOptions['search_phrases']), 'SyndicatedPostingPlugin') ?></textarea>
+        <textarea name="spSearchPhrases" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$this->options['search_phrases']), 'SyndicatedPostingPlugin') ?></textarea>
 
         <div class="submit" style="text-align:left">
           <input type="submit" name="update_syndicatedPostingPluginSettings" value="<?php _e('Update Search', 'SyndicatedPostingPlugin') ?>" />
