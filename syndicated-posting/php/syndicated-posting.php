@@ -189,17 +189,27 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         $this->options['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
       }   
       update_option($this->adminOptionsName, $this->options);
+    }
+    
+    // Function to check the request to see if an item is to be deleted
+    function itemDeleted() {
+      if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']) && preg_match("/\d+/",$_GET['id'])) {
+        return true;
+          } else {
+        return false;
+          }
+    }
+
+    function showUpdatedMessage($message) {
       ?>
 <div class="updated">
   <p>
     <strong>
-      <?php _e("Settings Updated.", "SyndicatedPostingPlugin");?>
+      <?php _e($message, "SyndicatedPostingPlugin");?>
     </strong>
   </p>
 </div>
-
-<?php 
-
+        <?php
     }
 
     function printAdminPage() {
@@ -219,24 +229,14 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         // Settings updated
         if (isset($_POST['update_syndicatedPostingPluginSettings'])) {
           $this->updateSettings();
+          $this->showUpdatedMessage('Settings updated');
         }
-          // Delete item
-          if (isset($_GET['action']) && 
-              $_GET['action'] == 'delete' &&
-              isset($_GET['id']) &&
-              preg_match("/\d+/",$_GET['id'])) {
-            $this->deleteFeedItem($_GET['id']);
-        ?>
-<div class="updated">
-  <p>
-    <strong>
-      <?php _e("Prospect removed.", "SyndicatedPostingPlugin");?>
-    </strong>
-  </p>
-</div>
-<?php 
+
+        // Item deleted
+        if ($this->itemDeleted()) {
+          $this->deleteFeedItem($_GET['id']);
+          $this->showUpdatedMessage('Prospect removed');
         }
-          // End Delete Item
  ?>
 
 <div class="wrap">
