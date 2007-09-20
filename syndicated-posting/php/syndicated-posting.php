@@ -189,6 +189,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         $this->options['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
       }   
       update_option($this->adminOptionsName, $this->options);
+
+      // Re-poll feeds because the the settings changes.
+      $this->pollFeeds();
+
     }
     
     // Function to check the request to see if an item is to be deleted
@@ -214,8 +218,6 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     function printAdminPage() {
       $this->getAdminOptions();
-      // TODO: remove from here and schedule
-      $this->pollFeeds();
 
       // Check if the page is calling itself from a syndicate action and has a numeric id set
       if (isset($_GET['action']) && 
