@@ -1,4 +1,5 @@
 <?php
+  // TODO: Change to include_once (and any others too)
 include ('syndicated-posting.php');
 include ('syndicated-post.php');
 
@@ -17,6 +18,11 @@ if (!function_exists("SyndicatedPostingPlugin_admin")) {
       add_management_page('Syndication Posting', 'Syndication', 9, basename(__FILE__), array(&$sp_plugin, 'printAdminPage'));
     }
   }
+ }
+
+// Initialize the scheduling
+if (!wp_next_scheduled('wp_syndicated-posting_poll_feeds_hook')) {
+  wp_schedule_event(time(), 'hourly', 'wp_syndicated-posting_poll_feeds_hook');
  }
 
 

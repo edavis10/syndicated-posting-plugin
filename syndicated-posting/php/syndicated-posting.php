@@ -6,6 +6,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     // Constructor
     function SyndicatedPostingPlugin() {
+      // Add a custom action WP can use for scheduling.  This is the reference that WP will call
+      add_action('wp_syndicated-posting_poll_feeds_hook', array(&$this, 'pollFeeds'));
       
     }
 
