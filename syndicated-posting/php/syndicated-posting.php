@@ -32,6 +32,11 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       return $feeds;
     }
 
+    function getSearches() {
+      $phrases = split(",",$this->options['search_phrases']);      
+      return $phrases;
+    }
+
     function pollFeeds() {
       // Use the built in Magpie RSS parser that is in Wordpress
       require(ABSPATH . WPINC . '/rss.php');
@@ -81,7 +86,26 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     function getFeedItems() {
       global $wpdb;
-      $posts = $wpdb->get_results("SELECT * FROM wp_posts WHERE post_type = 'syndicate' ORDER BY post_date DESC", ARRAY_A);
+
+      $query = "SELECT * FROM wp_posts WHERE post_type = 'syndicate' ";
+
+      $phrases = $this->getSearches();
+      if (!empty($phrases)) {
+        $query .= " AND ( ";
+        foreach ($phrases as $phrase) {
+          // Filter out empty strings
+          if ( strlen($phrase) > 1 ) {
+            $query .= "post_content LIKE '%" . $wpdb->escape($phrase) . "%' OR ";
+            $query .= "post_title LIKE '%" . $wpdb->escape($phrase) . "%' OR ";
+          }
+        }
+        // Hack for the final OR
+        $query .= " 0) ";
+      }
+      // Add on the final ORDER
+      $query .= " ORDER BY post_date DESC; ";
+
+      $posts = $wpdb->get_results($query, ARRAY_A);
       return $posts;
     }
     
@@ -169,6 +193,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
             $spOptions['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
           }   
           update_option($this->adminOptionsName, $spOptions);
+          // Since we saved the option, pull them back down.
+          // TODO: should remove extra call
+          $this->getAdminOptions();
+          $spOptions = $this->options;
           
         ?>
 <div class="updated">
