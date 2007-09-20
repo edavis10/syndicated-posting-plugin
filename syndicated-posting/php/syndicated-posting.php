@@ -181,6 +181,27 @@ if (!class_exists("SyndicatedPostingPlugin")) {
      <?php
     }
 
+    function updateSettings() {
+      if (isset($_POST['spFeedUrls'])) {
+        $this->options['feed_urls'] = apply_filters('content_save_pre', $_POST['spFeedUrls']);
+      }   
+      if (isset($_POST['spSearchPhrases'])) {
+        $this->options['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
+      }   
+      update_option($this->adminOptionsName, $this->options);
+      ?>
+<div class="updated">
+  <p>
+    <strong>
+      <?php _e("Settings Updated.", "SyndicatedPostingPlugin");?>
+    </strong>
+  </p>
+</div>
+
+<?php 
+
+    }
+
     function printAdminPage() {
       $this->getAdminOptions();
       // TODO: remove from here and schedule
@@ -195,27 +216,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       } else {
 
 
-        // Form update
+        // Settings updated
         if (isset($_POST['update_syndicatedPostingPluginSettings'])) {
-          if (isset($_POST['spFeedUrls'])) {
-            $this->options['feed_urls'] = apply_filters('content_save_pre', $_POST['spFeedUrls']);
-          }   
-          if (isset($_POST['spSearchPhrases'])) {
-            $this->options['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
-          }   
-          update_option($this->adminOptionsName, $this->options);
-        ?>
-<div class="updated">
-  <p>
-    <strong>
-      <?php _e("Settings Updated.", "SyndicatedPostingPlugin");?>
-    </strong>
-  </p>
-</div>
-<?php 
+          $this->updateSettings();
         }
-          // End Form Update
-
           // Delete item
           if (isset($_GET['action']) && 
               $_GET['action'] == 'delete' &&
