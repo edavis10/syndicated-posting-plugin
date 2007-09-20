@@ -114,13 +114,29 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       return $post_id;
     }
 
+    /// Sets the post_type to be `syndicated`
+    function markFeedItemAsSyndicated($post_id) {
+      global $wpdb;
+      return $wpdb->query("UPDATE $wpdb->posts SET post_type = 'syndicated' WHERE ID = (" . $post_id .");");
+    }
+
     function syndicateFeedItem($post_id) {
       // Copy the feed item to a post with metadata
       $new_post_id = $this->copyFeedItemToPost($post_id);
       // Mark the feed item as syndicated
-      
+      $this->markFeedItemAsSyndicated($post_id);
       // Redirect to the new post
-      echo $new_post_id;
+      // TODO: Hack
+      $redirect = get_option('siteurl') . '/wp-admin/post.php?action=edit&post=' . $new_post_id;
+      ?>
+        <a href="<?php echo $redirect ?>">Redirecting to your post</a>
+        <script type="text/javascript">
+           <!-- 
+           window.location = "<?php echo $redirect ?>"
+
+           -->
+        </script>
+     <?php
     }
 
     function printAdminPage() {
