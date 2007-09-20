@@ -27,14 +27,25 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       update_option($this->adminOptionsName,$this->options);
     }
 
+    function getSettings($option) {
+      $raw_settings = array_unique(split(",",$this->options[$option]));
+
+      $finals = array();
+      // Remove empty values
+      foreach ($raw_settings as $setting) {
+        if (trim($setting) != "") {
+          $finals[] = $setting;
+        }
+      }
+      return $finals;
+    }
+
     function getFeeds() {
-      $feeds = split(",",$this->options['feed_urls']);      
-      return $feeds;
+      return $this->getSettings('feed_urls');
     }
 
     function getSearches() {
-      $phrases = split(",",$this->options['search_phrases']);      
-      return $phrases;
+      return $this->getSettings('search_phrases');
     }
 
     function pollFeeds() {
@@ -90,11 +101,12 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       $query = "SELECT * FROM wp_posts WHERE post_type = 'syndicate' ";
 
       $phrases = $this->getSearches();
-      if (!empty($phrases)) {
+
+      if (!empty($phrases) && is_array($phrases)) {
         $query .= " AND ( ";
         foreach ($phrases as $phrase) {
           // Filter out empty strings
-          if ( strlen($phrase) > 1 ) {
+          if ( strlen($phrase) > 0 ) {
             $query .= "post_content LIKE '%" . $wpdb->escape($phrase) . "%' OR ";
             $query .= "post_title LIKE '%" . $wpdb->escape($phrase) . "%' OR ";
           }
