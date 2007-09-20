@@ -32,6 +32,8 @@ if (isset($sp_plugin)) {
   add_action('activate_syndicated-posting/syndicated-posting.php', array(&$sp_plugin,'init'));
   add_action('admin_menu', 'SyndicatedPostingPlugin_admin');
   // Filters
+  add_filter('the_content', array(&$sp_plugin,'addOriginalSource'));
+  add_filter('the_content', array(&$sp_plugin,'addReadSource'));
 
  }
 

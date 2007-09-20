@@ -218,7 +218,21 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         <?php
     }
 
-    function printAdminPage() {
+    // Filter for the_content()
+    function addOriginalSource($content) {
+      global $id;
+      $c = '<p><em>Originally Published by ' . $id . '</em></p>' . $content;
+      return $c;
+    }
+
+    // Filter for the_content()
+    function addReadSource($content) {
+      global $id;
+      $c = $content . '<p>Read the rest of this article on' . $id . '</p>';
+      return $c;
+    }
+ 
+   function printAdminPage() {
       $this->getAdminOptions();
 
       // Check if the page is calling itself from a syndicate action and has a numeric id set
