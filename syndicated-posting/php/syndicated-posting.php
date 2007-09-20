@@ -120,6 +120,12 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       return $wpdb->query("UPDATE $wpdb->posts SET post_type = 'syndicated' WHERE ID = (" . $post_id .");");
     }
 
+    /// Sets the post_type to be `syndicate_deleted`
+    function deleteFeedItem($post_id) {
+      global $wpdb;
+      return $wpdb->query("UPDATE $wpdb->posts SET post_type = 'syndicated_deleted' WHERE ID = (" . $post_id .");");
+    }
+
     function syndicateFeedItem($post_id) {
       // Copy the feed item to a post with metadata
       $new_post_id = $this->copyFeedItemToPost($post_id);
@@ -153,7 +159,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       } else {
 
 
-
+        // Form update
         $spOptions = $this->options;
         if (isset($_POST['update_syndicatedPostingPluginSettings'])) {
           if (isset($_POST['spFeedUrls'])) {
@@ -174,6 +180,25 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 </div>
 <?php 
         }
+          // End Form Update
+
+          // Delete item
+          if (isset($_GET['action']) && 
+              $_GET['action'] == 'delete' &&
+              isset($_GET['id']) &&
+              preg_match("/\d+/",$_GET['id'])) {
+            $this->deleteFeedItem($_GET['id']);
+        ?>
+<div class="updated">
+  <p>
+    <strong>
+      <?php _e("Prospect removed.", "SyndicatedPostingPlugin");?>
+    </strong>
+  </p>
+</div>
+<?php 
+        }
+          // End Delete Item
  ?>
 
 <div class="wrap">
@@ -242,7 +267,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 	  <td><a class="edit" rel="permalink" href='<?php echo $post_meta['syndicated_link']?>'>View</a></td>
 <!--	  <td><a class="edit" href="post.php?action=edit&post=<?php echo $post['ID']?>">Syndicate</a></td> -->
           <td><a class="edit" href="<?php echo $_SERVER["REQUEST_URI"] . '&action=syndicate&id=' . $post['ID'] ; ?>">Syndicate</a></td> 
-	  <td><a onclick="return deleteSomething( 'post', 53, 'You are about to delete this post \'"Guns, Germs and Steel" by Jared Diamond\'.\n\'OK\' to delete, \'Cancel\' to stop.' );" class="delete" href="post.php?action=delete&post=53&_wpnonce=43b533e904">Delete</a></td>
+	  <td><a class="delete" href="<?php echo $_SERVER["REQUEST_URI"] . '&action=delete&id=' . $post['ID'] ; ?>">Delete</a></td>
         </tr>
 <?php
             }
