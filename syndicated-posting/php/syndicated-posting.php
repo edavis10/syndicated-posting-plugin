@@ -218,13 +218,30 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         <?php
     }
 
-    // Filter for the_content()
+    /// Checks the metadata to see if this post is from a syndicated post.
+    /// If so it will return the metadata, if not it will return false
+    function isSyndicatedPost($post_id) {
+      $meta = $this->getFeedItemMeta($post_id);
+      if (!empty($meta['syndicated_source_link'])&&
+          !empty($meta['syndicated_source_title'])&&
+          !empty($meta['syndicated_link'])) {
+        return $meta;
+      } else {
+        return false;
+      }
+    }
+
+    /// Filter for the_content()
     function addOriginalSource($content) {
       global $id;
-      $meta = $this->getFeedItemMeta($id);
-      $c  = '<p><em>Originally Published by <a href="' . $meta['syndicated_source_link'] . '">' .$meta['syndicated_source_title'] . '</a></em></p>';
-      $c .= $content;
-      $c .= '<p>Read the rest of the article on <a href="' . $meta['syndicated_link'] . '">' .$meta['syndicated_source_title'] . '</a>.</p>';
+
+      if (!empty($id) && $meta = $this->isSyndicatedPost($id)) {
+        $c  = '<p><em>Originally Published by <a href="' . $meta['syndicated_source_link'] . '">' .$meta['syndicated_source_title'] . '</a></em></p>';
+        $c .= $content;
+        $c .= '<p>Read the rest of the article on <a href="' . $meta['syndicated_link'] . '">' .$meta['syndicated_source_title'] . '</a>.</p>';
+      } else {
+        $c = $content;
+      }
       return $c;
     }
 
