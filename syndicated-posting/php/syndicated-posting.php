@@ -221,17 +221,13 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     // Filter for the_content()
     function addOriginalSource($content) {
       global $id;
-      $c = '<p><em>Originally Published by ' . $id . '</em></p>' . $content;
+      $meta = $this->getFeedItemMeta($id);
+      $c  = '<p><em>Originally Published by <a href="' . $meta['syndicated_source_link'] . '">' .$meta['syndicated_source_title'] . '</a></em></p>';
+      $c .= $content;
+      $c .= '<p>Read the rest of the article on <a href="' . $meta['syndicated_link'] . '">' .$meta['syndicated_source_title'] . '</a>.</p>';
       return $c;
     }
 
-    // Filter for the_content()
-    function addReadSource($content) {
-      global $id;
-      $c = $content . '<p>Read the rest of this article on' . $id . '</p>';
-      return $c;
-    }
- 
    function printAdminPage() {
       $this->getAdminOptions();
 
