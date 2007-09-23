@@ -245,6 +245,35 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       return $c;
     }
 
+    /// Filter for the admin panel for posted content
+    function addAdminSourceInformation($content='') {
+      if (isset($_GET['post'])) {
+        $id = $_GET['post'];
+      } elseif (isset($_POST['post'])) {
+        $id = $_POST['post'];
+      } else {
+        $id = '';
+      }
+
+      if (!empty($id) && $meta = $this->isSyndicatedPost($id)) {
+        $c = $content;
+        $c .= '<fieldset id="syndication-admin">';
+        $c .= "  <p>";
+        $c .= "    <label for='source_pub_title'>Source Publication Title</label><br />";
+        $c .= "    <input id='source_pub_title' type='text' value='none' name='source_pub_title' class='syndication-input' />";
+        $c .= "  <p>";
+        $c .= "  </p>";
+        $c .= "    <label for='source_artilce_url'>Article URL</label><br />";
+        $c .= "    <input id='source_article_url' type='text' value='none' name='source_article_url' class='syndication-input' />";
+        $c .= "  </p>";
+        $c .= '</fieldset>';
+      } else {
+        $c = $content;
+      }
+
+      return $c;
+    }
+
    function printAdminPage() {
       $this->getAdminOptions();
 

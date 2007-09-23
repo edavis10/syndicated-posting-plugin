@@ -33,6 +33,7 @@ if (isset($sp_plugin)) {
   add_action('admin_menu', 'SyndicatedPostingPlugin_admin');
   // Filters
   add_filter('the_content', array(&$sp_plugin,'addOriginalSource'));
+  add_filter('the_editor', array(&$sp_plugin,'addAdminSourceInformation'));
 
  }
 
