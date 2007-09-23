@@ -2,7 +2,7 @@
 require "fileutils"
 
 require 'rake/clean'
-CLEAN.include('**/semantic.cache')
+CLEAN.include('**/semantic.cache','./syndicated-posting.zip')
 
 PLUGIN_FOLDER = '/home/edavis/dev/Business/Customers/Shane-and-Peter/earthzine/wp-content/plugins'
 SRC_FOLDER = '/home/edavis/dev/Business/Customers/Shane-and-Peter/syndication-plugin/trunk'
@@ -35,7 +35,9 @@ task :zip => [:clean] do
     files = Dir['syndicated-posting/**/*.*']
 
     files.each do |file|
+      print "Adding #{file} ...."
       zipfile.add(file, file)
+      puts ". done"
     end
   end
   
