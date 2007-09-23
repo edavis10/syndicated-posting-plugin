@@ -16,6 +16,11 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       $this->getAdminOptions();
     }
 
+    /// Action to add anything we need to the <head> tag of the HTML
+    function addHtmlHead() {
+      echo '<link type="text/css" rel="stylesheet" href="' . get_bloginfo('wpurl') . '/wp-content/plugins/syndicated-posting/css/syndicated-posting.css" />' . "\n";
+    }
+
     // Returns: Array of admin options
     function getAdminOptions() {
       $this->options = get_option($this->adminOptionsName);
