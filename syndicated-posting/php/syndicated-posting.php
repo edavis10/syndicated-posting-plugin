@@ -264,11 +264,11 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         $c = $content;
         $c .= "  <p>";
         $c .= "    <label for='source_pub_title'>Source Publication Title</label><br />";
-        $c .= "    <input id='source_pub_title' type='text' value='none' name='source_pub_title' class='syndication-input' />";
+        $c .= "    <input id='source_pub_title' type='text' value='". $meta['syndicated_source_title']."' name='source_pub_title' class='syndication-input' />";
         $c .= "  <p>";
         $c .= "  </p>";
         $c .= "    <label for='source_artilce_url'>Article URL</label><br />";
-        $c .= "    <input id='source_article_url' type='text' value='none' name='source_article_url' class='syndication-input' />";
+        $c .= "    <input id='source_article_url' type='text' value='". $meta['syndicated_link'] ."' name='source_article_url' class='syndication-input' />";
         $c .= "  </p>";
       } else {
         $c = $content;
