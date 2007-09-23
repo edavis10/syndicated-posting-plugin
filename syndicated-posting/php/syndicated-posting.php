@@ -277,6 +277,16 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       return $c;
     }
 
+    /// Called after a post is saved to save the meta info
+    function saveMetaFromEdit($id) {
+      if (isset($_POST['source_pub_title'])) {
+        update_post_meta($id, 'syndicated_source_title', $_POST['source_pub_title']);
+      }
+      if (isset($_POST['source_article_url'])) {
+        update_post_meta($id, 'syndicated_link', $_POST['source_article_url']);
+      }
+    }
+
    function printAdminPage() {
       $this->getAdminOptions();
 
