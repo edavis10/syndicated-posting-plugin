@@ -263,12 +263,12 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       if (!empty($id) && $meta = $this->isSyndicatedPost($id)) {
         $c = $content;
         $c .= "  <p>";
-        $c .= "    <label for='source_pub_title'>Source Publication Title</label><br />";
-        $c .= "    <input id='source_pub_title' type='text' value='". $meta['syndicated_source_title']."' name='source_pub_title' class='syndication-input' />";
+        $c .= "    <label for='syndicated_source_titlesource_pub_title'>Source Publication Title</label><br />";
+        $c .= "    <input id='syndicated_source_title' type='text' value='". $meta['syndicated_source_title']."' name='syndicated_source_title' class='syndication-input' />";
         $c .= "  <p>";
         $c .= "  </p>";
-        $c .= "    <label for='source_article_url'>Article URL</label><br />";
-        $c .= "    <input id='source_article_url' type='text' value='". $meta['syndicated_link'] ."' name='source_article_url' class='syndication-input' />";
+        $c .= "    <label for='syndicated_link'>Article URL</label><br />";
+        $c .= "    <input id='syndicated_link' type='text' value='". $meta['syndicated_link'] ."' name='syndicated_link' class='syndication-input' />";
         $c .= "  </p>";
       } else {
         $c = $content;
@@ -279,11 +279,11 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Called after a post is saved to save the meta info
     function saveMetaFromEdit($id) {
-      if (isset($_POST['source_pub_title'])) {
-        update_post_meta($id, 'syndicated_source_title', $_POST['source_pub_title']);
+      if (isset($_POST['syndicated_source_title'])) {
+        update_post_meta($id, 'syndicated_source_title', $_POST['syndicated_source_title']);
       }
-      if (isset($_POST['source_article_url'])) {
-        update_post_meta($id, 'syndicated_link', $_POST['source_article_url']);
+      if (isset($_POST['syndicated_link'])) {
+        update_post_meta($id, 'syndicated_link', $_POST['syndicated_link']);
       }
     }
 
