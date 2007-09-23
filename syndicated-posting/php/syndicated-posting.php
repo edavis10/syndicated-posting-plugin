@@ -180,12 +180,14 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       ?>
         <a href="<?php echo $redirect ?>">Redirecting to your post</a>
         <script type="text/javascript">
-           <!-- 
-           window.location = "<?php echo $redirect ?>"
-
-           -->
+          <!-- 
+               window.location = "<?php echo $redirect ?>"
+      
+            -->
         </script>
-     <?php
+        <?php
+
+      
     }
 
     function updateSettings() {
@@ -300,11 +302,13 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       $this->getAdminOptions();
 
       // Check if the page is calling itself from a syndicate action and has a numeric id set
-      if (isset($_GET['action']) && 
-          $_GET['action'] == 'syndicate' &&
-          isset($_GET['id']) &&
-          preg_match("/\d+/",$_GET['id'])) {
-        $this->syndicateFeedItem($_GET['id']);
+      // We need to check POST because when WP published a post it will redirect to the referer
+      //  thus calling this again and re-Posting the item
+      if (isset($_POST['action']) && 
+          $_POST['action'] == 'syndicate' &&
+          isset($_POST['id']) &&
+          preg_match("/\d+/",$_POST['id'])) {
+        $this->syndicateFeedItem($_POST['id']);
       } else {
 
 
@@ -385,8 +389,16 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 	  <td><a href='<?php echo $post_meta['syndicated_link'] ?>' target="_blank"><?php echo $post['post_title'] ?></a></td>
 	  <td><?php echo $post_meta['syndicated_author'] ?></td>
 	  <td><a class="edit" rel="permalink" href='<?php echo $post_meta['syndicated_link']?>'>View</a></td>
-<!--	  <td><a class="edit" href="post.php?action=edit&post=<?php echo $post['ID']?>">Syndicate</a></td> -->
-          <td><a class="edit" href="<?php echo $_SERVER["REQUEST_URI"] . '&action=syndicate&id=' . $post['ID'] ; ?>">Syndicate</a></td> 
+          <td>
+            <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" name="syndicate<?php echo $post['ID']; ?>">
+              <input type="hidden" name="action" value="syndicate" />
+              <input type="hidden" name="id" value="<?php echo $post['ID']; ?>" />
+              <?PHP // TODO: try to get a non-js action working without the WP redirectes ?>
+              <a class="edit" href="javascript:document.syndicate<?php echo $post['ID']; ?>.submit()">
+                Syndicate
+              </a>
+            </form>
+          </td> 
 	  <td><a class="delete" href="<?php echo $_SERVER["REQUEST_URI"] . '&action=delete&id=' . $post['ID'] ; ?>">Delete</a></td>
         </tr>
 <?php
