@@ -25,6 +25,12 @@ if (!class_exists("SyndicatedPost")) {
       
     }
 
+    function cleanTags($content) {
+      
+      $clean = nl2br(strip_tags(str_replace("<p","\n",$content)));
+      return $clean;
+    }
+
     function fillFromRss($rss){
       global $wpdb;
 
@@ -57,6 +63,9 @@ if (!class_exists("SyndicatedPost")) {
       if (!empty($rss['dc']['creator'])) {
         $this->meta_author = $wpdb->escape($rss['dc']['creator']);
       }
+      if (!empty($rss['author'])) {
+        $this->meta_author = $wpdb->escape($rss['author']);
+      }
 
       /// ATOM
       if (!empty($rss['author_name'])) {
@@ -65,12 +74,12 @@ if (!class_exists("SyndicatedPost")) {
 
       // RSS feeds use Description
       if (!empty($rss['description'])) {
-        $this->post_content = $wpdb->escape($rss['description']);
+        $this->post_content = $wpdb->escape($this->cleanTags($rss['description']));
       }
 
       // ATOM feeds use content
       if (!empty($rss['atom_content'])) {
-        $this->post_content = $wpdb->escape($rss['atom_content']);
+        $this->post_content = $wpdb->escape($this->cleanTags($rss['atom_content']));
       }
 
     }
