@@ -275,15 +275,23 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       if (!empty($id) && $meta = $this->isSyndicatedPost($id)) {
         $c = $content;
         $c .= "  <p>";
-        $c .= "    <label for='syndicated_source_titlesource_pub_title'>Source Publication Title</label><br />";
-        $c .= "    <input id='syndicated_source_title' type='text' value='". $meta['syndicated_source_title']."' name='syndicated_source_title' class='syndication-input' />";
-        $c .= "  <p>";
+        $c .= "    <label for='syndicated_author'>Author</label><br />";
+        $c .= "    <input id='syndicated_author' type='text' value='". $meta['syndicated_author']."' name='syndicated_author' class='syndication-input' />";
         $c .= "  </p>";
+        $c .= "  <p>";
+        $c .= "    <label for='syndicated_source_title'>Source Publication Title</label><br />";
+        $c .= "    <input id='syndicated_source_title' type='text' value='". $meta['syndicated_source_title']."' name='syndicated_source_title' class='syndication-input' />";
+        $c .= "  </p>";
+        $c .= "  <p>";
+        $c .= "    <label for='syndicated_source_link'>Source Publication URL</label><br />";
+        $c .= "    <input id='syndicated_source_link' type='text' value='". $meta['syndicated_source_link']."' name='syndicated_source_link' class='syndication-input' />";
+        $c .= "  <p>";
+        $c .= "  <p>";
         $c .= "    <label for='syndicated_link'>Article URL</label><br />";
         $c .= "    <input id='syndicated_link' type='text' value='". $meta['syndicated_link'] ."' name='syndicated_link' class='syndication-input' />";
         $c .= "  </p>";
       } else {
-        $c = $content;
+
       }
 
       return $c;
@@ -297,6 +305,14 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       if (isset($_POST['syndicated_link'])) {
         update_post_meta($id, 'syndicated_link', $_POST['syndicated_link']);
       }
+      if (isset($_POST['syndicated_author'])) {
+        update_post_meta($id, 'syndicated_author', $_POST['syndicated_author']);
+      }
+      if (isset($_POST['syndicated_source_link'])) {
+        update_post_meta($id, 'syndicated_source_link', $_POST['syndicated_source_link']);
+      }
+
+
     }
 
    function printAdminPage() {
