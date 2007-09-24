@@ -247,14 +247,14 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         $c = '';
         // Only display if both of these actully have content
         if (!empty($meta['syndicated_source_link']) && !empty($meta['syndicated_source_title'])) {
-          $c .= '<p class="original-publisher">Originally Published by <a href="' . $meta['syndicated_source_link'] . '">' .$meta['syndicated_source_title'] . '</a></em></p>';
+          $c .= '<p class="original-publisher">Originally Published by <a href="' . $meta['syndicated_source_link'] . '" target="_blank">' .$meta['syndicated_source_title'] . '</a></em></p>';
         }
 
         $c .= $content;
 
         // Only display if both of these actully have content
         if (!empty($meta['syndicated_link']) && !empty($meta['syndicated_source_link'])) {
-          $c .= '<p>Read the rest of the article on <a href="' . $meta['syndicated_link'] . '">' .$meta['syndicated_source_title'] . '</a>.</p>';
+          $c .= '<p>Read the rest of the article on <a href="' . $meta['syndicated_link'] . '" target="_blank">' .$meta['syndicated_source_title'] . '</a>.</p>';
         }
       } else {
         $c = $content;
