@@ -2,6 +2,7 @@
 if (!class_exists("SyndicatedPostingPlugin")) {
   class SyndicatedPostingPlugin {
     var $adminOptionsName = "syndicated_posting_admin_options";
+    var $paginationCount = 30;
     var $options = array();
 
     // Constructor
@@ -127,6 +128,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
       $posts = $wpdb->get_results($query, ARRAY_A);
       return $posts;
+    }
+
+    function getFeedCount() {
+      return count($this->getFeedItems());
     }
     
     function getFeedItemMeta($post_id) {
@@ -387,11 +392,11 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     </thead>
     <tbody id="the-list">
 <?php
-                      $feed_posts = $this->getFeedItems();
+                      $content_pages = ceil($this->getFeedCount() / $this->paginationCount);
+      $feed_posts = $this->getFeedItems();
       if (!empty($feed_posts) && is_array($feed_posts)) {
         // Found posts
         $css_class = '';
-        $content_pages = 4;
         foreach ($feed_posts as $post) {
           // TODO: Check boundries, e.g. no author name so print an empty cell
           if($css_class == 'alternate') { $css_class = ''; } else { $css_class = 'alternate'; }
