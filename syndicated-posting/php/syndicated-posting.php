@@ -35,15 +35,16 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     function getSettings($option) {
-      $raw_settings = array_unique(split(",",$this->options[$option]));
+      $raw_settings = array_unique(split("\n",str_replace(',',"\n",$this->options[$option])));
 
       $finals = array();
       // Remove empty values
       foreach ($raw_settings as $setting) {
         if (trim($setting) != "") {
-          $finals[] = $setting;
+          $finals[] = trim($setting);
         }
       }
+
       return $finals;
     }
 
@@ -192,10 +193,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     function updateSettings() {
       if (isset($_POST['spFeedUrls'])) {
-        $this->options['feed_urls'] = apply_filters('content_save_pre', $_POST['spFeedUrls']);
+        $this->options['feed_urls'] = apply_filters('content_save_pre', str_replace(',',"\n",$_POST['spFeedUrls']));
       }   
       if (isset($_POST['spSearchPhrases'])) {
-        $this->options['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
+        $this->options['search_phrases'] = apply_filters('content_save_pre', str_replace(',',"\n",$_POST['spSearchPhrases']));
       }   
       update_option($this->adminOptionsName, $this->options);
 
