@@ -2,7 +2,7 @@
 if (!class_exists("SyndicatedPostingPlugin")) {
   class SyndicatedPostingPlugin {
     var $adminOptionsName = "syndicated_posting_admin_options";
-    var $paginationCount = 30;
+    var $paginationCount = 5;
     var $options = array();
 
     // Constructor
@@ -104,7 +104,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       return $post;
     }
 
-    function getFeedItems() {
+    function getFeedItems($limit_row=0) {
       global $wpdb;
 
       $query = "SELECT * FROM wp_posts WHERE post_type = 'syndicate' ";
@@ -124,8 +124,11 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         $query .= " 0) ";
       }
       // Add on the final ORDER
-      $query .= " ORDER BY post_date DESC; ";
+      $query .= " ORDER BY post_date DESC ";
 
+      // Limits
+      $query .= " LIMIT " . $limit_row . ", " . $this->paginationCount;
+      echo var_dump($query);
       $posts = $wpdb->get_results($query, ARRAY_A);
       return $posts;
     }
@@ -345,6 +348,17 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           $this->deleteFeedItem($_GET['id']);
           $this->showUpdatedMessage('Prospect removed');
         }
+
+
+      // Pagination check
+      if (isset($_GET['action']) && $_GET['action'] == 'show') {
+        $this->showUpdatedMessage($_GET['syndication-page']);
+        // TODO: Check value is number  SQL-INJECT
+        $pagination = $_GET['syndication-page'];
+      } else {
+        $pagination = 1;
+      }
+
  ?>
 
 <div class="wrap">
@@ -392,12 +406,12 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     </thead>
     <tbody id="the-list">
 <?php
-                      $content_pages = ceil($this->getFeedCount() / $this->paginationCount);
-      $feed_posts = $this->getFeedItems();
+                      $content_pages = ceil($this->getFeedCount('') / $this->paginationCount);
+      $feed_posts = $this->getFeedItems(($this->paginationCount * $pagination) - $this->paginationCount);
       if (!empty($feed_posts) && is_array($feed_posts)) {
         // Found posts
         $css_class = '';
-        foreach ($feed_posts as $post) {
+        foreach ($feed_posts as $post) {              
           // TODO: Check boundries, e.g. no author name so print an empty cell
           if($css_class == 'alternate') { $css_class = ''; } else { $css_class = 'alternate'; }
           $post_meta = $this->getFeedItemMeta($post['ID']);
