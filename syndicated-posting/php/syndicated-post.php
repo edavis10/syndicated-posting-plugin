@@ -26,9 +26,25 @@ if (!class_exists("SyndicatedPost")) {
     }
 
     function cleanTags($content) {
-      
-      $clean = nl2br(strip_tags(str_replace("<p","\n",$content)));
+      $clean = (strip_tags($content,'<p>'));
       return $clean;
+    }
+
+    function limitParagraphs($content, $number) {
+      $limited_content = '';
+      $results = explode("<p>",$content);
+
+      for ($index = 0; ( ($index < count($results)) && ($index <= $number)) ; $index++) {
+
+        // Remove it's para tags if there
+        $item = trim(str_replace("<p>","",str_replace("</p>","",$results[$index])));
+        if ($item != "") {
+          $limited_content .= "<p>\n";
+          $limited_content .= $item . "\n";
+          $limited_content .= "</p>\n";
+        }
+      }
+      return $limited_content;
     }
 
     function fillFromRss($rss){
@@ -74,12 +90,12 @@ if (!class_exists("SyndicatedPost")) {
 
       // RSS feeds use Description
       if (!empty($rss['description'])) {
-        $this->post_content = $wpdb->escape($this->cleanTags($rss['description']));
+        $this->post_content = $wpdb->escape($this->cleanTags($this->limitParagraphs($rss['description'],3)));
       }
 
       // ATOM feeds use content
       if (!empty($rss['atom_content'])) {
-        $this->post_content = $wpdb->escape($this->cleanTags($rss['atom_content']));
+        $this->post_content = $wpdb->escape($this->cleanTags($this->limitParagraphs($rss['atom_content'],3)));
       }
 
     }
