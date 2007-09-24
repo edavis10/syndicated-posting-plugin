@@ -391,6 +391,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       if (!empty($feed_posts) && is_array($feed_posts)) {
         // Found posts
         $css_class = '';
+        $content_pages = 4;
         foreach ($feed_posts as $post) {
           // TODO: Check boundries, e.g. no author name so print an empty cell
           if($css_class == 'alternate') { $css_class = ''; } else { $css_class = 'alternate'; }
@@ -431,6 +432,19 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 ?>
     </tbody>
 </table>
+
+<?php
+        // Pagination
+        if ($content_pages > 1) {
+          echo "<p id='syndication-pages'>Page ";
+          for ($content_page = 1; $content_page <= $content_pages; $content_page++)
+            {
+              echo "<a href='" . $_SERVER["REQUEST_URI"] ."&action=show&syndication-page=".$content_page."'>" .$content_page . "</a> ";
+            }
+          echo "</p>";
+        }
+?>
+
 </div>
 
  <?php
