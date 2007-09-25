@@ -356,10 +356,144 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     ////
 
 
-    /// TODO: ripe for refactoring
+    /// Prints the admin page
     function printAdminPage($pagination) {
- ?>
+      $this->printSettings();
+      $this->printProspects($pagination);
+    } 
 
+    /// Syndicates a feed item into a post and redirects to the post's edit page
+    function syndicateFeedItem($post_id) {
+      // Copy the feed item to a post with metadata
+      $new_post_id = $this->copyFeedItemToPost($post_id);
+      // Mark the feed item as syndicated
+      $this->markFeedItemAsSyndicated($post_id);
+      // Redirect to the new post
+      // TODO: Hack
+      $redirect = get_option('siteurl') . '/wp-admin/post.php?action=edit&post=' . $new_post_id;
+      ?>
+        <a href="<?php echo $redirect ?>">Redirecting to your post</a>
+        <script type="text/javascript">
+          <!-- 
+               window.location = "<?php echo $redirect ?>"
+      
+            -->
+        </script>
+        <?php
+
+      
+    }
+
+    /// TODO
+    function printProspects($pagination) {
+      echo '<div class="wrap">';
+
+      $this->printProspectsHead();
+
+      $content_pages = ceil($this->getFeedCount('') / $this->paginationCount);
+      
+      $feed_posts = $this->getFeedItems(($this->paginationCount * $pagination) - $this->paginationCount);
+      if (!empty($feed_posts) && is_array($feed_posts)) {
+        // Found posts
+        $css_class = '';
+        foreach ($feed_posts as $post) {              
+          // TODO: Check boundries, e.g. no author name so print an empty cell
+          if($css_class == 'alternate') { $css_class = ''; } else { $css_class = 'alternate'; }
+          $post_meta = $this->getFeedItemMeta($post['ID']);
+          
+          $this->printFeedItem($post, $post_meta, $css_class);
+        }
+      } else {
+        // No posts
+        echo '<tr class=""  id="post-54">';
+        echo '  <td colspan="7">No Prospects found.</td>';
+        echo '</tr>';
+      }
+      
+      // Close the prospects table
+      $this->printProspectsFoot();
+
+      // Print pages if there are some
+      if ($content_pages > 1) {
+        $this->printPagination($pagination, $content_pages);
+      }
+      echo "</div>"; // Closes the syndication items 'wrap' div
+    }
+
+    /// Print the opening of the Prospects table
+    function printProspectsHead() {
+?>
+  <h2>Syndication Prospects</h2>
+  <table class="widefat">
+    <thead>
+      <tr>
+	<th scope="col">Source</th>
+	<th scope="col">Pubdate</th>
+	<th scope="col">Title</th>
+	<th scope="col">Author</th>
+	<th scope="col"/>
+	<th scope="col"/>
+	<th scope="col"/>
+
+      </tr>
+    </thead>
+    <tbody id="the-list">
+<?php
+        }
+
+    /// Print the closing of the Prospects table
+    function printProspectsFoot() {
+      echo "    </tbody>";
+      echo "  </table>";
+    }
+
+    /// Print a single feed item
+    function printFeedItem($post, $post_meta, $css_class) {
+?>        
+          <tr class="<?php echo $css_class;?>" id="post-<?php echo $post['ID'] ?>">
+          <td style="font-weight:bold">
+             <a href='<?php echo $post_meta['syndicated_source_link'] ?>' target="_blank">
+               <?php echo $post_meta['syndicated_source_title'] ?>
+             </a>
+          </td>
+          <td><?php echo $post['post_date'] ?></td>
+	  <td><a href='<?php echo $post_meta['syndicated_link'] ?>' target="_blank"><?php echo $post['post_title'] ?></a></td>
+	  <td><?php echo $post_meta['syndicated_author'] ?></td>
+	  <td><a class="edit" rel="permalink" href='<?php echo $post_meta['syndicated_link']?>' target="_blank">View</a></td>
+          <td>
+            <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" name="syndicate<?php echo $post['ID']; ?>">
+              <input type="hidden" name="action" value="syndicate" />
+              <input type="hidden" name="id" value="<?php echo $post['ID']; ?>" />
+              <?PHP // TODO: try to get a non-js action working without the WP redirectes ?>
+              <a class="edit" href="javascript:document.syndicate<?php echo $post['ID']; ?>.submit()">
+                Syndicate
+              </a>
+            </form>
+          </td> 
+	  <td><a class="delete" href="<?php echo $_SERVER["REQUEST_URI"] . '&action=delete&id=' . $post['ID'] ; ?>">Delete</a></td>
+        </tr>
+<?php
+    }
+
+    /// TODO
+    function printPagination($pagination, $content_pages) {
+        // Pagination
+          echo "<p id='syndication-pages'>Page ";
+          for ($content_page = 1; $content_page <= $content_pages; $content_page++)
+            {
+              // No link needed for the current page
+              if ($pagination == $content_page) {
+                echo "<strong>" . $content_page . "</strong> ";
+              } else {
+                echo "<a href='" . $this->url ."&action=show&syndication-page=".$content_page."'>" .$content_page . "</a> ";
+              }
+            }
+          echo "</p>";
+    }
+
+    /// TODO
+    function printSettings() {
+ ?>
 <div class="wrap">
     <h2>Feeds &amp; Search Terms</h2>
     <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" style="width:50%; float:left;">
@@ -387,115 +521,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 <br style="clear: both;"/>
 
 </div>
-
-<div class="wrap">
-  <h2>Syndication Prospects</h2>
-  <table class="widefat">
-    <thead>
-      <tr>
-	<th scope="col">Source</th>
-	<th scope="col">Pubdate</th>
-	<th scope="col">Title</th>
-	<th scope="col">Author</th>
-	<th scope="col"/>
-	<th scope="col"/>
-	<th scope="col"/>
-
-      </tr>
-    </thead>
-    <tbody id="the-list">
-<?php
-                      $content_pages = ceil($this->getFeedCount('') / $this->paginationCount);
-
-      $feed_posts = $this->getFeedItems(($this->paginationCount * $pagination) - $this->paginationCount);
-      if (!empty($feed_posts) && is_array($feed_posts)) {
-        // Found posts
-        $css_class = '';
-        foreach ($feed_posts as $post) {              
-          // TODO: Check boundries, e.g. no author name so print an empty cell
-          if($css_class == 'alternate') { $css_class = ''; } else { $css_class = 'alternate'; }
-          $post_meta = $this->getFeedItemMeta($post['ID']);
-?>        
-          <tr class="<?php echo $css_class;?>" id="post-<?php echo $post['ID'] ?>">
-          <td style="font-weight:bold">
-             <a href='<?php echo $post_meta['syndicated_source_link'] ?>' target="_blank">
-               <?php echo $post_meta['syndicated_source_title'] ?>
-             </a>
-          </td>
-          <td><?php echo $post['post_date'] ?></td>
-	  <td><a href='<?php echo $post_meta['syndicated_link'] ?>' target="_blank"><?php echo $post['post_title'] ?></a></td>
-	  <td><?php echo $post_meta['syndicated_author'] ?></td>
-	  <td><a class="edit" rel="permalink" href='<?php echo $post_meta['syndicated_link']?>' target="_blank">View</a></td>
-          <td>
-            <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" name="syndicate<?php echo $post['ID']; ?>">
-              <input type="hidden" name="action" value="syndicate" />
-              <input type="hidden" name="id" value="<?php echo $post['ID']; ?>" />
-              <?PHP // TODO: try to get a non-js action working without the WP redirectes ?>
-              <a class="edit" href="javascript:document.syndicate<?php echo $post['ID']; ?>.submit()">
-                Syndicate
-              </a>
-            </form>
-          </td> 
-	  <td><a class="delete" href="<?php echo $_SERVER["REQUEST_URI"] . '&action=delete&id=' . $post['ID'] ; ?>">Delete</a></td>
-        </tr>
-<?php
-            }
-        } else {
-          // No posts
-?>
-      <tr class=""  id="post-54">
-	<td colspan="7">No Prospects found.</td>
-      </tr>
-<?php
-        }
-?>
-    </tbody>
-</table>
-
-<?php
-        // Pagination
-        if ($content_pages > 1) {
-          echo "<p id='syndication-pages'>Page ";
-          for ($content_page = 1; $content_page <= $content_pages; $content_page++)
-            {
-              // No link needed for the current page
-              if ($pagination == $content_page) {
-                echo "<strong>" . $content_page . "</strong> ";
-              } else {
-                echo "<a href='" . $this->url ."&action=show&syndication-page=".$content_page."'>" .$content_page . "</a> ";
-              }
-            }
-          echo "</p>";
-        }
-?>
-
-</div>
-
- <?php
-
-    //        } // END syndication action check
-    } 
-
-    /// Syndicates a feed item into a post and redirects to the post's edit page
-    function syndicateFeedItem($post_id) {
-      // Copy the feed item to a post with metadata
-      $new_post_id = $this->copyFeedItemToPost($post_id);
-      // Mark the feed item as syndicated
-      $this->markFeedItemAsSyndicated($post_id);
-      // Redirect to the new post
-      // TODO: Hack
-      $redirect = get_option('siteurl') . '/wp-admin/post.php?action=edit&post=' . $new_post_id;
-      ?>
-        <a href="<?php echo $redirect ?>">Redirecting to your post</a>
-        <script type="text/javascript">
-          <!-- 
-               window.location = "<?php echo $redirect ?>"
-      
-            -->
-        </script>
-        <?php
-
-      
+<?php  
     }
 
     /// Displays a message div with `$message`
