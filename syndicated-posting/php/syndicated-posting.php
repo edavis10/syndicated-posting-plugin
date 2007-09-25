@@ -18,6 +18,49 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     ////
+    //// Request Handler
+    ////
+
+    /// Master loop.  It will check the parameters and do one of the following:
+    ///   * Create admin page with pagination
+    ///   * Update settins
+    ///   * Syndicate a feed item and redirect to posting
+    ///
+    function handleRequest() {
+      $this->getAdminOptions();
+
+      // Check if we are going to show the admin page or another page (only syndication page)
+      if ($this->syndicatedPageRequested()) {
+        // Another page
+        $this->syndicateFeedItem($_POST['id']);
+
+      } else {
+        // Admin page will be shown
+
+        $pagination = 1; // Default
+
+        // Check if there are special requests for the page
+        if ( $this->itemDeleted()) {
+          $this->deleteFeedItem($_GET['id']);
+          $this->showUpdatedMessage('Prospect removed');
+          
+        } elseif ($this->paginatedPageRequested()) {
+          $pagination = $_GET['syndication-page'];
+
+        } elseif (isset($_POST['update_syndicatedPostingPluginSettings'])) {
+          $this->updateSettings();
+          $this->showUpdatedMessage('Settings updated');
+
+        } else {
+          // Nothing
+        }
+
+        $this->printAdminPage($pagination);  
+      } // END page check
+    }
+
+
+    ////
     //// Wordpress Actions and Filters
     ////
 
@@ -313,46 +356,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     ////
 
 
-    /// Master loop.  It will check the parameters and do one of the following:
-    ///   * Create admin page with pagination
-    ///   * Update settins
-    ///   * Syndicate a feed item and redirect to posting
-    ///
     /// TODO: ripe for refactoring
-    function printAdminPage() {
-      $this->getAdminOptions();
-
-      // Check if the page is calling itself from a syndicate action and has a numeric id set
-      // We need to check POST because when WP published a post it will redirect to the referer
-      //  thus calling this again and re-Posting the item
-      if (isset($_POST['action']) && 
-          $_POST['action'] == 'syndicate' &&
-          isset($_POST['id']) &&
-          preg_match("/\d+/",$_POST['id'])) {
-        $this->syndicateFeedItem($_POST['id']);
-      } else {
-
-
-        // Settings updated
-        if (isset($_POST['update_syndicatedPostingPluginSettings'])) {
-          $this->updateSettings();
-          $this->showUpdatedMessage('Settings updated');
-        }
-
-        // Item deleted
-        if ($this->itemDeleted()) {
-          $this->deleteFeedItem($_GET['id']);
-          $this->showUpdatedMessage('Prospect removed');
-        }
-        
-
-        // Pagination check
-        if ($this->paginatedPageRequested()) {
-          $pagination = $_GET['syndication-page'];
-        } else {
-          $pagination = 1;
-        }
-
+    function printAdminPage($pagination) {
  ?>
 
 <div class="wrap">
@@ -468,7 +473,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
  <?php
 
-        } // END syndication action check
+    //        } // END syndication action check
     } 
 
     /// Syndicates a feed item into a post and redirects to the post's edit page
@@ -531,9 +536,18 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     function paginatedPageRequested() {
       if (isset($_GET['action']) && $_GET['action'] == 'show' && isset($_GET['syndication-page']) && preg_match("/\d+/",$_GET['syndication-page'])) {
         return true;
-          } else {
+      } else {
         return false;
-          }
+      }
+    }
+
+    /// Check the request to see if an item is to be syndicated
+    function syndicatedPageRequested() {
+      if (isset($_POST['action']) && $_POST['action'] == 'syndicate' && isset($_POST['id']) && preg_match("/\d+/",$_POST['id'])) {
+        return true;
+      } else {
+        return false;
+      }
     }
 
     /// Checks the metadata to see if this post is from a syndicated post.
@@ -571,7 +585,7 @@ if (!function_exists("SyndicatedPostingPlugin_admin")) {
       return;
     }
     if (function_exists('add_management_page')) {
-      add_management_page('Syndication Posting', 'Syndication', 9, basename(__FILE__), array(&$sp_plugin, 'printAdminPage'));
+      add_management_page('Syndication Posting', 'Syndication', 9, basename(__FILE__), array(&$sp_plugin, 'handleRequest'));
     }
   }
  }
