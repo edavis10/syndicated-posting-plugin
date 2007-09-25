@@ -196,13 +196,12 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       $post = new SyndicatedPost();
       $post->fillFromPost($feed_post,$feed_meta);
 
-      // TODO: use different variable name and don't stomp over this one
-      $post_id = wp_insert_post($post);
-      add_post_meta($post_id,'syndicated_author',$post->meta_author,true);
-      add_post_meta($post_id,'syndicated_link',$post->meta_link,true);
-      add_post_meta($post_id,'syndicated_source_title',$post->meta_source_title,true);
-      add_post_meta($post_id,'syndicated_source_link',$post->meta_source_link,true);
-      return $post_id;
+      $new_post_id = wp_insert_post($post);
+      add_post_meta($new_post_id,'syndicated_author',$post->meta_author,true);
+      add_post_meta($new_post_id,'syndicated_link',$post->meta_link,true);
+      add_post_meta($new_post_id,'syndicated_source_title',$post->meta_source_title,true);
+      add_post_meta($new_post_id,'syndicated_source_link',$post->meta_source_link,true);
+      return $new_post_id;
     }
 
     /// Sets the post_type to be `syndicated`
