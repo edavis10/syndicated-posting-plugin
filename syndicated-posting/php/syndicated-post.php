@@ -48,7 +48,7 @@ if (!class_exists("SyndicatedPost")) {
       return $limited_content;
     }
 
-    function fillFromRss($rss){
+    function fillFromRss($rss,$defaultAuthor=""){
       global $wpdb;
 
       // Title
@@ -76,6 +76,7 @@ if (!class_exists("SyndicatedPost")) {
 
 
       // Author name
+      $this->meta_author = $wpdb->escape($defaultAuthor);
       /// RSS
       if (!empty($rss['dc']['creator'])) {
         $this->meta_author = $wpdb->escape($rss['dc']['creator']);

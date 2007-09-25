@@ -209,9 +209,9 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Adds the feed item to the wp_posts database as a SyndicatedPost and attaches
     ///  the metadata for it
-    function addPost($rss, $title,$link){
+    function addPost($rss, $title,$link, $author){
       $post = new SyndicatedPost();
-      $post->fillFromRss($rss);
+      $post->fillFromRss($rss, $author);
       $post_id = wp_insert_post($post);
       add_post_meta($post_id,'syndicated_author',$post->meta_author,true);
       add_post_meta($post_id,'syndicated_link',$post->meta_link,true);
@@ -287,9 +287,13 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           if (!$feed == false) {
             $feed_title = $feed->channel['title'];
             $feed_link = $feed->channel['link'];
+
+            // Used in case the items don't have author set
+            $feed_author = $this->extractFeedAuthor($feed);
+
             foreach ($feed->items as $item ) {
               if ($this->newFeedItem($item) <= 0) {
-                $this->addPost($item, $feed_title,$feed_link);
+                $this->addPost($item, $feed_title, $feed_link, $feed_author);
               } else {
                 // Skip item
               }
@@ -305,6 +309,21 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       $query = "SELECT COUNT(*) FROM wp_posts WHERE post_type = 'syndicate'" . $this->buildSearchString();
       $count = $wpdb->get_var($query);
       return $count;
+    }
+
+    /// Gets the author of the feed object
+    function extractFeedAuthor($feed) {
+/*       // RSS 0.91 uses managingEditor */
+/*       if (!empty($feed->channel['managingEditor'])) { */
+/*         return $feed->channel['managingEditor']; */
+/*       } */
+
+      // ATOM uses author and potentially name
+      if (!empty($feed->channel['author_name'])) {
+        return $feed->channel['author_name'];
+      }
+      var_dump($feed);
+      
     }
 
     ////
