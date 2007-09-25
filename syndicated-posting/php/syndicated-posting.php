@@ -251,11 +251,15 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         }
     }
 
-    // TODO: remove middle man
+
+    /// Returns the count of feed items that match the search terms
     function getFeedCount() {
-      return $this->getCountOfFeedItems();
+      global $wpdb;
+      $query = "SELECT COUNT(*) FROM wp_posts WHERE post_type = 'syndicate'" . $this->buildSearchString();
+      $count = $wpdb->get_var($query);
+      return $count;
     }
-    
+
     ////
     //// Settings functions
     ////
@@ -509,14 +513,6 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       global $wpdb;
       $post = $wpdb->get_var("SELECT COUNT(*) FROM wp_posts WHERE post_title = ('" . $wpdb->escape($rss['title']) . "');");
       return $post;
-    }
-
-    /// Returns the count of feed items that match the search terms
-    function getCountOfFeedItems() {
-      global $wpdb;
-      $query = "SELECT COUNT(*) FROM wp_posts WHERE post_type = 'syndicate'" . $this->buildSearchString();
-      $count = $wpdb->get_var($query);
-      return $count;
     }
 
     /// Check the request to see if an item is to be deleted
