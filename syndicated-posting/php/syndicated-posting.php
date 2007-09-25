@@ -4,6 +4,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     var $adminOptionsName = "syndicated_posting_admin_options";
     var $paginationCount = 30;
     var $options = array();
+    // TODO: later.  Un hard code this url for the pagination code in printAdminPage()
+    var $url = 'edit.php?page=main.php';
 
     // Constructor
     function SyndicatedPostingPlugin() {
@@ -478,7 +480,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           echo "<p id='syndication-pages'>Page ";
           for ($content_page = 1; $content_page <= $content_pages; $content_page++)
             {
-              echo "<a href='" . $_SERVER["REQUEST_URI"] ."&action=show&syndication-page=".$content_page."'>" .$content_page . "</a> ";
+              echo "<a href='" . $this->url ."&action=show&syndication-page=".$content_page."'>" .$content_page . "</a> ";
             }
           echo "</p>";
         }
