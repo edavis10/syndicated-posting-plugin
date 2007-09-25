@@ -7,5 +7,5 @@ Author: <a href="http://www.littlestreamsoftware.com">Eric Davis</a> and <A href
 Description: TODO
 */
 
-include('php/main.php');
+include('php/syndicated-posting.php');
 ?>

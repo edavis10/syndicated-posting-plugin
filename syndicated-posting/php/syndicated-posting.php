@@ -1,11 +1,14 @@
 <?php
+////
+//// Class to hold the logic of this plugin
+////
 if (!class_exists("SyndicatedPostingPlugin")) {
   class SyndicatedPostingPlugin {
     var $adminOptionsName = "syndicated_posting_admin_options";
     var $paginationCount = 30;
     var $options = array();
     // TODO: later.  Un hard code this url for the pagination code in printAdminPage()
-    var $url = 'edit.php?page=main.php';
+    var $url = 'edit.php?page=syndicated-posting.php';
 
     // Constructor
     function SyndicatedPostingPlugin() {
@@ -549,4 +552,45 @@ if (!class_exists("SyndicatedPostingPlugin")) {
   } // End class
  }
 
+
+//// 
+//// Logic to hook into Wordpress as a plugin
+//// 
+
+include ('syndicated-post.php');
+
+if (class_exists("SyndicatedPostingPlugin")) {
+  $sp_plugin = new SyndicatedPostingPlugin();
+ }
+
+/// Initialize the admin panel
+if (!function_exists("SyndicatedPostingPlugin_admin")) {
+  function SyndicatedPostingPlugin_admin() {
+    global $sp_plugin;
+    if (!isset($sp_plugin)) {
+      return;
+    }
+    if (function_exists('add_management_page')) {
+      add_management_page('Syndication Posting', 'Syndication', 9, basename(__FILE__), array(&$sp_plugin, 'printAdminPage'));
+    }
+  }
+ }
+
+/// Initialize the scheduling
+if (!wp_next_scheduled('wp_syndicated-posting_poll_feeds_hook')) {
+  wp_schedule_event(time(), 'hourly', 'wp_syndicated-posting_poll_feeds_hook');
+ }
+
+
+/// Hook into the Wordpress Actions and Filters
+if (isset($sp_plugin)) {
+  // Actions
+  add_action('activate_syndicated-posting/syndicated-posting.php', array(&$sp_plugin,'init'));
+  add_action('admin_menu', 'SyndicatedPostingPlugin_admin');
+  add_action('admin_head',  array(&$sp_plugin,'addHtmlHead'));
+  add_action('save_post',  array(&$sp_plugin,'saveMetaFromEdit'));
+  // Filters
+  add_filter('the_content', array(&$sp_plugin,'addOriginalSource'));
+  add_filter('the_editor', array(&$sp_plugin,'addAdminSourceInformation'));
+ }
 ?>
