@@ -313,16 +313,16 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Gets the author of the feed object
     function extractFeedAuthor($feed) {
-/*       // RSS 0.91 uses managingEditor */
-/*       if (!empty($feed->channel['managingEditor'])) { */
-/*         return $feed->channel['managingEditor']; */
-/*       } */
+      // RSS 0.91 uses managingEditor
+      if (!empty($feed->channel['managingeditor'])) {
+        return $feed->channel['managingeditor'];
+      }
 
       // ATOM uses author and potentially name
       if (!empty($feed->channel['author_name'])) {
         return $feed->channel['author_name'];
       }
-      var_dump($feed);
+      echo var_dump($feed);
       
     }
 
