@@ -2,7 +2,7 @@
 if (!class_exists("SyndicatedPostingPlugin")) {
   class SyndicatedPostingPlugin {
     var $adminOptionsName = "syndicated_posting_admin_options";
-    var $paginationCount = 5;
+    var $paginationCount = 30;
     var $options = array();
 
     // Constructor
@@ -104,11 +104,17 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       return $post;
     }
 
-    function getFeedItems($limit_row=0) {
+    function getCountOfFeedItems() {
+      global $wpdb;
+      $query = "SELECT COUNT(*) FROM wp_posts WHERE post_type = 'syndicate'" . $this->buildSearchString();
+      $count = $wpdb->get_var($query);
+      return $count;
+    }
+
+    function buildSearchString() {
       global $wpdb;
 
-      $query = "SELECT * FROM wp_posts WHERE post_type = 'syndicate' ";
-
+      $query = " ";
       $phrases = $this->getSearches();
 
       if (!empty($phrases) && is_array($phrases)) {
@@ -123,18 +129,28 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         // Hack for the final OR
         $query .= " 0) ";
       }
+      return $query;
+    }
+
+    function getFeedItems($limit_row=0) {
+      global $wpdb;
+
+      $query = "SELECT * FROM wp_posts WHERE post_type = 'syndicate' ";
+      
+      $query .= $this->buildSearchString();
+
       // Add on the final ORDER
       $query .= " ORDER BY post_date DESC ";
 
       // Limits
       $query .= " LIMIT " . $limit_row . ", " . $this->paginationCount;
-      echo var_dump($query);
+
       $posts = $wpdb->get_results($query, ARRAY_A);
       return $posts;
     }
 
     function getFeedCount() {
-      return count($this->getFeedItems());
+      return $this->getCountOfFeedItems();
     }
     
     function getFeedItemMeta($post_id) {
@@ -352,6 +368,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
       // Pagination check
       if (isset($_GET['action']) && $_GET['action'] == 'show') {
+        // TODO: Remove debugging code
         $this->showUpdatedMessage($_GET['syndication-page']);
         // TODO: Check value is number  SQL-INJECT
         $pagination = $_GET['syndication-page'];
@@ -407,6 +424,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     <tbody id="the-list">
 <?php
                       $content_pages = ceil($this->getFeedCount('') / $this->paginationCount);
+
       $feed_posts = $this->getFeedItems(($this->paginationCount * $pagination) - $this->paginationCount);
       if (!empty($feed_posts) && is_array($feed_posts)) {
         // Found posts
@@ -454,6 +472,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
 <?php
         // Pagination
+        // TODO: REQUEST_URI keeps appending on the actions from the last one
+        // TODO: No link to current page
         if ($content_pages > 1) {
           echo "<p id='syndication-pages'>Page ";
           for ($content_page = 1; $content_page <= $content_pages; $content_page++)
