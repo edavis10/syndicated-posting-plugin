@@ -240,6 +240,15 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           }
     }
 
+    // Function to check the request to see if a paginated page is requested
+    function paginatedPageRequested() {
+      if (isset($_GET['action']) && $_GET['action'] == 'show' && isset($_GET['syndication-page']) && preg_match("/\d+/",$_GET['syndication-page'])) {
+        return true;
+          } else {
+        return false;
+          }
+    }
+
     function showUpdatedMessage($message) {
       ?>
 <div class="updated">
@@ -366,15 +375,14 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           $this->deleteFeedItem($_GET['id']);
           $this->showUpdatedMessage('Prospect removed');
         }
+        
 
-
-      // Pagination check
-      if (isset($_GET['action']) && $_GET['action'] == 'show') {
-        // TODO: Check value is number  SQL-INJECT
-        $pagination = $_GET['syndication-page'];
-      } else {
-        $pagination = 1;
-      }
+        // Pagination check
+        if ($this->paginatedPageRequested()) {
+          $pagination = $_GET['syndication-page'];
+        } else {
+          $pagination = 1;
+        }
 
  ?>
 
