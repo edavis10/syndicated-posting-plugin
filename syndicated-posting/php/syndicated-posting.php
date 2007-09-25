@@ -630,7 +630,8 @@ if (!function_exists("SyndicatedPostingPlugin_admin")) {
       return;
     }
     if (function_exists('add_management_page')) {
-      add_management_page('Syndication Posting', 'Syndication', 9, basename(__FILE__), array(&$sp_plugin, 'handleRequest'));
+      // Level 7 so Admins and Editors can use this
+      add_management_page('Syndication Posting', 'Syndication', 7, basename(__FILE__), array(&$sp_plugin, 'handleRequest'));
     }
   }
  }
