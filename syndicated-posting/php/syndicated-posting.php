@@ -10,6 +10,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     // TODO: later.  Un hard code this url for the pagination code in printAdminPage()
     var $url = 'edit.php?page=syndicated-posting.php';
 
+    var $numberOfPages;
+
     // Constructor
     function SyndicatedPostingPlugin() {
       // Add a custom action WP can use for scheduling.  This is the reference that WP will call
@@ -21,10 +23,9 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     //// Request Handler
     ////
 
-    /// Master loop.  It will check the parameters and do one of the following:
-    ///   * Create admin page with pagination
-    ///   * Update settins
+    /// Master loop.  It will check the parameters and will either:
     ///   * Syndicate a feed item and redirect to posting
+    ///   * Create admin page with pagination and any messages
     ///
     function handleRequest() {
       $this->getAdminOptions();
@@ -37,7 +38,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       } else {
         // Admin page will be shown
 
-        $pagination = 1; // Default
+        $currentPage = 1; // Default
 
         // Check if there are special requests for the page
         if ( $this->itemDeleted()) {
@@ -45,7 +46,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           $this->showUpdatedMessage('Prospect removed');
           
         } elseif ($this->paginatedPageRequested()) {
-          $pagination = $_GET['syndication-page'];
+          $currentPage = $_GET['syndication-page'];
 
         } elseif (isset($_POST['update_syndicatedPostingPluginSettings'])) {
           $this->updateSettings();
@@ -55,7 +56,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           // Nothing
         }
 
-        $this->printAdminPage($pagination);  
+        $this->printAdminPage($currentPage);  
       } // END page check
     }
 
@@ -357,9 +358,9 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
 
     /// Prints the admin page
-    function printAdminPage($pagination) {
+    function printAdminPage($currentPage) {
       $this->printSettings();
-      $this->printProspects($pagination);
+      $this->printProspects($currentPage);
     } 
 
     /// Syndicates a feed item into a post and redirects to the post's edit page
@@ -385,20 +386,21 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     /// TODO
-    function printProspects($pagination) {
+    function printProspects($currentPage) {
       echo '<div class="wrap">';
 
       $this->printProspectsHead();
 
-      $content_pages = ceil($this->getFeedCount('') / $this->paginationCount);
-      
-      $feed_posts = $this->getFeedItems(($this->paginationCount * $pagination) - $this->paginationCount);
+      $feed_posts = $this->getFeedItems($this->itemLimit($currentPage));
+
       if (!empty($feed_posts) && is_array($feed_posts)) {
         // Found posts
         $css_class = '';
-        foreach ($feed_posts as $post) {              
-          // TODO: Check boundries, e.g. no author name so print an empty cell
+        foreach ($feed_posts as $post) {
+
+          // Swap CSS class between 'alternate' and ''
           if($css_class == 'alternate') { $css_class = ''; } else { $css_class = 'alternate'; }
+
           $post_meta = $this->getFeedItemMeta($post['ID']);
           
           $this->printFeedItem($post, $post_meta, $css_class);
@@ -413,9 +415,12 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       // Close the prospects table
       $this->printProspectsFoot();
 
+      $this->setNumberOfContentPages();
+
       // Print pages if there are some
-      if ($content_pages > 1) {
-        $this->printPagination($pagination, $content_pages);
+      if ($this->numberOfPages > 1) {
+        
+        $this->printPagination($currentPage, $this->numberOfPages);
       }
       echo "</div>"; // Closes the syndication items 'wrap' div
     }
@@ -449,6 +454,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Print a single feed item
     function printFeedItem($post, $post_meta, $css_class) {
+      // TODO: Check boundries, e.g. no author name so print an empty cell
+
 ?>        
           <tr class="<?php echo $css_class;?>" id="post-<?php echo $post['ID'] ?>">
           <td style="font-weight:bold">
@@ -587,6 +594,17 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       } else {
         return false;
       }
+    }
+
+    /// Sets the variable to the number of content pages that need to be displayed based off the 
+    ///  paginationCount setting
+    function setNumberOfContentPages() {
+      $this->numberOfPages = ceil($this->getFeedCount('') / $this->paginationCount);
+    }
+
+    /// TODO
+    function itemLimit($pageNumber) {
+      return ($this->paginationCount * $pageNumber) - $this->paginationCount;
     }
 
   } // End class
