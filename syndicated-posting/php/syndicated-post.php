@@ -11,7 +11,6 @@ if (!class_exists("SyndicatedPost")) {
     var $ping_status;
     var $post_date;
     var $post_date_gmt;
-    // TODO: Check
     var $post_type = 'syndicate';
 
     var $meta_author;

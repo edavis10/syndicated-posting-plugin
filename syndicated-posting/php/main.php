@@ -1,5 +1,4 @@
 <?php
-  // TODO: Change to include_once (and any others too)
 include ('syndicated-posting.php');
 include ('syndicated-post.php');
 
