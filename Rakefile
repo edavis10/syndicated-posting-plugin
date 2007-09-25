@@ -6,6 +6,7 @@ CLEAN.include('**/semantic.cache','./syndicated-posting.zip')
 
 PLUGIN_FOLDER = '/home/edavis/dev/Business/Customers/Shane-and-Peter/earthzine/wp-content/plugins'
 SRC_FOLDER = '/home/edavis/dev/Business/Customers/Shane-and-Peter/syndication-plugin/trunk'
+ZIP_FILE = SRC_FOLDER + "/syndicated-posting.zip"
 
 desc "Copy the plugin source to the plugin folder"
 task :copy => [:remove] do
@@ -22,15 +23,13 @@ task :zip => [:clean] do
   require 'zip/zip'
   require 'zip/zipfilesystem'
   
-  bundle_filename = "./syndicated-posting.zip"
-
   # check to see if the file exists already, and if it does, delete it.
-  if File.file?(bundle_filename)
-    File.delete(bundle_filename)
+  if File.file?(ZIP_FILE)
+    File.delete(ZIP_FILE)
   end 
 
   # open or create the zip file
-  Zip::ZipFile.open(bundle_filename, Zip::ZipFile::CREATE) do |zipfile|
+  Zip::ZipFile.open(ZIP_FILE, Zip::ZipFile::CREATE) do |zipfile|
     # Should skip svn files
     files = Dir['syndicated-posting/**/*.*']
 
@@ -42,7 +41,12 @@ task :zip => [:clean] do
   end
   
   # set read permissions on the file
-  File.chmod(0644, bundle_filename)
+  File.chmod(0644, ZIP_FILE)
+end
+
+desc "Upload zip file to server"
+task :upload => [:zip] do
+  system("scp -oPort=44444 #{ZIP_FILE} littlestreamsoftware.com:/home/websites/littlestreamsoftware/shared/uploaded-images/")
 end
 
 task :default => [:copy]
