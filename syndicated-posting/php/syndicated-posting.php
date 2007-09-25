@@ -370,8 +370,6 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
       // Pagination check
       if (isset($_GET['action']) && $_GET['action'] == 'show') {
-        // TODO: Remove debugging code
-        $this->showUpdatedMessage($_GET['syndication-page']);
         // TODO: Check value is number  SQL-INJECT
         $pagination = $_GET['syndication-page'];
       } else {
@@ -474,13 +472,16 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
 <?php
         // Pagination
-        // TODO: REQUEST_URI keeps appending on the actions from the last one
-        // TODO: No link to current page
         if ($content_pages > 1) {
           echo "<p id='syndication-pages'>Page ";
           for ($content_page = 1; $content_page <= $content_pages; $content_page++)
             {
-              echo "<a href='" . $this->url ."&action=show&syndication-page=".$content_page."'>" .$content_page . "</a> ";
+              // No link needed for the current page
+              if ($pagination == $content_page) {
+                echo "<strong>" . $content_page . "</strong> ";
+              } else {
+                echo "<a href='" . $this->url ."&action=show&syndication-page=".$content_page."'>" .$content_page . "</a> ";
+              }
             }
           echo "</p>";
         }
