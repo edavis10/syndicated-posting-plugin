@@ -14,6 +14,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       
     }
 
+    ////
+    //// Wordpress Actions and Filters
+    ////
+
     // Called when the plugin is activated/installed
     function init(){
       $this->getAdminOptions();
@@ -24,253 +28,19 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       echo '<link type="text/css" rel="stylesheet" href="' . get_bloginfo('wpurl') . '/wp-content/plugins/syndicated-posting/css/syndicated-posting.css" />' . "\n";
     }
 
-    // Returns: Array of admin options
-    function getAdminOptions() {
-      $this->options = get_option($this->adminOptionsName);
-
-      // Set defaults if empty
-      if (empty($this->options)){
-        $this->options = array(
-                               'feed_urls' => '',
-                               'search_phrases' => '');
+    /// Called after a post is saved to save the meta info
+    function saveMetaFromEdit($id) {
+      if (isset($_POST['syndicated_source_title'])) {
+        update_post_meta($id, 'syndicated_source_title', $_POST['syndicated_source_title']);
       }
-      update_option($this->adminOptionsName,$this->options);
-    }
-
-    function getSettings($option) {
-      $raw_settings = array_unique(split("\n",str_replace(',',"\n",$this->options[$option])));
-
-      $finals = array();
-      // Remove empty values
-      foreach ($raw_settings as $setting) {
-        if (trim($setting) != "") {
-          $finals[] = trim($setting);
-        }
+      if (isset($_POST['syndicated_link'])) {
+        update_post_meta($id, 'syndicated_link', $_POST['syndicated_link']);
       }
-
-      return $finals;
-    }
-
-    function getFeeds() {
-      return $this->getSettings('feed_urls');
-    }
-
-    function getSearches() {
-      return $this->getSettings('search_phrases');
-    }
-
-    function pollFeeds() {
-      // Use the built in Magpie RSS parser that is in Wordpress
-      require(ABSPATH . WPINC . '/rss.php');
-
-      $this->getAdminOptions();
-
-      // Get all the feeds
-      $feed_urls = $this->getFeeds();
-
-      foreach ($feed_urls as $feed_url)
-        {
-          $feed = fetch_rss(trim($feed_url));
-
-          // Feed good?
-          if (!$feed == false) {
-            $feed_title = $feed->channel['title'];
-            $feed_link = $feed->channel['link'];
-            foreach ($feed->items as $item ) {
-              if ($this->newFeedItem($item) <= 0) {
-                $this->addPost($item, $feed_title,$feed_link);
-              } else {
-                // Skip item
-              }
-            }
-          }
-        }
-    }
-
-    // Add the feed item to the wp_posts database as a SyndicatedPost
-    function addPost($rss, $title,$link){
-      $post = new SyndicatedPost();
-      $post->fillFromRss($rss);
-      $post_id = wp_insert_post($post);
-      add_post_meta($post_id,'syndicated_author',$post->meta_author,true);
-      add_post_meta($post_id,'syndicated_link',$post->meta_link,true);
-      add_post_meta($post_id,'syndicated_source_title',$title,true);
-      add_post_meta($post_id,'syndicated_source_link',$link,true);
-
-    }
-
-    // Check if the feed item is new to us based off the title
-    function newFeedItem($rss){
-      global $wpdb;
-      $post = $wpdb->get_var("SELECT COUNT(*) FROM wp_posts WHERE post_title = ('" . $wpdb->escape($rss['title']) . "');");
-      return $post;
-    }
-
-    function getCountOfFeedItems() {
-      global $wpdb;
-      $query = "SELECT COUNT(*) FROM wp_posts WHERE post_type = 'syndicate'" . $this->buildSearchString();
-      $count = $wpdb->get_var($query);
-      return $count;
-    }
-
-    function buildSearchString() {
-      global $wpdb;
-
-      $query = " ";
-      $phrases = $this->getSearches();
-
-      if (!empty($phrases) && is_array($phrases)) {
-        $query .= " AND ( ";
-        foreach ($phrases as $phrase) {
-          // Filter out empty strings
-          if ( strlen($phrase) > 0 ) {
-            $query .= "post_content LIKE '%" . $wpdb->escape($phrase) . "%' OR ";
-            $query .= "post_title LIKE '%" . $wpdb->escape($phrase) . "%' OR ";
-          }
-        }
-        // Hack for the final OR
-        $query .= " 0) ";
+      if (isset($_POST['syndicated_author'])) {
+        update_post_meta($id, 'syndicated_author', $_POST['syndicated_author']);
       }
-      return $query;
-    }
-
-    function getFeedItems($limit_row=0) {
-      global $wpdb;
-
-      $query = "SELECT * FROM wp_posts WHERE post_type = 'syndicate' ";
-      
-      $query .= $this->buildSearchString();
-
-      // Add on the final ORDER
-      $query .= " ORDER BY post_date DESC ";
-
-      // Limits
-      $query .= " LIMIT " . $limit_row . ", " . $this->paginationCount;
-
-      $posts = $wpdb->get_results($query, ARRAY_A);
-      return $posts;
-    }
-
-    function getFeedCount() {
-      return $this->getCountOfFeedItems();
-    }
-    
-    function getFeedItemMeta($post_id) {
-      global $wpdb;
-      $post_meta = array();
-
-      $metas = $wpdb->get_results("SELECT * FROM wp_postmeta WHERE post_id = (" . $wpdb->escape($post_id) . ");", ARRAY_A);
-      if (!empty($metas)) {
-        foreach ($metas as $meta) {
-          $post_meta[$meta['meta_key']] = $meta['meta_value'];
-        }
-      }
-      return $post_meta;
-    }
-
-    function copyFeedItemToPost($post_id) {
-      global $wpdb;
-      $feed_post = $wpdb->get_row("SELECT * FROM wp_posts WHERE id = (" . $wpdb->escape($post_id) . ");", ARRAY_A);
-      $feed_meta = $this->getFeedItemMeta($post_id);
-
-      $post = new SyndicatedPost();
-      $post->fillFromPost($feed_post,$feed_meta);
-
-      $post_id = wp_insert_post($post);
-      add_post_meta($post_id,'syndicated_author',$post->meta_author,true);
-      add_post_meta($post_id,'syndicated_link',$post->meta_link,true);
-      add_post_meta($post_id,'syndicated_source_title',$post->meta_source_title,true);
-      add_post_meta($post_id,'syndicated_source_link',$post->meta_source_link,true);
-      return $post_id;
-    }
-
-    /// Sets the post_type to be `syndicated`
-    function markFeedItemAsSyndicated($post_id) {
-      global $wpdb;
-      return $wpdb->query("UPDATE $wpdb->posts SET post_type = 'syndicated' WHERE ID = (" . $post_id .");");
-    }
-
-    /// Sets the post_type to be `syndicate_deleted`
-    function deleteFeedItem($post_id) {
-      global $wpdb;
-      return $wpdb->query("UPDATE $wpdb->posts SET post_type = 'syndicated_deleted' WHERE ID = (" . $post_id .");");
-    }
-
-    function syndicateFeedItem($post_id) {
-      // Copy the feed item to a post with metadata
-      $new_post_id = $this->copyFeedItemToPost($post_id);
-      // Mark the feed item as syndicated
-      $this->markFeedItemAsSyndicated($post_id);
-      // Redirect to the new post
-      // TODO: Hack
-      $redirect = get_option('siteurl') . '/wp-admin/post.php?action=edit&post=' . $new_post_id;
-      ?>
-        <a href="<?php echo $redirect ?>">Redirecting to your post</a>
-        <script type="text/javascript">
-          <!-- 
-               window.location = "<?php echo $redirect ?>"
-      
-            -->
-        </script>
-        <?php
-
-      
-    }
-
-    function updateSettings() {
-      if (isset($_POST['spFeedUrls'])) {
-        $this->options['feed_urls'] = apply_filters('content_save_pre', str_replace(',',"\n",$_POST['spFeedUrls']));
-      }   
-      if (isset($_POST['spSearchPhrases'])) {
-        $this->options['search_phrases'] = apply_filters('content_save_pre', str_replace(',',"\n",$_POST['spSearchPhrases']));
-      }   
-      update_option($this->adminOptionsName, $this->options);
-
-      // Re-poll feeds because the the settings changes.
-      $this->pollFeeds();
-
-    }
-    
-    // Function to check the request to see if an item is to be deleted
-    function itemDeleted() {
-      if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']) && preg_match("/\d+/",$_GET['id'])) {
-        return true;
-          } else {
-        return false;
-          }
-    }
-
-    // Function to check the request to see if a paginated page is requested
-    function paginatedPageRequested() {
-      if (isset($_GET['action']) && $_GET['action'] == 'show' && isset($_GET['syndication-page']) && preg_match("/\d+/",$_GET['syndication-page'])) {
-        return true;
-          } else {
-        return false;
-          }
-    }
-
-    function showUpdatedMessage($message) {
-      ?>
-<div class="updated">
-  <p>
-    <strong>
-      <?php _e($message, "SyndicatedPostingPlugin");?>
-    </strong>
-  </p>
-</div>
-        <?php
-    }
-
-    /// Checks the metadata to see if this post is from a syndicated post.
-    /// If so it will return the metadata, if not it will return false
-    function isSyndicatedPost($post_id) {
-      $meta = $this->getFeedItemMeta($post_id);
-      if (!empty($meta['syndicated_source_link']) ||
-          !empty($meta['syndicated_source_title']) ||
-          !empty($meta['syndicated_link'])) {
-        return $meta;
-      } else {
-        return false;
+      if (isset($_POST['syndicated_source_link'])) {
+        update_post_meta($id, 'syndicated_source_link', $_POST['syndicated_source_link']);
       }
     }
 
@@ -332,25 +102,223 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       return $c;
     }
 
-    /// Called after a post is saved to save the meta info
-    function saveMetaFromEdit($id) {
-      if (isset($_POST['syndicated_source_title'])) {
-        update_post_meta($id, 'syndicated_source_title', $_POST['syndicated_source_title']);
-      }
-      if (isset($_POST['syndicated_link'])) {
-        update_post_meta($id, 'syndicated_link', $_POST['syndicated_link']);
-      }
-      if (isset($_POST['syndicated_author'])) {
-        update_post_meta($id, 'syndicated_author', $_POST['syndicated_author']);
-      }
-      if (isset($_POST['syndicated_source_link'])) {
-        update_post_meta($id, 'syndicated_source_link', $_POST['syndicated_source_link']);
-      }
+    ////
+    //// Database functions
+    ////
 
+    // Returns: Array of admin options
+    function getAdminOptions() {
+      $this->options = get_option($this->adminOptionsName);
+
+      // Set defaults if empty
+      if (empty($this->options)){
+        $this->options = array(
+                               'feed_urls' => '',
+                               'search_phrases' => '');
+      }
+      update_option($this->adminOptionsName,$this->options);
+    }
+
+    function buildSearchString() {
+      global $wpdb;
+
+      $query = " ";
+      $phrases = $this->getSearches();
+
+      if (!empty($phrases) && is_array($phrases)) {
+        $query .= " AND ( ";
+        foreach ($phrases as $phrase) {
+          // Filter out empty strings
+          if ( strlen($phrase) > 0 ) {
+            $query .= "post_content LIKE '%" . $wpdb->escape($phrase) . "%' OR ";
+            $query .= "post_title LIKE '%" . $wpdb->escape($phrase) . "%' OR ";
+          }
+        }
+        // Hack for the final OR
+        $query .= " 0) ";
+      }
+      return $query;
+    }
+
+    function getFeedItems($limit_row=0) {
+      global $wpdb;
+
+      $query = "SELECT * FROM wp_posts WHERE post_type = 'syndicate' ";
+      
+      $query .= $this->buildSearchString();
+
+      // Add on the final ORDER
+      $query .= " ORDER BY post_date DESC ";
+
+      // Limits
+      $query .= " LIMIT " . $limit_row . ", " . $this->paginationCount;
+
+      $posts = $wpdb->get_results($query, ARRAY_A);
+      return $posts;
+    }
+
+    // Add the feed item to the wp_posts database as a SyndicatedPost
+    function addPost($rss, $title,$link){
+      $post = new SyndicatedPost();
+      $post->fillFromRss($rss);
+      $post_id = wp_insert_post($post);
+      add_post_meta($post_id,'syndicated_author',$post->meta_author,true);
+      add_post_meta($post_id,'syndicated_link',$post->meta_link,true);
+      add_post_meta($post_id,'syndicated_source_title',$title,true);
+      add_post_meta($post_id,'syndicated_source_link',$link,true);
 
     }
 
-   function printAdminPage() {
+
+    function getFeedItemMeta($post_id) {
+      global $wpdb;
+      $post_meta = array();
+
+      $metas = $wpdb->get_results("SELECT * FROM wp_postmeta WHERE post_id = (" . $wpdb->escape($post_id) . ");", ARRAY_A);
+      if (!empty($metas)) {
+        foreach ($metas as $meta) {
+          $post_meta[$meta['meta_key']] = $meta['meta_value'];
+        }
+      }
+      return $post_meta;
+    }
+
+    function copyFeedItemToPost($post_id) {
+      global $wpdb;
+      $feed_post = $wpdb->get_row("SELECT * FROM wp_posts WHERE id = (" . $wpdb->escape($post_id) . ");", ARRAY_A);
+      $feed_meta = $this->getFeedItemMeta($post_id);
+
+      $post = new SyndicatedPost();
+      $post->fillFromPost($feed_post,$feed_meta);
+
+      $post_id = wp_insert_post($post);
+      add_post_meta($post_id,'syndicated_author',$post->meta_author,true);
+      add_post_meta($post_id,'syndicated_link',$post->meta_link,true);
+      add_post_meta($post_id,'syndicated_source_title',$post->meta_source_title,true);
+      add_post_meta($post_id,'syndicated_source_link',$post->meta_source_link,true);
+      return $post_id;
+    }
+
+    /// Sets the post_type to be `syndicated`
+    function markFeedItemAsSyndicated($post_id) {
+      global $wpdb;
+      return $wpdb->query("UPDATE $wpdb->posts SET post_type = 'syndicated' WHERE ID = (" . $post_id .");");
+    }
+
+    /// Sets the post_type to be `syndicate_deleted`
+    function deleteFeedItem($post_id) {
+      global $wpdb;
+      return $wpdb->query("UPDATE $wpdb->posts SET post_type = 'syndicated_deleted' WHERE ID = (" . $post_id .");");
+    }
+
+
+    ////
+    //// Feed functions
+    ////
+
+    function pollFeeds() {
+      // Use the built in Magpie RSS parser that is in Wordpress
+      require(ABSPATH . WPINC . '/rss.php');
+
+      $this->getAdminOptions();
+
+      // Get all the feeds
+      $feed_urls = $this->getFeeds();
+
+      foreach ($feed_urls as $feed_url)
+        {
+          $feed = fetch_rss(trim($feed_url));
+
+          // Feed good?
+          if (!$feed == false) {
+            $feed_title = $feed->channel['title'];
+            $feed_link = $feed->channel['link'];
+            foreach ($feed->items as $item ) {
+              if ($this->newFeedItem($item) <= 0) {
+                $this->addPost($item, $feed_title,$feed_link);
+              } else {
+                // Skip item
+              }
+            }
+          }
+        }
+    }
+
+
+    function getFeedCount() {
+      return $this->getCountOfFeedItems();
+    }
+    
+
+    function syndicateFeedItem($post_id) {
+      // Copy the feed item to a post with metadata
+      $new_post_id = $this->copyFeedItemToPost($post_id);
+      // Mark the feed item as syndicated
+      $this->markFeedItemAsSyndicated($post_id);
+      // Redirect to the new post
+      // TODO: Hack
+      $redirect = get_option('siteurl') . '/wp-admin/post.php?action=edit&post=' . $new_post_id;
+      ?>
+        <a href="<?php echo $redirect ?>">Redirecting to your post</a>
+        <script type="text/javascript">
+          <!-- 
+               window.location = "<?php echo $redirect ?>"
+      
+            -->
+        </script>
+        <?php
+
+      
+    }
+
+    ////
+    //// Settings functions
+    ////
+
+    function getFeeds() {
+      return $this->getSettings('feed_urls');
+    }
+
+    function getSearches() {
+      return $this->getSettings('search_phrases');
+    }
+
+    function getSettings($option) {
+      $raw_settings = array_unique(split("\n",str_replace(',',"\n",$this->options[$option])));
+
+      $finals = array();
+      // Remove empty values
+      foreach ($raw_settings as $setting) {
+        if (trim($setting) != "") {
+          $finals[] = trim($setting);
+        }
+      }
+
+      return $finals;
+    }
+
+    function updateSettings() {
+      if (isset($_POST['spFeedUrls'])) {
+        $this->options['feed_urls'] = apply_filters('content_save_pre', str_replace(',',"\n",$_POST['spFeedUrls']));
+      }   
+      if (isset($_POST['spSearchPhrases'])) {
+        $this->options['search_phrases'] = apply_filters('content_save_pre', str_replace(',',"\n",$_POST['spSearchPhrases']));
+      }   
+      update_option($this->adminOptionsName, $this->options);
+
+      // Re-poll feeds because the the settings changes.
+      $this->pollFeeds();
+
+    }
+    
+
+    ////
+    //// HTML functions
+    ////
+
+
+    /// TODO: desc
+    function printAdminPage() {
       $this->getAdminOptions();
 
       // Check if the page is calling itself from a syndicate action and has a numeric id set
@@ -500,7 +468,69 @@ if (!class_exists("SyndicatedPostingPlugin")) {
  <?php
 
         } // END syndication action check
+    } 
+
+    ////
+    //// Helper functions
+    ////
+
+    // Check if the feed item is new to us based off the title
+    function newFeedItem($rss){
+      global $wpdb;
+      $post = $wpdb->get_var("SELECT COUNT(*) FROM wp_posts WHERE post_title = ('" . $wpdb->escape($rss['title']) . "');");
+      return $post;
     }
+
+    function getCountOfFeedItems() {
+      global $wpdb;
+      $query = "SELECT COUNT(*) FROM wp_posts WHERE post_type = 'syndicate'" . $this->buildSearchString();
+      $count = $wpdb->get_var($query);
+      return $count;
+    }
+
+    // Function to check the request to see if an item is to be deleted
+    function itemDeleted() {
+      if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']) && preg_match("/\d+/",$_GET['id'])) {
+        return true;
+          } else {
+        return false;
+          }
+    }
+
+    // Function to check the request to see if a paginated page is requested
+    function paginatedPageRequested() {
+      if (isset($_GET['action']) && $_GET['action'] == 'show' && isset($_GET['syndication-page']) && preg_match("/\d+/",$_GET['syndication-page'])) {
+        return true;
+          } else {
+        return false;
+          }
+    }
+
+    function showUpdatedMessage($message) {
+      ?>
+<div class="updated">
+  <p>
+    <strong>
+      <?php _e($message, "SyndicatedPostingPlugin");?>
+    </strong>
+  </p>
+</div>
+        <?php
+    }
+
+    /// Checks the metadata to see if this post is from a syndicated post.
+    /// If so it will return the metadata, if not it will return false
+    function isSyndicatedPost($post_id) {
+      $meta = $this->getFeedItemMeta($post_id);
+      if (!empty($meta['syndicated_source_link']) ||
+          !empty($meta['syndicated_source_title']) ||
+          !empty($meta['syndicated_link'])) {
+        return $meta;
+      } else {
+        return false;
+      }
+    }
+
   } // End class
  }
 
