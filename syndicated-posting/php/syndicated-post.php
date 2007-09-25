@@ -21,7 +21,9 @@ if (!class_exists("SyndicatedPost")) {
 
     // Constructor
     function SyndicatedPost() {
-      
+      // Use right now as the default date
+      $this->post_date = date("Y-m-d H:i:s");
+      $this->post_date_gmt = date("Y-m-d H:i:s");
     }
 
     function cleanTags($content) {
