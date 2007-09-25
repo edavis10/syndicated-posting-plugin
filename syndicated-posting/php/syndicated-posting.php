@@ -385,7 +385,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       
     }
 
-    /// TODO
+    /// Gets the prospects and prints each one in a table
     function printProspects($currentPage) {
       echo '<div class="wrap">';
 
@@ -482,7 +482,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 <?php
     }
 
-    /// TODO
+    /// Prints the pagination links
     function printPagination($pagination, $content_pages) {
         // Pagination
           echo "<p id='syndication-pages'>Page ";
@@ -498,7 +498,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           echo "</p>";
     }
 
-    /// TODO
+    /// Prints the settings form for the search terms and feeds
     function printSettings() {
  ?>
 <div class="wrap">
@@ -602,7 +602,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       $this->numberOfPages = ceil($this->getFeedCount('') / $this->paginationCount);
     }
 
-    /// TODO
+    /// Finds the SQL limit for this page.  Used by the pagination so item 31-60 are
+    ///  shown on page two (if 30 items a page).
     function itemLimit($pageNumber) {
       return ($this->paginationCount * $pageNumber) - $this->paginationCount;
     }
