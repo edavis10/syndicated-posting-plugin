@@ -388,7 +388,6 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       // Mark the feed item as syndicated
       $this->markFeedItemAsSyndicated($post_id);
       // Redirect to the new post
-      // TODO: Hack
       $redirect = get_option('siteurl') . '/wp-admin/post.php?action=edit&post=' . $new_post_id;
       ?>
         <a href="<?php echo $redirect ?>">Redirecting to your post</a>
@@ -472,7 +471,6 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Print a single feed item
     function printFeedItem($post, $post_meta, $css_class) {
-      // TODO: Check boundries, e.g. no author name so print an empty cell
 
 ?>        
           <tr class="<?php echo $css_class;?>" id="post-<?php echo $post['ID'] ?>">
