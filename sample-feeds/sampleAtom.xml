@@ -1,0 +1,1010 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns='http://www.w3.org/2005/Atom'
+      xmlns:thr='http://purl.org/syndication/thread/1.0'
+      xml:base='http://www.tbray.org/ongoing/ongoing.atom'
+      xml:lang='en-us'>
+ <title>ongoing</title>
+ <id>http://www.tbray.org/ongoing/</id>
+ <link href='./' />
+ <link rel='self' href='' />
+ <link rel='replies'       thr:count='101'       href='/home/tbray.org/www/html/ongoing/comments.atom' />
+ <logo>rsslogo.jpg</logo>
+ <icon>/favicon.ico</icon>
+ <updated>2007-09-25T15:11:05-07:00</updated>
+ <author><name>Tim Bray</name></author>
+ <subtitle>ongoing fragmented essay by Tim Bray</subtitle>
+ <rights>All content written by Tim Bray and photos by Tim Bray Copyright Tim Bray, some rights reserved, see /ongoing/misc/Copyright</rights>
+ <generator uri='/misc/Colophon'>Generated from XML source code using Perl, Expat, Emacs, Mysql, Ruby, Java, and ImageMagick.  Industrial-strength technology, baby.</generator>
+
+<entry xml:base='When/200x/2007/09/23/'>
+ <title>Flat Rate Considered Harmful</title>
+ <link href='Flat-Rate-Considered-Harmful' />
+ <link rel='replies'        thr:count='16'        type='application/xhtml+xml'        href='Flat-Rate-Considered-Harmful#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/23/Flat-Rate-Considered-Harmful</id>
+ <published>2007-09-23T13:00:00-07:00</published>
+ <updated>2007-09-24T14:28:14-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Business/Internet' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Business' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Internet' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Mobile' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Mobile' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>Lots of people, including for example <a href='http://blogs.sun.com/jonathan'>my CEO</a>, say that the hand-held mobile  is going to be a crucial, maybe a dominant, way for people to experience the Net; particularly on the other side of what we now call the digital divide.  Only there&#x2019;s an economic problem.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Lots of people, including for example
+<a href="http://blogs.sun.com/jonathan">my CEO</a>, say that the hand-held
+mobile 
+is going to be a crucial, maybe a dominant, way for people to
+experience the Net; particularly on the other side of what we now call
+the digital divide.  Only there’s an economic problem.</p>
+<p>I don’t know anyone who’s really satisfied with the quality of the
+mobile Net experience; the iPhone seems to be pushing the edge of
+tolerable, as long as you’re on WiFi.  But still, where’s the rich menu of
+multi-modal multi-media location-sensitive always-on exquisitely-personalized
+applications that the hardware and the Net ought to deliver?  Surely
+there’s something more interesting than Blackberry-style mail?</p>
+<p>Here’s one problem: fixed-rate data plans.  With those, once the telco has
+your money they really want you on the network as little as possible;
+there’s no incentive to make it run faster or have better apps or lure you
+into using it more.  Some of the network operators have this idea that the way
+to make money 
+is to control the relationship with the customer and extract a piece of unit of
+payment that flows through a mobile device.</p> 
+<p>The conventional wisdom—and one I buy into—is that businesses ought to focus
+on their core competences.  For mobile network operators, those would be
+bandwidth and billing.  So, here’s a recipe for blowing up the mobile-network
+business and making the world better and also a whole lot of money.</p>
+<ol>
+<li><p>Discontinue all flat-rate mobile data plans.</p></li>
+<li><p>Offer a-la-carte data at a price that seems obscenely, ridiculously,
+low.</p></li>
+<li><p>Radically open up the network.  Let anyone connect anything to it.
+Sell phones that make it really easy to download apps from anywhere and run
+them.</p></li>
+<li><p>Build a developer ecosystem.  Make it effortless to get in.  Build a
+hot-new-apps social network; maybe in alliance with one of the big existing
+social nets.</p></li>
+<li><p>Don’t ask developers for any money.  But sell the use of your billing
+system at a really attractive rate, so people can sign up for apps and have it
+billed to their phone plan.  Do it at a scale that an app can charge a dime a
+month and still make money on scale.</p></li>
+<li><p>Duck and cover, because the explosion of creativity and new business
+models will cause some casualties.</p></li>
+</ol>
+<p>Seems like a no-brainer to me.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/20/'>
+ <title>The Wide Finder Project</title>
+ <link href='Wide-Finder' />
+ <link rel='replies'        thr:count='9'        type='application/xhtml+xml'        href='Wide-Finder#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/20/Wide-Finder</id>
+ <published>2007-09-20T13:00:00-07:00</published>
+ <updated>2007-09-24T08:16:26-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Concurrency' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Concurrency' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>In my <cite>Finding Things</cite> chapter of <a href='http://www.oreilly.com/catalog/9780596510046/'>Beautiful Code</a>, the first complete program is a little Ruby script that reads the <span class="o">ongoing</span> Apache logfile and figures out which articles have been fetched the most. It&#x2019;s a classic example of the culture, born in Awk, perfected in Perl, of getting useful work done by combining regular expressions and hash tables. I want to figure out how to write an equivalent program that runs fast on modern CPUs with low clock rates but many cores; this is the Wide Finder project.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>In my <cite>Finding Things</cite> chapter of
+<a href="http://www.oreilly.com/catalog/9780596510046/">Beautiful Code</a>,
+the first complete program is a little Ruby script that reads the <span class='o'>ongoing</span>
+Apache logfile and figures out which articles have been fetched the most.
+It’s a classic example of the culture, born in Awk, perfected in Perl, of
+getting useful work done by combining regular expressions and hash tables.
+I want to figure out how to write an equivalent program that runs fast on
+modern CPUs with low clock rates but many cores; this is the Wide Finder
+project.</p>
+<p>Fragments in the Wide Finder Project series:</p>
+<ul>
+<li><p><a href="/ongoing/When/200x/2007/09/21/Erlang">WF I: Erlang
+Ho!</a></p></li>
+<li><p><a href="/ongoing/When/200x/2007/09/22/Erlang">WF II: Erlang
+blues</a></p></li>
+<li><p><a href="/ongoing/When/200x/2007/09/23/Erlang">WF III: Lessons</a></p></li>
+</ul>
+<p>It’s already obvious that Web-oriented frameworks in general, and Java EE
+in particular, run like a bat out of hell on processors like our Niagara boxes
+and especially the systems that will be built around the new
+<a href="http://www.sun.com/processors/UltraSPARC-T2/">T2</a>.</p>
+<p>But you know, there’s lots of interesting computing that doesn’t happen in
+Web frameworks. 
+Like, for example, logfile processing.
+And since more and more computers are going to start looking
+more and more like our Niagara-family boxes, we’re going to need to figure out
+how to get this kind of basic unglamorous essential job to run fast on them.</p>
+<p>Whatever it is we use to write the many-core-friendly Intergalactic P2P
+Adaptive Semantic Web4.0 killer apps of the future, well, it has to be a
+<em>general-purpose</em> programming language, because they always win.  Which
+means it has to have a good way to read a logfile and compute the most popular
+fetches.  You might argue that this program is kind of heavy on I/O
+and text processing.  That’s correct; but so is computing in general.</p>
+<p>For reference, here’s the little Ruby program:</p>
+<pre><code>counts = {}
+counts.default = 0
+
+ARGF.each_line do |line|
+  if line =~ %r{GET /ongoing/When/\d\d\dx/(\d\d\d\d/\d\d/\d\d/[^ .]+) }
+    counts[$1] += 1
+  end
+end
+
+keys_by_count = counts.keys.sort { |a, b| counts[b] &lt;=> counts[a] }
+keys_by_count[0 .. 9].each do |key|
+  puts "#{counts[key]}: #{key}"
+end</code></pre>
+<p>Several have pointed out that I should have used <code>sort_by</code> at
+the bottom.  Whatever.</p>
+<p>It took this code 7½ seconds of CPU, 13½ seconds elapsed, to process a
+million and change records, a quarter-gig or so, on last year’s 1.67Ghz
+PowerBook.  A Perl version was approximately twice as fast.</p>
+<p>What I’m looking for is something that’s approximately as compact and
+readable, and runs many times faster on a modern many-core meat-grinder.
+Should be fun.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/23/'>
+ <title>WF III: Lessons</title>
+ <link href='Erlang' />
+ <link rel='replies'        thr:count='12'        type='application/xhtml+xml'        href='Erlang#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/23/Erlang</id>
+ <published>2007-09-23T13:00:00-07:00</published>
+ <updated>2007-09-23T23:13:49-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Concurrency' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Concurrency' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Erlang' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Erlang' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>This is the third progress report from the <a href='/ongoing/When/200x/2007/09/20/Wide-Finder'>Wide Finder Project</a>. Given that I launched this brouhaha late on a Friday, totally the worst possible time, I&#x2019;m astounded at the intensity and quality of the conversation that&#x2019;s going on. I want to address two themes that have emerged, one of which seems stupid and the other smart.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>This is the third progress report from the
+<a href="/ongoing/When/200x/2007/09/20/Wide-Finder">Wide Finder Project</a>.
+Given that I launched this brouhaha late on a Friday, totally the worst
+possible time, I’m astounded at the intensity and quality of the conversation
+that’s going on. I want to address two themes that have emerged,
+one of which seems stupid and the other smart.</p>
+<h2 id='p-1'>The Wrong Problem?</h2>
+<p>There’ve been comments and blogs along the lines of “WTF, trying
+to shake down Erlang using what amounts to a degenerate Awk script!!?
+This isn’t what Erlang is for!  It’s all just I/O!  Lines of text are so
+1980’s!”</p>
+<p>Nope; the further this goes, the more I think it’s a valid line of
+research.  You know all those kazillions of Sun servers out there?  Let me
+tell you, they’re not all running state-of-the-art Java-on-the-net apps.  A huge
+proportion of all those cycles goes into Perl scripts and COBOL batches and C++
+meat-grinders and FORTRAN number-crunching.  Furthermore, if you look at the
+numbers from running my Perl and Ruby scripts, it’s obvious that they’re
+pegging both the CPU and I/O needles; so they’re nicely multidimensional in a
+simple way.</p>
+<p>This is the kind of nasty unglamorous job that a lot of our customers run
+all the time to pay their rents, and this whole business is making a big bet
+on many-core computers, and it’s just not on to tell all those people that
+those are the wrong kind of jobs for the new iron.</p>
+<h2 id='p-2'>The Good News</h2>
+<p>I first saw this on the 
+<a href="http://www.trapexit.org/forum/viewtopic.php?p=31894#31894">Erlang
+Questions</a> mailing list, from someone whose 
+handle was Patrick: “The good news is speeding up the i/o in erlang should be
+easier than introducing better concurrency to another language.”  Then there’s
+Patrick (the some one?) Logan saying the same thing in
+<a href="http://patricklogan.blogspot.com/2007/09/postmodern-io.html">Postmodern I/O</a>.</p>
+<p>Yep.</p>
+<p>In fact, there are practical suggestions on how exactly to do that, from
+<a href="http://www.tbray.org/ongoing/When/200x/2007/09/22/Erlang#c1190584602.142246">Clayton
+Wheeler</a> and
+<a href="http://steve.vinoski.net/blog/2007/09/23/tim-bray-and-erlang/">Steve
+Vinoski</a>. (What <em>is</em> he up to at the new startup?).</p>
+<p>Not only will I kick the tires, I’ll try the code out on our unreleased
+T2-based many-core/many-thread monster.  This is going to be fun.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/22/'>
+ <title>WF II: Erlang Blues</title>
+ <link href='Erlang' />
+ <link rel='replies'        thr:count='29'        type='application/xhtml+xml'        href='Erlang#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/22/Erlang</id>
+ <published>2007-09-22T13:00:00-07:00</published>
+ <updated>2007-09-23T09:08:08-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Concurrency' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Concurrency' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Erlang' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Erlang' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>This is the second progress report from the <a href='/ongoing/When/200x/2007/09/20/Wide-Finder'>Wide Finder Project</a>, and a follow-on from the first, <a href='/ongoing/When/200x/2007/09/21/Erlang'>Erlang Ho!</a>  The one thing that Erlang does right is so important that I&#x2019;d like to get past its problems. So far I can&#x2019;t.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>This is the second progress report from the
+<a href="/ongoing/When/200x/2007/09/20/Wide-Finder">Wide Finder Project</a>,
+and a follow-on from the first,
+<a href="/ongoing/When/200x/2007/09/21/Erlang">Erlang Ho!</a>  The one thing
+that Erlang does right is so important that I’d like to get past its
+problems. So far I can’t.</p>
+<p><i>[Update: Several people wrote “show me the data!”  Well, OK then.  
+Ten thousand lines of
+logfile, a little over two meg, may be found at
+<code>www.tbray.org/tmp/o10k.ap</code>.  Anyone who can generate Erlang code
+that can read this stuff and parse out the <span class='o'>ongoing</span>
+fragment 
+fetches at a remotely competitive speed will get me interested in Erlang
+again.]
+[Update II: See the comments: the problem seems to be <code>io:get_line</code>
+(which is a serious problem, by the way).  At
+first glance, the solutions
+work for the case when you can read the whole file into memory before you
+start to process any of it.  Looks like I’ll be spending a bit more quality
+time with E.]</i></p>
+<h2 id='p-1'>Interactive Irritation</h2>
+<p>If you type <code>erl</code> at your shell prompt, you’re in Erlang.  There
+are differences between what you can have in a file and
+what you can type at the prompt.  And when you type control-D, nothing
+happens; to get out, you have to interrupt it with control-C or
+equivalent.  This is wrong.</p>
+<p>If you type <code>erlc foo.erl</code> it’ll compile into
+<code>foo.beam</code>, but you can’t just type
+<code>erl foo.beam</code> to run it, you have to add a bunch of
+stupid pettifogging options.  This is wrong.</p>
+<h2 id='p-2'>Slow Basics</h2>
+<p>Yesterday, I reported on Erlang’s <em>appalling</em> regexp performance.
+Someone using the handle “Masklinn”
+<a href="http://www.tbray.org/ongoing/When/200x/2007/09/21/Erlang#c1190452706.452333">suggested</a> using 
+pattern-matching with what Erlang calls “binaries” instead.  So I did.  Let’s
+leave the add-’em-up part of my problem out, and zero in on the problem of
+getting Erlang to read the 1,167,948 lines of logfile and select the 105,099
+that are fetches of <span class='o'>ongoing</span> fragments.</p>
+<p>I coded it up using patterns per Masklinn’s suggestion and it was really
+much better, burning only 56.44 CPU seconds on my MacBook.  The code looks
+like this:</p>
+<pre><code>process_match(&lt;&lt; "/ongoing/When/", Trailer/binary >>) ->
+    Last = binary_to_list(Trailer),
+    case lists:member($., Last) of
+	true -> 0;
+	false -> 1
+    end;
+process_match(_) -> 0.
+
+scan_line(eof, _, Count) -> Count;
+scan_line(Line, File, Count) ->
+    Uri = list_to_binary(lists:nth(7, string:tokens(Line, " "))),
+    NewCount = Count + process_match(Uri),
+    scan_line(io:get_line(File, ''), File, NewCount).</code></pre>
+<p>At this point I smelled a rat; in particular, an I/O rat.  So I ripped out
+all the fragment-recognition crap and measured how long it takes Erlang to
+read the lines:</p>
+<pre><code>scan_line(eof, _, Count) -> Count;
+scan_line(_, File, Count) ->
+    scan_line(io:get_line(File, ''), File, Count + 1).</code></pre>
+<p>That was better: a mere 34.165 CPU seconds.</p>
+<p>Except for, on the same MacBook, my simple little Ruby program read the
+lines, parsed out the fragment fetches, and did all the totaling and sorting
+in, let’s see... 3.036 CPU seconds (3.47 seconds elapsed).</p>
+<h2 id='p-5'>Hold On a Second</h2>
+<p>Unlike Ruby, Erlang is highly concurrent.  So if I ran it on an 8-core
+machine, the Ruby would run at the same speed, but the Erlang ought to go
+faster.  Except for parallelizing line-at-a-time I/O from a file would be
+hard.  And even if you could, and go eight times as fast, and even leaving out
+all the matching and adding, you’re still half again as slow as Ruby.  This is
+wrong.</p>
+<h2 id='p-3'>Dear Erlang I:</h2>
+<p>I like you.  Really, I do.  But until you can read lines of text out of a
+file and do basic pattern-matching against them acceptably fast (which most
+people would say is <em>faster</em> than Ruby), you’re stuck in a niche;
+you’re a thought experiment and a consciousness-raiser and an engineering
+showpiece, but you’re not a general-purpose tool.  Sorry.</p>
+<p>I’m done with beating my head against Erlang for now.  If someone can
+show me how to make it read and pattern-match at a remotely competitive speed,
+I’ll be able actually to look at that nice concurrency stuff; and I’d like
+to.</p>
+<h2 id='p-4'>Dear Erlang II:</h2>
+<p>Thank you for helping me think about the Wide Finder problem.  As a result
+of these days together, I think I know what the ideal solution 
+would look like.  I suspect it’s not out there yet, but I bet I
+can recognize it when I see it.  More on that later.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/22/'>
+ <title>Early Autumn</title>
+ <link href='Early-Autumn' />
+ <link rel='replies'        thr:count='3'        type='application/xhtml+xml'        href='Early-Autumn#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/22/Early-Autumn</id>
+ <published>2007-09-22T13:00:00-07:00</published>
+ <updated>2007-09-22T22:27:15-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Arts/Photos' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Arts' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Photos' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Garden' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Garden' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>I spent time with the baby in the garden this afternoon, and we both had fun.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>I spent time with the baby in the garden this afternoon, and we both had
+fun.</p>
+<p>The roses still have some new blossoms, but even the old ones are worth
+watching in this light.</p>
+<img src="IMGP6761.png" alt="Tattered Royal Sunset rose blossom" />
+<p>The blueberry leaves are turning red almost as you watch them.</p>
+<img src="IMGP6763.png" alt="Blueberry leaves turning red" />
+<p>The honeysuckle that I love to photograph is still flowering a bit, but its
+leaves are showing the season’s wear and tear, and its energies are devoted to
+reddening its berries.</p>
+<img src="IMGP6767.png" alt="Honeysuckle berries" />
+<p>The spiders of early summer are many and irritating, spinning their webs at
+night so you catch them with your face in the morning.  The remaining spiders
+are bigger, presumably the ones lucky or smart not to have got in the way of
+<i>homo sapiens</i>; but they’re moving slow and their webs are cluttered and
+tattered.</p>
+<img src="IMGP6768.png" alt="Spider on weatherbeaten web" />
+<p>In the slanting light, the heavenly-bamboo leaves are decorated with
+shadows of heavenly-bamboo leaves.</p>
+<img src="IMGP6772-Edit.png" alt="Heavenly bamboo leaves with shadows of other leaves" />
+<p>Our front steps need sweeping.</p>
+<img src="IMGP6777.png" alt="Green steps with railing shadows" />
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/21/'>
+ <title>WF I: Erlang Ho!</title>
+ <link href='Erlang' />
+ <link rel='replies'        thr:count='8'        type='application/xhtml+xml'        href='Erlang#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/21/Erlang</id>
+ <published>2007-09-21T13:00:00-07:00</published>
+ <updated>2007-09-21T16:52:29-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Concurrency' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Concurrency' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Erlang' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Erlang' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>This is the first progress report from the <a href='/ongoing/When/200x/2007/09/20/Wide-Finder'>Wide Finder Project</a>. Erlang is the obvious candidate for a Wide Finder implementation.  It may be decades old but it&#x2019;s the new hotness, it&#x2019;s got a <a href='http://www.pragmaticprogrammer.com/titles/jaerlang/'>PragBook</a> (<a href='http://www.amazon.com/gp/product/193435600X?ie=UTF8&amp;tag=anyway-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=193435600X'>@Amazon</a>),  I hear heavy breathing from serious software geeks whichever way I listen. So, let&#x2019;s give it a whirl.  <i>[Warning: Long and detailed, but the conclusion comes first.]</i></div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>This is the first progress report from the
+<a href="/ongoing/When/200x/2007/09/20/Wide-Finder">Wide Finder Project</a>.
+Erlang is the obvious candidate for a Wide Finder implementation.  It may be
+decades old but it’s the new hotness, it’s got a
+<a href="http://www.pragmaticprogrammer.com/titles/jaerlang/">PragBook</a> (<a href="http://www.amazon.com/gp/product/193435600X?ie=UTF8&amp;tag=anyway-20&amp;linkCode=as2&amp;camp=1789&amp;creative=9325&amp;creativeASIN=193435600X">@Amazon</a>), 
+I hear heavy breathing from serious software geeks whichever way I listen.
+So, let’s give it a whirl.  <i>[Warning: Long and
+detailed, but the conclusion comes first.]</i></p>
+<h2 id='p-1'>Conclusion</h2>
+<p>Based on a few days’ bashing, I think that if I were
+starting out on a networked application that needed to run well on many-core
+systems and I wanted to be really <em>really</em> sure would never go
+down, Erlang might be just the ticket.</p>
+<p>But as for the Wide Finder problem: Erlang, as it ships today, doesn’t work.
+It’s got slow-ish file I/O and ridiculously, unusably slow regular
+expression processing.  There may be work-arounds.</p> 
+<h2 id='p-2'>Leaping In</h2> 
+<p>Joe Armstrong’s book is no Camel or Pickaxe, but it’s OK.  Armstrong tends
+to lead with theory, introducing the language formalisms <em>then</em> showing
+how you might use them.  
+The coverage is a little thin; there are lots of big
+important pieces of the library that are entirely bypassed, and lots of
+omitted pieces in those that are covered.  Whatever; if you’re an experienced
+programmer, you’ll be able to to use this as a bootstrap, and there are 
+decent resources online.</p>
+<p>I raised my eyebrows a bit at the near-complete absence of any discussion
+of text processing, regular expressions, and so on.  Also at Erlang’s quaint
+notions about strings and characters; see Sam Ruby’s
+<a href="http://intertwingly.net/blog/2007/09/14/ASCII-ISO-8859-1-UCS-and-Erlang">ASCII, ISO-8859-1, UCS, and Erlang</a>.
+Well, the language reflects the book.</p>
+<p>The rest of this piece is basically my working notes from the last few
+days’ work.
+I’m sure the source-code snippets will make real Erlang experts blanch in
+horror.  That’s OK, I’m probably reasonably typical of an experienced
+developer picking this stuff up, so my goofs are likely usefully diagnostic.</p>
+<h2 id='p-3'>Looping</h2>
+<p>Erlang doesn’t want to; it wants you to use tail-recursion instead.  Here’s
+how I process all the lines out of a file:</p>
+<pre><code>scan_line(io:get_line(File, ''), File, Pattern, Counter).
+
+scan_line(eof, _, _, _) -> 0;
+scan_line(Line, File, Pattern, Counter) ->
+    process_match(Line, regexp:match(Line, Pattern), Counter),
+    scan_line(io:get_line(File, ''), File, Pattern, Counter).</code></pre>
+<p>I suppose this is OK, except for the tail recursion is really 
+a glorified <code>goto</code> statement, and after a while it starts to
+feel like an elaborate fake-recursive lie.</p>
+<h2 id='p-4'>Counting</h2>
+<p>In most computer languages, the way you count things is by incrementing a
+variable.  In the Ruby program that the Wide Finders are trying to replicate,
+it’s like this:</p>
+<pre><code>    counts[$1] += 1</code></pre>
+<p>Except for, in Erlang, Variables aren’t variable, so you Can’t Do That.
+I thought of two ways to count things.  Every Erlang process has a process
+dictionary, i.e. a hashtable or content-addressable store or whatever, with
+<code>get()</code> and <code>put()</code> calls.  This is the kind of thing
+that the Ruby code above depends on; the square brackets are a dictionary
+lookup. 
+The problem is, Joe Armstrong severely disses the use
+of the dictionary; you get the idea that if you use it, you’re the kind of
+person who sniffs little girls’ bicycle seats for thrills.</p>
+<p>There’s also a hashtable package called <code>ets</code>, of which Joe
+expresses less disapproval.</p>
+<p>Another way to count things, which I suspect would make Erlinguists
+happier, is to spawn a process for each thing you need to count, containing code
+like so:</p>
+<pre><code>counter_loop(Count) ->
+    receive
+	{ incr } ->
+	    counter_loop(Count + 1);
+	{ report, To } ->
+	    To ! { count, Count },
+	    counter_loop(Count)
+    end.</code></pre>
+<p>Then you talk to it with code like this:</p>
+<pre><code>incr(Counter) ->
+    Counter ! { incr }.
+
+find_count(Counter) ->
+    Counter ! { report, self() },
+    receive
+	{ count, Count } ->
+	    Count
+    end.</code></pre>
+<p>In my logfile, there is a small number of thousands of unique URIs to
+count, and the Erlang posse loves chest-beating about their process mojo, so
+this may be a good fit.  Of course, you need some extra infrastructure to
+spawn the counter processes and map each unique URI to the process that’s
+counting it, but I built that and it seems to work OK.</p>
+<h2 id='p-5'>Performance</h2>
+<p>Reviewing: that little Ruby program could process a week’s worth of data,
+a million and change lines, maybe a quarter of a gig, in about 7½ seconds of
+CPU, 13½ seconds elapsed.  Perl was about twice as fast.</p>
+<p>My first cut in Erlang, based on the per-process dictionary, took around
+<em>eight minutes</em> of CPU, and kept one of my MacBook’s Core Duo
+processors pegged at 97% while it was running.  Ouch!</p>
+<p>Switching to the <code>ets</code> version made no difference, nor did
+switching to my lightweight multi-process counter as illustrated above.</p>
+<h2 id='p-6'>Profiling</h2>
+<p>Erlang comes with no less than three profilers, fairly thinly documented.
+I ended up using something called <em>fprof</em>.  It’s a pig.
+I put it to work on a 100K-line subset of the test data, and it ground my
+computer to a halt and exhibited no progress in ten minutes, I killed that and
+started again with a 10K-line (2M of data) subset.  It was still pretty bad;
+then I noticed that the profile trace was up over 8G in size and growing fast.
+So I tried again on only a thousand lines (195K), and the profile data was a
+mere 900M.</p>
+<p>Eventually, the profiler revealed the awful truth: my program was spending
+90% of its time in <code>regexp:match</code> and another 9% in
+<code>io:get_line</code>.  I put my amazing powers of deduction to work and
+considered the hypothesis that Erlang regular expressions are slow.  I had
+previously noticed this comment in the implementation:</p>
+<pre><code>%% Note that we interpret the syntax tree of a regular expression
+%% directly instead of converting it to an NFA and then interpreting
+%% that. This method seems to go significantly faster.</code></pre>
+<p>Well, a single-digit number of seconds with Google turned up lots of
+evidence, as for example from Gaspar Chilingarov in
+<a href="http://zanazan.am/erlang/re.html">Implementatoin of regular
+expressions in pure Erlang</a> <i>[sic]</i>: “In you tried to use regexp
+module from base erlang distribution or gregexp from jungerl, you noticed,
+that they work quite slow and are not usable to real text extraction
+tasks.”</p>
+<p>There are alternatives: Gaspar, quoted above, provides one, and there has
+been
+<a href="http://www.erlang.org/pipermail/erlang-questions/2006-August/022596.html">at
+least one</a> interface to the Posix regex libraries.</p>
+<p>So I’ll check these out, because I’d really like to get past this basic
+stuff and investigate whether, as seems likely, I can get past Erlang’s
+reluctance to read, parse, and count, and make use of its allegedly-excellent concurrency.</p>
+<h2 id='p-7'>Postscript</h2>
+<p>And I should say: I’ve really enjoyed having to learn a new way to think
+about computer programming.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/21/'>
+ <title>The Rubinius Sprint</title>
+ <link href='Rubinius-Sprint' />
+ <link rel='replies'        thr:count='3'        type='application/xhtml+xml'        href='Rubinius-Sprint#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/21/Rubinius-Sprint</id>
+ <published>2007-09-21T13:00:00-07:00</published>
+ <updated>2007-09-21T15:16:29-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Ruby' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Ruby' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>Last week in Denver, the <a href='http://rubini.us/'>Rubinius</a> guys had a coding sprint; read about it in Brian Ford&#x2019;s <a href='http://blog.brightredglow.com/2007/9/17/rubinius-sprint-retrospective'>Rubinius sprint retrospective</a> and Wilson Bilkovich&#x2019;s <a href='http://metaclass.org/2007/9/18/define-method'>Implementing define_method</a>.  We at Sun supported it by covering the travel costs (well, we will as soon as I get the paperwork, guys) and by sending Charles Nutter along for a day.  Looks like they got some good stuff done.  Rubinius is an attempt to build the next-gen Ruby implementation.  Which is happening in parallel with the &#x201c;official&#x201d; Ruby 1.9 work in Japan and the JRuby project.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Last week in Denver, the
+<a href="http://rubini.us/">Rubinius</a> guys had a coding sprint; read about
+it in Brian Ford’s
+<a href="http://blog.brightredglow.com/2007/9/17/rubinius-sprint-retrospective">Rubinius sprint retrospective</a>
+and Wilson Bilkovich’s
+<a href="http://metaclass.org/2007/9/18/define-method">Implementing
+define_method</a>.  We at Sun supported it by covering the travel costs (well,
+we will as soon as I get the paperwork, guys) and by sending Charles Nutter
+along for a day.  Looks like they got some good stuff done.  Rubinius is an
+attempt to build the next-gen Ruby implementation.  Which is happening in
+parallel with the “official” Ruby 1.9 work in Japan and the JRuby project.</p>
+<p>Basically, we’re supporting all of them.  Along with giving Rubinius a
+hand, we employ half the JRuby committers, we’ve donated a server to Matz’s
+gang, and (I hope to be able to announce soon) we’re going to be giving the
+Japanese side some other support.</p>
+<p>Why are we doing this?  Because, in my view, Ruby isn’t finished.  It’s a
+great substrate for Rails, it’s immensely useful for building all sorts of
+things, but it’s <em>not fast enough</em>.  I agree with Avi Bryant’s argument
+that a language isn’t finished until it’s fast enough to extend itself.
+Frankly, none of the language enhancements proposed for Ruby 2.0 make my heart
+go pitter-patter.  But give me a Ruby with performance as good as a really
+good Smalltalk VM, and the space of things for which you need 
+statically-typed languages shrinks to a really uninteresting size.</p>
+<p>Except for, nobody including me is smart enough to predict which of the
+Ruby.next implementations is going to have that performance mojo.  So, it
+seems like the only reasonable thing is to bet on all of ’em.  One thing that
+makes this easy is that all the teams get along with each other; a natural
+outgrowth of Ruby culture, and something from which we can all learn.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/20/'>
+ <title>Postmodern Errors</title>
+ <link href='Error-Message' />
+ <link rel='replies'        thr:count='13'        type='application/xhtml+xml'        href='Error-Message#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/20/Error-Message</id>
+ <published>2007-09-20T13:00:00-07:00</published>
+ <updated>2007-09-20T12:04:07-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Coding' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Coding' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Concurrency' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Concurrency' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>Today&#x2019;s fashionable programming languages, in particular Ruby, Python, and Erlang, have something in common: really lousy error messages.  I guess we just gotta suck it up and deal with it.  But today I got something really, uh, <em>special</em> from Erlang.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Today’s fashionable programming languages, in particular Ruby, Python, and
+Erlang, have something in common: really lousy error messages.  I guess we
+just gotta suck it up and deal with it.  But today I got something really, uh,
+<em>special</em> from Erlang.</p>
+<p>Doing loops with tail recursion is wonderful, except when it’s not.</p>
+<pre><code>2> seq:scan('o10.ap').
+
+=ERROR REPORT==== 19-Sep-2007::23:35:10 ===
+Error in process &lt;0.31.0> with exit value: {badarg,[{erlang,tl,[{concat,
+{concat,{concat,{concat,{concat,{concat,{concat,{concat,{concat,{concat,
+{concat,{concat,{concat,{concat,{concat,{concat,{concat,{concat,{concat,
+{concat,{concat,{concat,{concat... 
+
+** exited: {badarg,
+            [{erlang,
+              tl,
+              [{concat,
+                {concat,
+                 {concat,
+                  {concat,
+                   {concat,
+                    {concat,
+                     {concat,
+                      {concat,
+                       {concat,
+                        {concat,{concat,{...},...},{char_class,...}},
+                        47},
+                       {char_class,[{48,57}]}},
+                      {char_class,[{48,57}]}},
+                     47},
+                    {char_class,[{48,57}]}},
+                   {char_class,[{48,57}]}},
+                  47},
+                 {pclosure,{comp_class,". "}}},
+                32}]},
+             {regexp,first_match,3},
+             {regexp,match,5},
+             {regexp,match,2},
+             {seq,scan_line,3},
+             {erl_eval,do_apply,5},
+             {shell,exprs,6},
+             {shell,eval_loop,3}]} **</code></pre>
+<p>The error happened in line 3 of <code>scan_line</code>, which has nothing
+to do with the line number in the source file.  Sigh.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/19/'>
+ <title>Atomic</title>
+ <link href='Atomic' />
+ <link rel='replies'        thr:count='1'        type='application/xhtml+xml'        href='Atomic#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/19/Atomic</id>
+ <published>2007-09-19T13:00:00-07:00</published>
+ <updated>2007-09-19T22:17:20-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Atom' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Atom' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Web' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>Today&#x2019;s big Atom news is from Joseph Scott, who was on the <a href='/ongoing/When/200x/2007/09/02/Labour-Day-Weekend'>long-weekend shift</a> with Pete Lacey and Sam Ruby and I, pounding WP2.3&#x2019;s APP-server code into shape.  He has written <a href='http://joseph.randomnetworks.com/archives/2007/09/19/http-basic-authentication-a-tale-of-atompub-wordpress-php-apache-cgi-and-ssltls/'>HTTP Basic Authentication, A Tale of AtomPub, WordPress, PHP, Apache, CGI and SSL/TLS</a>; the title is appropriately long, as this is a <em>very</em> meaty piece that I bet will be read many times in the near to medium future by someone puzzled and frustrated by some combination of Apache, PHP, and authentication requirements.  Well, yes, the problems popped up in the context of Atompub and WordPress, but there&#x2019;s nothing specific to the protocol or the product; it&#x2019;s a big messy ugly corner of Web technology.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Today’s big Atom news is from Joseph Scott, who was on the
+<a href="/ongoing/When/200x/2007/09/02/Labour-Day-Weekend">long-weekend
+shift</a> with Pete Lacey and Sam Ruby and I, pounding WP2.3’s APP-server code
+into shape.  He has written
+<a href="http://joseph.randomnetworks.com/archives/2007/09/19/http-basic-authentication-a-tale-of-atompub-wordpress-php-apache-cgi-and-ssltls/">HTTP Basic Authentication, A Tale of AtomPub, WordPress, PHP, Apache, CGI and SSL/TLS</a>;
+the title is appropriately long, as this is a <em>very</em> meaty piece that I
+bet will be read many times in the near to medium future by someone puzzled
+and frustrated by some combination of Apache, PHP, and authentication
+requirements.  Well, yes, the problems popped up in the context of Atompub and
+WordPress, but there’s nothing specific to the protocol or the product; it’s a
+big messy ugly corner of Web technology.</p>
+<p>Further Atom news: It seems like a new APP implementation drifts across my
+radar every week. 
+Here are a couple more: Ian Bicking’s
+<a href="http://blog.ianbicking.org/2007/09/12/flatatompub/">FlatAtompub</a>
+and Takeru Inoue’s
+<a href="http://search.cpan.org/dist/Atompub/">Atompub-0.1.5</a>.  (That’s a
+pretty low version number on Inoue’s work, since it’s passing all the tests
+and looks solid.)</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/19/'>
+ <title>NB6b1</title>
+ <link href='NetBeans-6-Beta' />
+ <link rel='replies'        thr:count='15'        type='application/xhtml+xml'        href='NetBeans-6-Beta#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/19/NetBeans-6-Beta</id>
+ <published>2007-09-19T13:00:00-07:00</published>
+ <updated>2007-09-19T18:40:27-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Coding' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Coding' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Java' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Java' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>Which is to say, <a href='http://www.netbeans.org/community/releases/60/index.html'>NetBeans 6.0 Beta 1</a> is out.  Looks pretty good so far, they even revised the Borg Cube logo.  I&#x2019;ve got a couple tabs with .rb files open, and three more that end in .h and .c. I understand it can be used with Java too.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Which is to say,
+<a href="http://www.netbeans.org/community/releases/60/index.html">NetBeans
+6.0 Beta 1</a> is out.  Looks pretty good so far, they even revised the Borg
+Cube logo.  I’ve got a couple tabs with .rb files open, and three more
+that end in .h and .c.
+I understand it can be used with Java too.</p>
+<img src="NetBeans-6-Beta1.png" alt="NetBeans 6.0 Beta1" />
+<p>It’s now got a Mac-style installer, instead of just a DMG with a .app in
+it.  I’m trying to develop an opinion as to whether this is better or not.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/18/'>
+ <title>Rental Audio</title>
+ <link href='Rent-a-Car-Audio' />
+ <link rel='replies'        thr:count='7'        type='application/xhtml+xml'        href='Rent-a-Car-Audio#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/18/Rent-a-Car-Audio</id>
+ <published>2007-09-18T13:00:00-07:00</published>
+ <updated>2007-09-18T23:04:46-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Arts/Music' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Arts' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Music' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Why is it, I wonder, that in every rental car on the planet, both the bass
+and treble settings on the radio are cranked to the max.  This may be optimal
+for Early Nineties Norwegian Death Metal, and also possibly Balalaika and
+Bassoon Ensemble compilations, but it makes most normal music sound like a
+box of nails bouncing down a large heating duct.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/17/'>
+ <title>GlassFish V2</title>
+ <link href='GlassFish-V2' />
+ <link rel='replies'        thr:count='3'        type='application/xhtml+xml'        href='GlassFish-V2#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/17/GlassFish-V2</id>
+ <published>2007-09-17T13:00:00-07:00</published>
+ <updated>2007-09-17T11:03:01-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Java' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Java' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Open Source' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Open Source' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Business/Marketing' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Business' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Marketing' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>It’s
+<a href="http://blogs.sun.com/theaquarium/entry/glassfish_v2_launch_roundup">out
+today</a>.  Now, I don’t work with app servers that much, and I’ve hardly ever
+touched GlassFish.  But this is interesting anyhow, for two reasons: First,
+GlassFish is an example of a software product that was struggling in the
+market, and is doing immensely better after moving from closed to Open Source.
+Smells like the future to me.
+Second, check out that launch pointer: a blog
+cluster, with the marketing basics and a ton of highly-technical detail.  I
+just don’t think there’s any other sensible way to launch a modern
+software package whose users are developers.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/14/'>
+ <title>Bad, Feed Readers, Bad!</title>
+ <link href='Lousy-Aggregators' />
+ <link rel='replies'        thr:count='16'        type='application/xhtml+xml'        href='Lousy-Aggregators#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/14/Lousy-Aggregators</id>
+ <published>2007-09-14T13:00:00-07:00</published>
+ <updated>2007-09-17T09:56:54-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Atom' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Atom' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/XML' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='XML' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Piles of junk, I say.  Pardon me, but I’m feeling grumpy.  After much
+more work than it should have been,
+<a href="/ongoing/misc/Software#p-5">mod_atom</a> is now generating reasonably
+coherent (not done yet, but getting there) HTML output and human-oriented
+(as opposed to APP-oriented) Atom feeds.  
+It’s slightly idiosyncratic XML, with lots of namespace prefixes.
+The <a href="http://feedvalidator.org/">Feed Validator</a> says it’s OK and I
+think it’s OK.  But
+<em>none of</em> NetNewsWire or Vienna or Bloglines 
+<i>[Update: or Blogbridge or Safari, or My Yahoo!, or Sage]</i> 
+can read it correctly.  I fart in their general direction.
+<i>[Update:
+<a href="http://www.google.com/reader/">Google Reader</a>,
+<a href="http://www.intertwingly.net/code/venus/">Planet Venus</a>, 
+<a href="http://www.snarfware.com/">Snarfer</a>,
+<a href="http://simplepie.org/">SimplePie</a>,
+<a href="http://liferea.sourceforge.net/">Liferea</a>, 
+<a href="http://www.awasu.com/">Awasu</a>, 
+<a href="http://www.utsire.com/shrook/">Shrook</a>, and
+<a href="http://www.flock.com/">Flock</a> get it right!  Good
+on ya, guys.]
+[Ah, Brent sent me a pointer to the latest beta of
+<a href="http://www.newsgator.com/Individuals/NetNewsWire/">NetNewsWire</a>
+3.1, and it’s fine.
+I know other people rave about GoogleReader and Vienna
+and so on, but for me NNW is still way ahead of the pack in letting me scan a
+whole lot of news in almost no time at all.]</i>
+Are there any other feed-reader implementors out there who think they can, you
+know, <em>read XML correctly</em>?!?! If so, get in touch, and if you process my
+little bundle of joy properly, I’ll lavish praise and links.  Or if there’s a
+bug in the feed that neither I nor the validator can see, I’ll apologize
+humbly to the whole world.  In any case, I’m going to have to go back and
+patch up the code so it doesn’t emit any of those nasty colons and relative
+URI references that apparently hurt implementors’ fragile feelings.  This does
+not improve my mood.
+<i>[Update: Just to be clear, I’m not talking about the ongoing feed; if you
+want to test your feed reader, contact me and I’ll point you at the test
+feed.]</i></p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/16/'>
+ <title>Autumnal mod_atom</title>
+ <link href='Autumnal-Atom' />
+ <link rel='replies'        thr:count='6'        type='application/xhtml+xml'        href='Autumnal-Atom#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/16/Autumnal-Atom</id>
+ <published>2007-09-16T13:00:00-07:00</published>
+ <updated>2007-09-16T19:25:12-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Atom' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Atom' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>I just did a massive check-in on <a href='http://www.tbray.org/ongoing/misc/Software#p-5'>mod_atom</a>, and it&#x2019;s now not just an Atom Store, it&#x2019;s also a basic blog publisher.  This fragment is about how it works, and includes a confession; I did one fairly awful thing along the way.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>I just did a massive check-in on
+<a href="http://www.tbray.org/ongoing/misc/Software#p-5">mod_atom</a>, and
+it’s now not just an Atom Store, it’s also a basic blog publisher.  This
+fragment is about how it works, and includes a confession; I did one fairly
+awful thing along the way.</p>
+<h2 id='p-2'>Still CoC</h2>
+<p>There’s still almost no configuration; just one directive, like so:</p>
+<pre><code>AtomPub /base/publication/URI /base/pub/dir "Pub Title" "Pub Author"</code></pre>
+<p>I keep thinking of places where configuration options would be useful, but
+then there’d need to be a configuration syntax and a place to put them, and
+it’s so easy to make a mistake there that you’ll have to live with for a long,
+long time.  So I’m going to hold the line on more config stuff, for the
+moment.</p>
+<h2 id='p-5'>Making HTML: What?</h2>
+<p>As of now, if you POST (or PUT) an Atom Entry to a mod_atom collection that
+accepts them, it’ll generate an HTML version <em>if</em> the entry’s
+<code>content</code> element has a <code>type</code> value of
+<code>text</code> or <code>html</code> or <code>xhtml</code>.</p>
+<p>Whenever one of the HTML pages gets created or updated, mod_atom updates
+the publication’s “Front page” and a public-facing Atom feed for the
+publication.</p>
+<h2 id='p-6'>Making HTML: How?</h2>
+<p>How, you might ask, does that HTML get created?  Well, here’s the
+confession: I ended up inventing another HTML templating language.  Because
+the Web doesn’t have enough.  Here’s the current default template for the
+per-entry pages.</p>
+<pre><code>&lt;html xmlns:m='http://www.mod-atom.net/ns'>
+&lt;head>
+&lt;title>&lt;m:title />&lt;/title>
+&lt;m:entry-stylesheet />
+&lt;m:entry-script />
+&lt;m:generator />
+&lt;/head>
+&lt;body class='atom-body'>
+&lt;m:logo />
+&lt;h2>&lt;m:title />&lt;/h2>
+&lt;div class='atom-authors'>
+&lt;m:entry-author />
+&lt;m:contributors />
+&lt;/div>
+&lt;div class='atom-content'>
+&lt;m:content />
+&lt;/div>
+&lt;div class='atom-cats'>
+&lt;m:cats />
+&lt;/div>
+&lt;div class='atom-rights'>
+&lt;m:rights />
+&lt;/div>
+&lt;div class='atom-dates'>
+&lt;m:published />
+&lt;m:updated />
+&lt;/div>
+&lt;/body>
+&lt;/html></code></pre>
+<p>This template never gets applied at run-time, only at POST or PUT time.
+There’s really quite a lot of scope for customization.  Also, those
+<code>entry-stylesheet</code> and <code>entry-script</code> template fields
+generate something that look like:</p>
+<pre><code>&lt;link href="/foo/bar/pub/e/entries/atom-entry.css" rel="stylesheet">&lt;/link>
+&lt;script src="/foo/bar/pub/e/entries/atom-entry.js" type="text/javascript">&lt;/script></code></pre>
+<p>That, together with all those class attributes, ought to give you enough
+hooks to build as widget-packed and AJAXerrific a twenty-first century HTML
+page as anyone could want.</p>
+<h2 id='p-4'>Sanitation</h2>
+<p>Earlier on, I had a bunch of HTML
+<a href="/ongoing/When/200x/2007/08/09/Sanitation">sanitation</a> code that
+was applied to incoming POSTs and PUTs.  I ripped it out again, so the
+Atom-store part of mod_atom screws with the incoming data as little as
+possible.  But all that sanitation code does get applied to anything that
+comes out of the HTMLification process.</p>
+<h2 id='p-3'>Does It Work?</h2>
+<p>Well, it passes the Ape test suite running on OS X and Debian.  The HTML
+Entry and Front pages look OK, and while the public-facing feed
+<a href="/ongoing/When/200x/2007/09/14/Lousy-Aggregators">has some
+problems</a> (and is a first-rate
+<a href="http://intertwingly.net/blog/2007/09/15/One-More-Step-Forward#c1189960923">conversation
+piece</a>),
+it’s a start.</p>
+<p>There are
+<a href="http://code.google.com/p/mod-atom/issues/list">issues</a>, of course,
+and if anyone starts using this, there’ll be lots more.</p>
+<h2 id='p-1'>To Do</h2>
+<p>There are two big missing <em>functional</em> pieces. First off, it needs
+to be easy to turn off all this HTML stuff so mod_atom is a pure Atom Store.
+Second, it doesn’t support <code>app:draft</code>, and if it got much out into
+the wild in that state, Joe Cheng would send a poison dwarf from Redmond to
+strangle my cats.  And it’s easy enough to add, so I will.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/16/'>
+ <title>Fall Colours</title>
+ <link href='Fall-Colours' />
+ <link rel='replies'        thr:count='4'        type='application/xhtml+xml'        href='Fall-Colours#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/16/Fall-Colours</id>
+ <published>2007-09-16T13:00:00-07:00</published>
+ <updated>2007-09-16T14:00:22-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Arts/Photos' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Arts' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Photos' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>Brown and yellow, to be precise.  Leaf and Volkswagen.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Brown and yellow, to be precise.  Leaf and Volkswagen.</p>
+<img src="IMGP6739.png" alt="Autumn leaf on seventies yellow Volkswagen" />
+<p>One of those great old rounded Sixties non-beetle VWs.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/16/'>
+ <title>The Sunday Contests</title>
+ <link href='Sunday-Pedantry' />
+ <link rel='replies'        thr:count='0'        type='application/xhtml+xml'        href='Sunday-Pedantry#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/16/Sunday-Pedantry</id>
+ <published>2007-09-16T13:00:00-07:00</published>
+ <updated>2007-09-16T10:00:51-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Atom' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Atom' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Web' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Web' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Who needs the NFL? The 0.00001% of the population who think
+Syndication Semantics and Web Architecture are all about fun ought to
+cruise by Sam Ruby’s space and take in the discussion around
+<a href="http://intertwingly.net/blog/2007/09/15/One-More-Step-Forward#c1189960923">One
+More Step Forward?</a></p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/15/'>
+ <title>Reducing C Pain</title>
+ <link href='NetBeans-for-C' />
+ <link rel='replies'        thr:count='4'        type='application/xhtml+xml'        href='NetBeans-for-C#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/15/NetBeans-for-C</id>
+ <published>2007-09-15T13:00:00-07:00</published>
+ <updated>2007-09-15T23:45:20-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology/Coding' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Technology' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Coding' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>Despite my brutal minimalism, <a href='/ongoing/misc/Software#p-5'>mod_atom</a> is getting kind of big.  The main file has a few dozen (mostly pleasingly-small) functions, and navigating around in it was starting to be a chore.  I&#x2019;ve been using Emacs, and I seem to recall that it has all sorts of navigation magic.  But then I thought about NetBeans&#x2019; excellent &#x201c;Navigator&#x201d; tool, and that there&#x2019;s supposed to be some new C-support code.  So I installed it and it kind of works.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Despite my brutal minimalism,
+<a href="/ongoing/misc/Software#p-5">mod_atom</a> is getting kind of big.  The
+main file has a few dozen (mostly pleasingly-small) functions, and navigating
+around in it was starting to be a chore.  I’ve been using Emacs, and I seem to
+recall that it has all sorts of navigation magic.  But then I thought about
+NetBeans’ excellent “Navigator” tool, and that there’s supposed to be some new
+C-support code.  So I installed it and it kind of works.</p>
+<img src="NB-navigator.jpg" class="inline" alt="the NetBeans navigator on C code" />
+<p>The Navigator was immensely helpful. It’s not perfect; for example, (see the
+little picture on the right) it has separate entries for functions
+and their forward declarations.</p>
+<p>The indentation engine needs a few more features; I can’t quite make the code
+follow the Apache standards.</p>
+<p>There’s not much refactoring there yet but, given what they’ve already got,
+I can’t see “Find Usages” and friends being that far away.
+And the autocomplete is already in pretty good shape.</p>
+<p>It was awfully nice that when I opened up the files, they came with
+colour-coding to show the SVN status; I hadn’t even thought of that.</p>
+<p>Overall, the pre-beta NB6 C support is perfectly competent and gets out
+of the way; I’m going faster than I was in Emacs.  Heh, I’ve also filed five
+or ten bugs and RFEs in my first day of using the thing.</p>
+<p>For those of us who have to spend time in the C mines, NetBeans
+6 is going to be a Very Good Thing.</p>
+<p>I suppose a piece like this isn’t complete without a screenshot; looks
+about like you’d expect a C IDE to.</p>
+<img src="NB-C-screenshot.png" alt="NetBeans 6 C support screenshot" />
+<p>Heh; note that the error message for <code>ap_log_error</code> is
+<em>completely</em> wrong; first of all this is PUT not POST, and it’s “save”
+not “same”.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/15/'>
+ <title>Before the Bell</title>
+ <link href='Before-the-Bell' />
+ <link rel='replies'        thr:count='5'        type='application/xhtml+xml'        href='Before-the-Bell#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/15/Before-the-Bell</id>
+ <published>2007-09-15T13:00:00-07:00</published>
+ <updated>2007-09-15T09:50:09-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World' />
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Parents’ bicycles head to the school from every direction.  They ride
+prudently, sitting up,
+calling guidance and warnings to the little bikes swarming round them, whence
+smaller voices shrill about new socks and rockets.  After the bell, the
+parents fly outward, bent low, pedaling hard, fast and quiet.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/12/'>
+ <title>Tab Sweep &#x2014; The World</title>
+ <link href='World-Tab-Sweep' />
+ <link rel='replies'        thr:count='3'        type='application/xhtml+xml'        href='World-Tab-Sweep#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/12/World-Tab-Sweep</id>
+ <published>2007-09-12T13:00:00-07:00</published>
+ <updated>2007-09-12T15:23:52-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Arts/Photos' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Arts' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Photos' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>Today we have an aviatrix, a last message, a beautiful voice, and a set list.</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>Today we have an aviatrix, a last message, a beautiful voice, and a set
+list.</p>
+<p>Some pieces of historical linkage led me to the Wikipedia entry for
+<a href="http://en.wikipedia.org/wiki/Amelia_Earhart">Amelia Earhart</a>, and
+her picture grabbed my eye and I blew it up, and I liked it so much that it’s
+been sitting in a browser tab for a week; if I publish it here it’ll show up
+from time to time over in the right margin.  What a face.</p>
+<img src="Amelia_earhart.png" alt="Amelia Earhart" />
+<p>Via a recommendation from
+<a href="http://www.webmink.net/">Simon Phipps</a>, the music of
+<a href="http://www.juanamolina.com/">Juana Molina</a>.  I’m going to have to
+get some.  Check out the video; this is not just another pretty voice.</p>
+<p>Now, let’s have some nice morbid fun.  Over at the Blog of Death, the
+<a href="http://www.blogofdeath.com/archives/001625.html">Final Farewell
+Contest</a>; get your Last Words in by September 30th.</p>
+<p>In the same vein, Kevin Chu has an exclusive preview of some
+<a href="http://blogs.sun.com/kevin/entry/led_leppelin_reunion_tour_song">Led
+Zeppelin Reunion Tour Song Changes</a>; not to be missed.</p>
+</div></content></entry>
+
+<entry xml:base='When/200x/2007/09/12/'>
+ <title>Murder Coverage</title>
+ <link href='Facebook-Biker' />
+ <link rel='replies'        thr:count='2'        type='application/xhtml+xml'        href='Facebook-Biker#comments' />
+ <id>http://www.tbray.org/ongoing/When/200x/2007/09/12/Facebook-Biker</id>
+ <published>2007-09-12T13:00:00-07:00</published>
+ <updated>2007-09-12T09:10:28-07:00</updated>
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World/Life Online' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='The World' />
+ <category scheme='http://www.tbray.org/ongoing/What/' term='Life Online' />
+ <summary type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>The paper this morning had a <a href='http://www.canada.com/vancouversun/news/story.html?id=3af68499-102b-463c-93d2-0513a6f9e221&amp;k=38809'>front-page story</a> about some guy with Hells Angels links getting shot: &#x201c;A high-speed car chase in a quiet east Langley neighborhood Tuesday ended with a black Hummer in a ditch and a spray of gunfire in a gang-style shooting just a few hundred meters from two schools.&#x201d;</div></summary>
+<content type='xhtml'><div xmlns='http://www.w3.org/1999/xhtml'>
+<p>The paper this morning had a
+<a href="http://www.canada.com/vancouversun/news/story.html?id=3af68499-102b-463c-93d2-0513a6f9e221&amp;k=38809">front-page
+story</a> about some guy with
+Hells Angels links getting shot: “A high-speed car chase in a quiet east Langley neighborhood Tuesday ended with a black Hummer in a ditch and a spray of gunfire in a gang-style shooting just a few hundred meters from two schools.”</p>
+<p>Now, in Vancouver, bikers shooting 
+other bikers is hardly a surprising news story.  And after all, the guy wasn’t
+killed, and the fourteen-year-old son he was driving to school wasn’t hurt.
+What I found interesting was that the portrait of the victim, and another
+picture of him at a Hells Angels event, were credited as “from his Facebook
+profile”.</p>
+</div></content></entry>
+
+</feed>
