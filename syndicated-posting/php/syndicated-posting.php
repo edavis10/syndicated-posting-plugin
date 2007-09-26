@@ -322,7 +322,6 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       if (!empty($feed->channel['author_name'])) {
         return $feed->channel['author_name'];
       }
-      echo var_dump($feed);
       
     }
 
