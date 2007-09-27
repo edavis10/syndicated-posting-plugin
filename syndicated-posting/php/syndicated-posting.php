@@ -341,7 +341,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Returns the settings for `$option` key
     function getSettings($option) {
-      $raw_settings = array_unique(split("\n",str_replace(',',"\n",$this->options[$option])));
+      $raw_settings = array_unique(preg_split('/[,|\n]/',$this->options[$option]));
 
       $finals = array();
       // Remove empty values
@@ -357,10 +357,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     /// Updates the settings from a user change
     function updateSettings() {
       if (isset($_POST['spFeedUrls'])) {
-        $this->options['feed_urls'] = apply_filters('content_save_pre', str_replace(',',"\n",$_POST['spFeedUrls']));
+        $this->options['feed_urls'] = apply_filters('content_save_pre', $_POST['spFeedUrls']);
       }   
       if (isset($_POST['spSearchPhrases'])) {
-        $this->options['search_phrases'] = apply_filters('content_save_pre', str_replace(',',"\n",$_POST['spSearchPhrases']));
+        $this->options['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
       }   
       update_option($this->adminOptionsName, $this->options);
 
