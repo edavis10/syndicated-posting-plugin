@@ -47,6 +47,7 @@ end
 desc "Upload zip file to server"
 task :upload => [:zip] do
   system("scp -oPort=44444 #{ZIP_FILE} littlestreamsoftware.com:/home/websites/littlestreamsoftware/shared/uploaded-images/")
+  puts "File is at http://www.littlestreamsoftware.com/images/assets/syndicated-posting.zip"
 end
 
 task :default => [:copy]
