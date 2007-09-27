@@ -519,7 +519,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
  ?>
 <div class="wrap">
     <h2>Feeds &amp; Search Terms</h2>
-    <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" style="width:50%; float:left;">
+    <form method="post" action="<?php echo $this->url; ?>" style="width:50%; float:left;">
       <fieldset>
         <legend>Enter <strong>feed URLs</strong>, one per line or comma-separated</legend>
         <textarea name="spFeedUrls" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$this->options['feed_urls']), 'SyndicatedPostingPlugin') ?></textarea>
@@ -530,7 +530,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       </fieldset>
     </form>
 
-    <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>"  style="width:50%; float:left;">
+    <form method="post" action="<?php echo $this->url; ?>"  style="width:50%; float:left;">
       <fieldset>
         <legend>Enter <strong>search phrases</strong>, one per line or comma-separated</legend>
         <textarea name="spSearchPhrases" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$this->options['search_phrases']), 'SyndicatedPostingPlugin') ?></textarea>
