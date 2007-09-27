@@ -125,8 +125,9 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         $id = '';
       }
 
+      $c = $content;
+
       if (!empty($id) && $meta = $this->isSyndicatedPost($id)) {
-        $c = $content;
         $c .= "  <p>";
         $c .= "    <label for='syndicated_author'>Author</label><br />";
         $c .= "    <input id='syndicated_author' type='text' value='". $meta['syndicated_author']."' name='syndicated_author' class='syndication-input' />";
@@ -143,8 +144,6 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         $c .= "    <label for='syndicated_link'>Article URL</label><br />";
         $c .= "    <input id='syndicated_link' type='text' value='". $meta['syndicated_link'] ."' name='syndicated_link' class='syndication-input' />";
         $c .= "  </p>";
-      } else {
-
       }
 
       return $c;
