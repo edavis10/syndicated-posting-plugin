@@ -567,7 +567,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     /// Check if the feed item is new to us based off the title
     function newFeedItem($rss){
       global $wpdb;
-      $post = $wpdb->get_var("SELECT COUNT(*) FROM wp_posts WHERE post_title = ('" . $wpdb->escape($rss['title']) . "');");
+      $post = $wpdb->get_var("SELECT COUNT(*) FROM wp_posts WHERE post_title = ('" . $wpdb->escape($rss['title']) . "') AND post_type LIKE ('%syndicate%');");
       return $post;
     }
 
