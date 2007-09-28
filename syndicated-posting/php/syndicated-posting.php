@@ -212,6 +212,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       $post = new SyndicatedPost();
       $post->fillFromRss($rss, $author);
       $post_id = wp_insert_post($post);
+      add_post_meta($post_id,'syndicated','true',true);
       add_post_meta($post_id,'syndicated_author',$post->meta_author,true);
       add_post_meta($post_id,'syndicated_link',$post->meta_link,true);
       add_post_meta($post_id,'syndicated_source_title',$title,true);
@@ -243,6 +244,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       $post->fillFromPost($feed_post,$feed_meta);
 
       $new_post_id = wp_insert_post($post);
+      add_post_meta($new_post_id,'syndicated','true',true);
       add_post_meta($new_post_id,'syndicated_author',$post->meta_author,true);
       add_post_meta($new_post_id,'syndicated_link',$post->meta_link,true);
       add_post_meta($new_post_id,'syndicated_source_title',$post->meta_source_title,true);
@@ -602,9 +604,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     /// Will return the metadata with true, or the bool false.
     function isSyndicatedPost($post_id) {
       $meta = $this->getFeedItemMeta($post_id);
-      if (!empty($meta['syndicated_source_link']) ||
-          !empty($meta['syndicated_source_title']) ||
-          !empty($meta['syndicated_link'])) {
+      if (!empty($meta['syndicated'])) {
         return $meta;
       } else {
         return false;
