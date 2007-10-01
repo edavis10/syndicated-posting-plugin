@@ -5,7 +5,6 @@
 if (!class_exists("SyndicatedPostingPlugin")) {
   class SyndicatedPostingPlugin {
     var $adminOptionsName = "syndicated_posting_admin_options";
-    var $paginationCount = 30;
     var $options = array();
     // TODO: later.  Un hard code this url for the pagination code in printAdminPage()
     var $url = 'edit.php?page=syndicated-posting.php';
@@ -213,7 +212,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       $query .= " ORDER BY post_date DESC ";
 
       // Limits
-      $query .= " LIMIT " . $limit_row . ", " . $this->paginationCount;
+      $query .= " LIMIT " . $limit_row . ", " . $this->options['per_page'];
 
       $posts = $wpdb->get_results($query, ARRAY_A);
       return $posts;
@@ -668,15 +667,15 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     /// Sets the variable to the number of content pages that need to be displayed based off the 
-    ///  paginationCount setting
+    ///  pagination settings
     function setNumberOfContentPages() {
-      $this->numberOfPages = ceil($this->getFeedCount('') / $this->paginationCount);
+      $this->numberOfPages = ceil($this->getFeedCount('') / $this->options['per_page']);
     }
 
     /// Finds the SQL limit for this page.  Used by the pagination so item 31-60 are
     ///  shown on page two (if 30 items a page).
     function itemLimit($pageNumber) {
-      return ($this->paginationCount * $pageNumber) - $this->paginationCount;
+      return ($this->options['per_page'] * $pageNumber) - $this->options['per_page'];
     }
 
   } // End class
