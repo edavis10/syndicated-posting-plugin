@@ -60,6 +60,11 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       } // END page check
     }
 
+    function handleOptionRequest() {
+      $this->getAdminOptions();
+      $this->printOptionPage();
+
+    }
 
     ////
     //// Wordpress Actions and Filters
@@ -382,6 +387,41 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       $this->printProspects($currentPage);
     } 
 
+    /// Prints the option page
+    function printOptionPage() {
+ ?>
+<div class="wrap">
+    <h2>Syndicated Posting Options</h2>
+    <form method="post" action="<?php echo $this->url; ?>">
+      <fieldset class="options">
+        <table width="100%" cellspacing="2" cellpadding="5" class="optiontable editform"> 
+          <tbody>
+            <tr valign="top"> 
+              <th width="33%" scope="row">Show at most:</th> 
+              <td>
+                <input type="text" size="3" value="<?php echo $this->options['per_page'];?>" id="prospects_per_page" name="prospects_per_page"/> prospects</td> 
+            </tr> 
+            <tr valign="top"> 
+              <th width="33%" scope="row">Keep unposted prospects for:</th> 
+              <td>
+                <input type="text" size="3" value="<?php echo $this->options['days_to_keep'];?>" id="days_to_keep" name="days_to_keep"/> days</td> 
+            </tr> 
+          </tbody>
+        </table>
+        
+        <div class="submit" style="text-align:right">
+          <input type="submit" name="update_syndicatedPostingPluginOptions" value="<?php _e('Update Options »', 'SyndicatedPostingPlugin') ?>" />
+        </div>
+      </fieldset>
+    </form>
+
+<br style="clear: both;"/>
+
+</div>
+<?php  
+
+    }
+
     /// Syndicates a feed item into a post and redirects to the post's edit page
     function syndicateFeedItem($post_id) {
       // Copy the feed item to a post with metadata
@@ -648,6 +688,11 @@ if (!function_exists("SyndicatedPostingPlugin_admin")) {
       // Level 7 so Admins and Editors can use this
       add_management_page('Syndication Posting', 'Syndication', 7, basename(__FILE__), array(&$sp_plugin, 'handleRequest'));
     }
+    if (function_exists('add_options_page')) {
+      // Level 7 so Admins and Editors can use this
+      add_options_page('Syndication Posting', 'Syndication', 7, basename(__FILE__), array(&$sp_plugin, 'handleOptionRequest'));
+    }
+
   }
  }
 
