@@ -570,9 +570,9 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 ?>
   <h2>Syndication Prospects</h2>
   <script type="text/javascript">
-            <?php //$this->printBulkDeleteJavaScript(); ?>
+        <?php $this->printBulkDeleteJavaScript(); ?>
   </script>
-<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" name="syndicate<?php echo $post['ID']; ?>">
+<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" name="bulk-delete">
   <input type="hidden" name="action" value="bulk-delete" />
    <div class="submit" style="text-align:left">
     <input type="submit" value="Delete Checked" name="delete_checked" />
@@ -580,7 +580,9 @@ if (!class_exists("SyndicatedPostingPlugin")) {
   <table class="widefat" id="prospects">
     <thead>
       <tr>
-	<th scope="col"></th>
+	<th scope="col">
+          <input type="checkbox" name="delete_all" onClick="checkAll(document.forms['bulk-delete'].elements['delete[]'],this)" />
+        </th>
 	<th scope="col">Source</th>
 	<th scope="col">Pubdate</th>
 	<th scope="col">Title</th>
@@ -588,7 +590,6 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 	<th scope="col"/>
 	<th scope="col"/>
 	<th scope="col"/>
-
       </tr>
     </thead>
     <tbody id="the-list">
@@ -682,22 +683,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     function printBulkDeleteJavaScript() {
 ?>
-      function bulkDelete() {
-          var prospects = document.getElementById("prospects");
-          var formElements = prospects.getElementsByTagName("input");
-          var results = [];
-
-          for (ele in formElements) {
-              // Will filter out non-checked boxes and also get us the data we want
-              if (formElements[ele].checked) {
-                  results.push(formElements[ele]);
-              }
-          }
-
-          for (checked in results) {
-              alert(results[checked].name);
-          }
-
+      function checkAll(group,nameOfAllCheckbox) {
+        for (index = 0; index < group.length; index++) {
+          group[index].checked = nameOfAllCheckbox.checked? true:false
+        }
       }
 <?php
     }
