@@ -9,6 +9,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     var $options = array();
     // TODO: later.  Un hard code this url for the pagination code in printAdminPage()
     var $url = 'edit.php?page=syndicated-posting.php';
+    var $optionUrl = 'options-general.php?page=syndicated-posting.php';
 
     var $numberOfPages;
 
@@ -62,6 +63,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     function handleOptionRequest() {
       $this->getAdminOptions();
+      if (isset($_POST['update_syndicatedPostingPluginOptions'])) {
+          $this->updateSettings();
+          $this->showUpdatedMessage('Options updated');
+      }
       $this->printOptionPage();
 
     }
@@ -166,7 +171,9 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       if (empty($this->options)){
         $this->options = array(
                                'feed_urls' => '',
-                               'search_phrases' => '');
+                               'search_phrases' => '',
+                               'per_page' => 30,
+                               'days_to_keep' => 30);
       }
       update_option($this->adminOptionsName,$this->options);
     }
@@ -368,6 +375,14 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       if (isset($_POST['spSearchPhrases'])) {
         $this->options['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
       }   
+      // From options panel
+      if (isset($_POST['prospects_per_page']) && preg_match("/\d+/", $_POST['prospects_per_page'])) {
+        $this->options['per_page'] = apply_filters('content_save_pre', $_POST['prospects_per_page']);
+      }   
+      if (isset($_POST['days_to_keep']) && preg_match("/\d+/", $_POST['days_to_keep'])) {
+        $this->options['days_to_keep'] = apply_filters('content_save_pre', $_POST['days_to_keep']);
+      }   
+
       update_option($this->adminOptionsName, $this->options);
 
       // Re-poll feeds because the the settings changes.
@@ -392,7 +407,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
  ?>
 <div class="wrap">
     <h2>Syndicated Posting Options</h2>
-    <form method="post" action="<?php echo $this->url; ?>">
+    <form method="post" action="<?php echo $this->optionUrl; ?>">
       <fieldset class="options">
         <table width="100%" cellspacing="2" cellpadding="5" class="optiontable editform"> 
           <tbody>
