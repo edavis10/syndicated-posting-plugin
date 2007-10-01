@@ -12,6 +12,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     var $optionUrl = 'options-general.php?page=syndicated-posting.php';
 
     var $numberOfPages;
+    var $digitRegex = "#[0-9]+#";
 
     // Constructor
     function SyndicatedPostingPlugin() {
@@ -376,10 +377,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         $this->options['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
       }   
       // From options panel
-      if (isset($_POST['prospects_per_page']) && preg_match("/\d+/", $_POST['prospects_per_page'])) {
+      if (isset($_POST['prospects_per_page']) && preg_match($this->digitRegex, $_POST['prospects_per_page'])) {
         $this->options['per_page'] = apply_filters('content_save_pre', $_POST['prospects_per_page']);
       }   
-      if (isset($_POST['days_to_keep']) && preg_match("/\d+/", $_POST['days_to_keep'])) {
+      if (isset($_POST['days_to_keep']) && preg_match($this->digitRegex, $_POST['days_to_keep'])) {
         $this->options['days_to_keep'] = apply_filters('content_save_pre', $_POST['days_to_keep']);
       }   
 
@@ -630,7 +631,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Check the request to see if an item is to be deleted
     function itemDeleted() {
-      if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']) && preg_match("/\d+/",$_GET['id'])) {
+      if (isset($_GET['action']) && $_GET['action'] == 'delete' && isset($_GET['id']) && preg_match($this->digitRegex,$_GET['id'])) {
         return true;
           } else {
         return false;
@@ -639,7 +640,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Check the request to see if a paginated page was requested
     function paginatedPageRequested() {
-      if (isset($_GET['action']) && $_GET['action'] == 'show' && isset($_GET['syndication-page']) && preg_match("/\d+/",$_GET['syndication-page'])) {
+      if (isset($_GET['action']) && $_GET['action'] == 'show' && isset($_GET['syndication-page']) && preg_match($this->digitRegex,$_GET['syndication-page'])) {
         return true;
       } else {
         return false;
@@ -648,7 +649,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Check the request to see if an item is to be syndicated
     function syndicatedPageRequested() {
-      if (isset($_POST['action']) && $_POST['action'] == 'syndicate' && isset($_POST['id']) && preg_match("/\d+/",$_POST['id'])) {
+      if (isset($_POST['action']) && $_POST['action'] == 'syndicate' && isset($_POST['id']) && preg_match($this->digitRegex,$_POST['id'])) {
         return true;
       } else {
         return false;
