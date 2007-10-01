@@ -17,6 +17,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     function SyndicatedPostingPlugin() {
       // Add a custom action WP can use for scheduling.  This is the reference that WP will call
       add_action('wp_syndicated-posting_poll_feeds_hook', array(&$this, 'pollFeeds'));
+      add_action('wp_syndicated-posting_purge_old_items_hook', array(&$this, 'purgeOldFeedItems'));
       
     }
 
@@ -315,6 +316,27 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         }
     }
 
+    /// Purge feed items that are over the limit to keep
+    function purgeOldFeedItems () {
+      global $wpdb;
+
+      $this->getAdminOptions();
+
+      // Get the cutoff date for purging
+      $expiry = time() - ($this->options['days_to_keep'] * 24 * 60 * 60);
+
+      // Find all the feed items that are old
+      $query = "Select * from wp_posts WHERE post_type = 'syndicate' AND post_date < ('" . strftime('%Y-%m-%d %H:%M:%S',$expiry) ."')";
+
+      $results = $wpdb->get_results($query, ARRAY_A);
+      
+      // Iterate through all the feed items and purge them from the database including metadata
+      if (!empty($results)) {
+        foreach ($results as $post) {
+          wp_delete_post($post['ID']);
+        }
+      }
+    }
 
     /// Returns the count of feed items that match the search terms
     function getFeedCount() {
@@ -714,6 +736,9 @@ if (!function_exists("SyndicatedPostingPlugin_admin")) {
 /// Initialize the scheduling
 if (!wp_next_scheduled('wp_syndicated-posting_poll_feeds_hook')) {
   wp_schedule_event(time(), 'hourly', 'wp_syndicated-posting_poll_feeds_hook');
+ }
+if (!wp_next_scheduled('wp_syndicated-posting_purge_old_items_hook')) {
+  wp_schedule_event(time(), 'daily', 'wp_syndicated-posting_purge_old_items_hook');
  }
 
 
