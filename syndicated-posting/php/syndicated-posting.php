@@ -55,8 +55,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           $this->showUpdatedMessage('Settings updated');
 
         } elseif ( $this->bulkDeleteRequested()) {
-          $this->bulkDeleteFeedItems();
-          $this->showUpdatedMessage('Prospects removed');
+          if ($this->bulkDeleteFeedItems()) {
+            // Only print message if items are deleted
+            $this->showUpdatedMessage('Prospects removed');
+          }
 
         } else {
           // Nothing
@@ -295,11 +297,16 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Sets many posts to have the post_type to be `syndicate_deleted`
     function bulkDeleteFeedItems() {
-      foreach ($_POST['delete'] as $post_id) {
-        // Check input
-        if (preg_match($this->digitRegex, $post_id)) {
-          $this->deleteFeedItem($post_id);
+      if (isset($_POST['delete']) && !empty($_POST['delete'])) {
+        foreach ($_POST['delete'] as $post_id) {
+          // Check input
+          if (preg_match($this->digitRegex, $post_id)) {
+            $this->deleteFeedItem($post_id);
+          }
         }
+        return true;
+      } else {
+        return false;
       }
     }
 
