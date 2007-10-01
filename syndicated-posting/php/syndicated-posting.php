@@ -35,7 +35,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       // Check if we are going to show the admin page or another page (only syndication page)
       if ($this->syndicatedPageRequested()) {
         // Another page
-        $this->syndicateFeedItem($_POST['id']);
+        $this->syndicateFeedItem($_GET['id']);
 
       } else {
         // Admin page will be shown
@@ -281,6 +281,18 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       return $wpdb->query("UPDATE $wpdb->posts SET post_type = 'syndicated_deleted' WHERE ID = (" . $post_id .");");
     }
 
+    /// Checks if a post has been syndicated
+    function hasPostBeenSyndicated($post_id) {
+      global $wpdb;
+      $post = $wpdb->get_row("SELECT * FROM wp_posts WHERE id = (" . $wpdb->escape($post_id) . ");", ARRAY_A);
+      if ($post['post_type'] == "syndicated") {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+
     /// Sets many posts to have the post_type to be `syndicate_deleted`
     function bulkDeleteFeedItems() {
       foreach ($_POST['delete'] as $post_id) {
@@ -474,23 +486,36 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Syndicates a feed item into a post and redirects to the post's edit page
     function syndicateFeedItem($post_id) {
-      // Copy the feed item to a post with metadata
-      $new_post_id = $this->copyFeedItemToPost($post_id);
-      // Mark the feed item as syndicated
-      $this->markFeedItemAsSyndicated($post_id);
-      // Redirect to the new post
-      $redirect = get_option('siteurl') . '/wp-admin/post.php?action=edit&post=' . $new_post_id;
-      ?>
-        <a href="<?php echo $redirect ?>">Redirecting to your post</a>
+      // Check if it was syndicated alredy to prevent double posts from WP's redirection
+      if ($this->hasPostBeenSyndicated($post_id)) {
+        // Redirect to main plugin page
+            ?>
+        <a href="<?php echo $this->url ?>">Redirecting..</a>
         <script type="text/javascript">
           <!-- 
-               window.location = "<?php echo $redirect ?>"
+               window.location = "<?php echo $this->url ?>"
       
             -->
         </script>
         <?php
-
+      } else {
+        // Copy the feed item to a post with metadata
+        $new_post_id = $this->copyFeedItemToPost($post_id);
+        // Mark the feed item as syndicated
+        $this->markFeedItemAsSyndicated($post_id);
+        // Redirect to the new post
+        $redirect = get_option('siteurl') . '/wp-admin/post.php?action=edit&post=' . $new_post_id;
+        ?>
+          <a href="<?php echo $redirect ?>">Redirecting to your post</a>
+             <script type="text/javascript">
+             <!-- 
+             window.location = "<?php echo $redirect ?>"
       
+             -->
+             </script>
+             <?php
+
+      }
     }
 
     /// Gets the prospects and prints each one in a table
@@ -584,7 +609,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 	  <td><a href='<?php echo $post_meta['syndicated_link'] ?>' target="_blank"><?php echo $post['post_title'] ?></a></td>
 	  <td><?php echo $post_meta['syndicated_author'] ?></td>
 	  <td><a class="edit" rel="permalink" href='<?php echo $post_meta['syndicated_link']?>' target="_blank">View</a></td>
-          <td>TODO Add back in syndication
+          <td>
+            <a class="edit" href="<?php echo $this->url;?>&action=syndicate&id=<?php echo $post['ID']; ?>">
+              Syndicate
+            </a>
           </td> 
 	  <td><a class="delete" href="<?php echo $_SERVER["REQUEST_URI"] . '&action=delete&id=' . $post['ID'] ; ?>">Delete</a></td>
         </tr>
@@ -707,7 +735,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Check the request to see if an item is to be syndicated
     function syndicatedPageRequested() {
-      if (isset($_POST['action']) && $_POST['action'] == 'syndicate' && isset($_POST['id']) && preg_match($this->digitRegex,$_POST['id'])) {
+      if (isset($_GET['action']) && $_GET['action'] == 'syndicate' && isset($_GET['id']) && preg_match($this->digitRegex,$_GET['id'])) {
         return true;
       } else {
         return false;
