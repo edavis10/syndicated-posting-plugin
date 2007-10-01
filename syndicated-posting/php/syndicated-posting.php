@@ -54,6 +54,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           $this->updateSettings();
           $this->showUpdatedMessage('Settings updated');
 
+        } elseif ( $this->bulkDeleteRequested()) {
+          $this->bulkDeleteFeedItems();
+          $this->showUpdatedMessage('Prospects removed');
+
         } else {
           // Nothing
         }
@@ -277,6 +281,15 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       return $wpdb->query("UPDATE $wpdb->posts SET post_type = 'syndicated_deleted' WHERE ID = (" . $post_id .");");
     }
 
+    /// Sets many posts to have the post_type to be `syndicate_deleted`
+    function bulkDeleteFeedItems() {
+      foreach ($_POST['delete'] as $post_id) {
+        // Check input
+        if (preg_match($this->digitRegex, $post_id)) {
+          $this->deleteFeedItem($post_id);
+        }
+      }
+    }
 
     ////
     //// Feed functions
@@ -524,9 +537,16 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     function printProspectsHead() {
 ?>
   <h2>Syndication Prospects</h2>
-  <table class="widefat">
+  <script type="text/javascript">
+            <?php //$this->printBulkDeleteJavaScript(); ?>
+  </script>
+<form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" name="syndicate<?php echo $post['ID']; ?>">
+  <input type="hidden" name="action" value="bulk-delete" />
+  <input type="submit" value="Delete Checked" name="delete_checked" />
+  <table class="widefat" id="prospects">
     <thead>
       <tr>
+	<th scope="col"></th>
 	<th scope="col">Source</th>
 	<th scope="col">Pubdate</th>
 	<th scope="col">Title</th>
@@ -545,6 +565,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     function printProspectsFoot() {
       echo "    </tbody>";
       echo "  </table>";
+      echo "</form>";
+
     }
 
     /// Print a single feed item
@@ -552,6 +574,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
 ?>        
           <tr class="<?php echo $css_class;?>" id="post-<?php echo $post['ID'] ?>">
+          <td><input type="checkbox" name="delete[]" value="<?php echo $post['ID'];?>" </td>
           <td style="font-weight:bold">
              <a href='<?php echo $post_meta['syndicated_source_link'] ?>' target="_blank">
                <?php echo $post_meta['syndicated_source_title'] ?>
@@ -561,15 +584,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 	  <td><a href='<?php echo $post_meta['syndicated_link'] ?>' target="_blank"><?php echo $post['post_title'] ?></a></td>
 	  <td><?php echo $post_meta['syndicated_author'] ?></td>
 	  <td><a class="edit" rel="permalink" href='<?php echo $post_meta['syndicated_link']?>' target="_blank">View</a></td>
-          <td>
-            <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" name="syndicate<?php echo $post['ID']; ?>">
-              <input type="hidden" name="action" value="syndicate" />
-              <input type="hidden" name="id" value="<?php echo $post['ID']; ?>" />
-              <?PHP // TODO: try to get a non-js action working without the WP redirectes ?>
-              <a class="edit" href="javascript:document.syndicate<?php echo $post['ID']; ?>.submit()">
-                Syndicate
-              </a>
-            </form>
+          <td>TODO Add back in syndication
           </td> 
 	  <td><a class="delete" href="<?php echo $_SERVER["REQUEST_URI"] . '&action=delete&id=' . $post['ID'] ; ?>">Delete</a></td>
         </tr>
@@ -625,6 +640,28 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 <?php  
     }
 
+    function printBulkDeleteJavaScript() {
+?>
+      function bulkDelete() {
+          var prospects = document.getElementById("prospects");
+          var formElements = prospects.getElementsByTagName("input");
+          var results = [];
+
+          for (ele in formElements) {
+              // Will filter out non-checked boxes and also get us the data we want
+              if (formElements[ele].checked) {
+                  results.push(formElements[ele]);
+              }
+          }
+
+          for (checked in results) {
+              alert(results[checked].name);
+          }
+
+      }
+<?php
+    }
+
     /// Displays a message div with `$message`
     function showUpdatedMessage($message) {
       ?>
@@ -671,6 +708,15 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     /// Check the request to see if an item is to be syndicated
     function syndicatedPageRequested() {
       if (isset($_POST['action']) && $_POST['action'] == 'syndicate' && isset($_POST['id']) && preg_match($this->digitRegex,$_POST['id'])) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
+    /// Check the request to see if a bulk delete action is requested
+    function bulkDeleteRequested() {
+      if (isset($_POST['action']) && $_POST['action'] == 'bulk-delete') {
         return true;
       } else {
         return false;
