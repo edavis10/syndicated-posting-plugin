@@ -567,7 +567,9 @@ if (!class_exists("SyndicatedPostingPlugin")) {
   </script>
 <form method="post" action="<?php echo $_SERVER["REQUEST_URI"]; ?>" name="syndicate<?php echo $post['ID']; ?>">
   <input type="hidden" name="action" value="bulk-delete" />
-  <input type="submit" value="Delete Checked" name="delete_checked" />
+   <div class="submit" style="text-align:left">
+    <input type="submit" value="Delete Checked" name="delete_checked" />
+  </div
   <table class="widefat" id="prospects">
     <thead>
       <tr>
@@ -590,6 +592,9 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     function printProspectsFoot() {
       echo "    </tbody>";
       echo "  </table>";
+      echo '  <div class="submit" style="text-align:left">';
+      echo '    <input type="submit" value="Delete Checked" name="delete_checked" />';
+      echo '  </div>';
       echo "</form>";
 
     }
