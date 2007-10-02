@@ -12,6 +12,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     var $numberOfPages;
     var $digitRegex = "#[0-9]+#";
+    var $lastPostId = 0;
     // USE the getter/setter provided
     private $category = '';
 
@@ -84,7 +85,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         } else {
           // Nothing
         }
-
+        $this->setLastSeenItem();
         $this->printAdminPage($currentPage);  
       } // END page check
     }
@@ -475,7 +476,26 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       $this->pollFeeds();
 
     }
-    
+
+    function setLastSeenItem() {
+      $user = wp_get_current_user();
+      $user_data = get_option("syndicated_user_" . $user->ID);
+      if (empty($user_data)) {
+        $user_data = array( "last_post" => 0 );
+      }
+      $this->lastPostId = $user_data['last_post'];
+      // TODO: should do based on sessions and not page loading
+      $user_data['last_post'] = $this->getTopId();
+      update_option("syndicated_user_" . $user->ID, $user_data);
+
+    }
+
+    function getTopId(){
+      global $wpdb;
+      $top_id = $wpdb->get_var("SELECT id FROM wp_posts ORDER BY id DESC LIMIT 1");
+
+      return $top_id;
+    }
 
     ////
     //// HTML functions
@@ -651,7 +671,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           <td style="font-weight:bold">
              <a href='<?php echo $post_meta['syndicated_source_link'] ?>' target="_blank">
                <?php echo $post_meta['syndicated_source_title'] ?>
-             </a>
+        </a><?php if ($this->lastPostId < $post['ID']) { echo "NEW";}?> 
           </td>
           <td><?php echo $post['post_date'] ?></td>
 	  <td><a href='<?php echo $post_meta['syndicated_link'] ?>' target="_blank"><?php echo $post['post_title'] ?></a></td>
