@@ -692,7 +692,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     <h2>Feeds &amp; Search Terms</h2>
     <form method="post" action="<?php echo $this->url; ?>" style="width:50%; float:left;">
       <fieldset>
-        <legend>Enter <strong>feed URLs</strong>, one per line or comma-separated</legend>
+        <label for="spFeedUrls">Enter <strong>feed URLs</strong>, one per line or comma-separated</label>
         <textarea name="spFeedUrls" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$this->options['feed_urls']), 'SyndicatedPostingPlugin') ?></textarea>
 
         <div class="submit" style="text-align:left">
@@ -703,18 +703,25 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     <form method="post" action="<?php echo $this->url; ?>"  style="width:50%; float:left;">
       <fieldset>
-        <input type="hidden" name="current_category" value="<?php echo $this->getCategory(); ?>" />            
-        <select name="category" id="category" onchange="javascript:this.form.submit();">
-          <!-- TODO: use parameter as selected value -->
-          <?php $this->printCategorySelect($this->getCategoryRawId()); ?>
-        </select>
-
-        <legend>Enter <strong>search phrases</strong>, one per line or comma-separated</legend>
+        <label for="spSearchPhrases">Enter <strong>search phrases</strong>, one per line or comma-separated</label>
         <textarea name="spSearchPhrases" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$this->searchPhrasesForCategory()), 'SyndicatedPostingPlugin') ?></textarea>
 
-        <div class="submit" style="text-align:left">
-          <input type="submit" name="update_syndicatedPostingPluginSettings" value="<?php _e('Update Search', 'SyndicatedPostingPlugin') ?>" />
-        </div>
+        <table width="100%">
+          <tr>
+            <td width="30%" align="left">
+              <div class="submit" style="display:inline;text-align:left;">
+                <input type="submit" name="update_syndicatedPostingPluginSettings" value="<?php _e('Update Search', 'SyndicatedPostingPlugin') ?>" />
+              </div>
+            </td>
+            <td width="70%" align="right">
+              <label for="category" style="font-weight:bold">Search category:</label>
+              <select name="category" id="category" onchange="javascript:this.form.submit();">
+                <?php $this->printCategorySelect($this->getCategoryRawId()); ?>
+              </select>
+              <input type="hidden" name="current_category" value="<?php echo $this->getCategory(); ?>" />
+            </td>
+          </tr>
+        </table>
       </fieldset>
     </form>
 
