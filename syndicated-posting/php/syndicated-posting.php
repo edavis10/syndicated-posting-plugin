@@ -829,12 +829,13 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       return ($this->options['per_page'] * $pageNumber) - $this->options['per_page'];
     }
 
-    /// Gets the category id from the passed in data
+    /// Gets the category id from the passed in data or the 'Uncategorized' category if no
+    ///  post data was found
     function getCategoryIdFromRequest() {
       if (isset($_POST['category']) && preg_match($this->digitRegex,$_POST['category'])) {
         return $_POST['category'];
       } else {
-        return false;
+        return get_cat_ID('Uncategorized');
       }
 
     }
