@@ -12,7 +12,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     var $numberOfPages;
     var $digitRegex = "#[0-9]+#";
-    var $category = ''; // ID of the current category
+    // USE the getter/setter provided
+    var $category = '';
 
     // Constructor
     function SyndicatedPostingPlugin() {
@@ -21,6 +22,24 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       add_action('wp_syndicated-posting_purge_old_items_hook', array(&$this, 'purgeOldFeedItems'));
       
     }
+
+    /////
+    //// Getter / Setters
+    ////
+    function getCategory() {
+      return $this->category;
+    }
+
+    function setCategory($cat_id) {
+      $this->category = "c" . $cat_id;
+      return $this->getCategory();
+    }
+
+    // Getter for category but will only return the number for it
+    function getCategoryRawId() {
+      return substr($this->getCategory(),1);
+    }
+
 
     ////
     //// Request Handler
@@ -405,7 +424,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     /// Returns the settings for the search_phrases
     // TODO: Refactor so we can use getSettings as a base
     function getSearches() {
-      $raw_settings = array_unique(preg_split('/[,|\n]/',$this->options['search_phrases']['c' . $this->category]));
+      $raw_settings = array_unique(preg_split('/[,|\n]/',$this->options['search_phrases'][$this->getCategory()]));
 
       $finals = array();
       // Remove empty values
@@ -465,7 +484,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     /// Prints the admin page
     function printAdminPage($currentPage) {
       // Find what category is currently viewed
-      $this->category = $this->getCategoryId();
+      $this->setCategory($this->getCategoryIdFromRequest());
 
       $this->printSettings($category);
       $this->printProspects($currentPage);
@@ -683,10 +702,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     <form method="post" action="<?php echo $this->url; ?>"  style="width:50%; float:left;">
       <fieldset>
-        <input type="hidden" name="current_category" value="<?php echo $this->category; ?>" />            
+        <input type="hidden" name="current_category" value="<?php echo $this->getCategory(); ?>" />            
         <select name="category" id="category" onchange="javascript:this.form.submit();">
           <!-- TODO: use parameter as selected value -->
-          <?php $this->printCategorySelect($this->category); ?>
+          <?php $this->printCategorySelect($this->getCategoryRawId()); ?>
         </select>
 
         <legend>Enter <strong>search phrases</strong>, one per line or comma-separated</legend>
@@ -811,7 +830,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     /// Gets the category id from the passed in data
-    function getCategoryId() {
+    function getCategoryIdFromRequest() {
       if (isset($_POST['category']) && preg_match($this->digitRegex,$_POST['category'])) {
         return $_POST['category'];
       } else {
@@ -821,7 +840,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     function searchPhrasesForCategory() {
-      return $this->options['search_phrases']['c' . $this->category];
+      return $this->options['search_phrases'][$this->getCategory()];
     }
 
   } // End class
