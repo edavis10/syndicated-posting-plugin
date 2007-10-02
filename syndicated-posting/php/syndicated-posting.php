@@ -51,10 +51,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     ///
     function handleRequest() {
       $this->getAdminOptions();
+      $this->setCategory($this->getCategoryIdFromRequest());
 
       // Check if we are going to show the admin page or another page (only syndication page)
       if ($this->syndicatedPageRequested()) {
-        $this->setCategory($this->getCategoryIdFromRequest($_GET));
         // Another page
         $this->syndicateFeedItem($_GET['id']);
 
@@ -484,9 +484,6 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Prints the admin page
     function printAdminPage($currentPage) {
-      // Find what category is currently viewed
-      $this->setCategory($this->getCategoryIdFromRequest($_POST));
-
       $this->printSettings($category);
       $this->printProspects($currentPage);
     } 
@@ -835,13 +832,18 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Gets the category id from the passed in data or the 'Uncategorized' category if no
     ///  data was found.  Parameter is $_GET or $_POST
-    function getCategoryIdFromRequest($request) {
-      if (isset($request['category']) && preg_match($this->digitRegex,$request['category'])) {
-        return $request['category'];
+    function getCategoryIdFromRequest() {
+      if (isset($_GET['category']) && preg_match($this->digitRegex,$_GET['category'])) {
+        // GET called
+        return $_GET['category'];
+
+      } elseif  (isset($_POST['category']) && preg_match($this->digitRegex,$_POST['category'])) {
+        // POST called
+        return $_POST['category'];
+
       } else {
         return get_cat_ID('Uncategorized');
       }
-
     }
 
     function searchPhrasesForCategory() {
