@@ -650,6 +650,9 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Prints the settings form for the search terms and feeds
     function printSettings() {
+      // Find what category is currently viewed
+      $category = $this->getCategoryId();
+
  ?>
 <div class="wrap">
     <h2>Feeds &amp; Search Terms</h2>
@@ -666,6 +669,12 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     <form method="post" action="<?php echo $this->url; ?>"  style="width:50%; float:left;">
       <fieldset>
+        <input type="hidden" name="current_category" value="<?php echo $category; ?>" />            
+        <select name="category" id="category" onchange="javascript:this.form.submit();">
+          <!-- TODO: use parameter as selected value -->
+          <?php $this->printCategorySelect($category); ?>
+        </select>
+
         <legend>Enter <strong>search phrases</strong>, one per line or comma-separated</legend>
         <textarea name="spSearchPhrases" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$this->options['search_phrases']), 'SyndicatedPostingPlugin') ?></textarea>
 
@@ -689,6 +698,18 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         }
       }
 <?php
+    }
+
+    function printCategorySelect($selected_id) {
+      // Get list of category id and names
+      $cat_ids = get_all_category_ids();
+
+      foreach ($cat_ids as $cat) {
+        $name = get_cat_name($cat);
+        if ($selected_id == $cat) { $selected = "selected='selected'";} else { $selected = "";}
+        echo "  <option value='" . $cat . "' " . $selected . " >" . $name . "</option>\n";
+      }
+
     }
 
     /// Displays a message div with `$message`
@@ -773,6 +794,16 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     ///  shown on page two (if 30 items a page).
     function itemLimit($pageNumber) {
       return ($this->options['per_page'] * $pageNumber) - $this->options['per_page'];
+    }
+
+    /// Gets the category id from the passed in data
+    function getCategoryId() {
+      if (isset($_POST['category']) && preg_match($this->digitRegex,$_POST['category'])) {
+        return $_POST['category'];
+      } else {
+        return false;
+      }
+
     }
 
   } // End class
