@@ -13,7 +13,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     var $numberOfPages;
     var $digitRegex = "#[0-9]+#";
     // USE the getter/setter provided
-    var $category = '';
+    private $category = '';
 
     // Constructor
     function SyndicatedPostingPlugin() {
