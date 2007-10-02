@@ -12,6 +12,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     var $numberOfPages;
     var $digitRegex = "#[0-9]+#";
+    var $category = ''; // ID of the current category
 
     // Constructor
     function SyndicatedPostingPlugin() {
@@ -178,7 +179,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       if (empty($this->options)){
         $this->options = array(
                                'feed_urls' => '',
-                               'search_phrases' => '',
+                               'search_phrases' => array (''),
                                'per_page' => 30,
                                'days_to_keep' => 30);
       }
@@ -402,8 +403,19 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     /// Returns the settings for the search_phrases
+    // TODO: Refactor so we can use getSettings as a base
     function getSearches() {
-      return $this->getSettings('search_phrases');
+      $raw_settings = array_unique(preg_split('/[,|\n]/',$this->options['search_phrases']['c' . $this->category]));
+
+      $finals = array();
+      // Remove empty values
+      foreach ($raw_settings as $setting) {
+        if (trim($setting) != "") {
+          $finals[] = trim($setting);
+        }
+      }
+
+      return $finals;
     }
 
     /// Returns the settings for `$option` key
@@ -426,8 +438,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       if (isset($_POST['spFeedUrls'])) {
         $this->options['feed_urls'] = apply_filters('content_save_pre', $_POST['spFeedUrls']);
       }   
-      if (isset($_POST['spSearchPhrases'])) {
-        $this->options['search_phrases'] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
+      if (isset($_POST['spSearchPhrases']) && isset($_POST['category']) && preg_match($this->digitRegex, $_POST['category'])) {
+        $this->options['search_phrases']['c' . $_POST['category']] = apply_filters('content_save_pre', $_POST['spSearchPhrases']);
       }   
       // From options panel
       if (isset($_POST['prospects_per_page']) && preg_match($this->digitRegex, $_POST['prospects_per_page'])) {
@@ -452,7 +464,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Prints the admin page
     function printAdminPage($currentPage) {
-      $this->printSettings();
+      // Find what category is currently viewed
+      $this->category = $this->getCategoryId();
+
+      $this->printSettings($category);
       $this->printProspects($currentPage);
     } 
 
@@ -492,6 +507,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     /// Syndicates a feed item into a post and redirects to the post's edit page
+    // TODO: category
     function syndicateFeedItem($post_id) {
       // Check if it was syndicated alredy to prevent double posts from WP's redirection
       if ($this->hasPostBeenSyndicated($post_id)) {
@@ -526,6 +542,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     /// Gets the prospects and prints each one in a table
+    // TODO: category
     function printProspects($currentPage) {
       echo '<div class="wrap">';
 
@@ -547,7 +564,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         }
       } else {
         // No posts
-        echo '<tr class=""  id="post-54">';
+        echo '<tr class="">';
         echo '  <td colspan="7">No Prospects found.</td>';
         echo '</tr>';
       }
@@ -649,10 +666,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     /// Prints the settings form for the search terms and feeds
-    function printSettings() {
-      // Find what category is currently viewed
-      $category = $this->getCategoryId();
-
+    function printSettings($category) {
  ?>
 <div class="wrap">
     <h2>Feeds &amp; Search Terms</h2>
@@ -669,14 +683,14 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     <form method="post" action="<?php echo $this->url; ?>"  style="width:50%; float:left;">
       <fieldset>
-        <input type="hidden" name="current_category" value="<?php echo $category; ?>" />            
+        <input type="hidden" name="current_category" value="<?php echo $this->category; ?>" />            
         <select name="category" id="category" onchange="javascript:this.form.submit();">
           <!-- TODO: use parameter as selected value -->
-          <?php $this->printCategorySelect($category); ?>
+          <?php $this->printCategorySelect($this->category); ?>
         </select>
 
         <legend>Enter <strong>search phrases</strong>, one per line or comma-separated</legend>
-        <textarea name="spSearchPhrases" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$this->options['search_phrases']), 'SyndicatedPostingPlugin') ?></textarea>
+        <textarea name="spSearchPhrases" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$this->searchPhrasesForCategory()), 'SyndicatedPostingPlugin') ?></textarea>
 
         <div class="submit" style="text-align:left">
           <input type="submit" name="update_syndicatedPostingPluginSettings" value="<?php _e('Update Search', 'SyndicatedPostingPlugin') ?>" />
@@ -804,6 +818,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         return false;
       }
 
+    }
+
+    function searchPhrasesForCategory() {
+      return $this->options['search_phrases']['c' . $this->category];
     }
 
   } // End class
