@@ -530,10 +530,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       if ($this->hasPostBeenSyndicated($post_id)) {
         // Redirect to main plugin page
             ?>
-        <a href="<?php echo $this->url ?>">Redirecting..</a>
+        <a href="<?php echo $this->url . "&category=" . $this->getCategoryRawId();  ?>">Redirecting..</a>
         <script type="text/javascript">
           <!-- 
-               window.location = "<?php echo $this->url ?>"
+               window.location = "<?php echo $this->url . "&category=" . $this->getCategoryRawId();  ?>"
       
             -->
         </script>
