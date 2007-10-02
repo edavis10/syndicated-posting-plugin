@@ -524,7 +524,6 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     /// Syndicates a feed item into a post and redirects to the post's edit page
-    // TODO: category
     function syndicateFeedItem($post_id) {
       // Check if it was syndicated alredy to prevent double posts from WP's redirection
       if ($this->hasPostBeenSyndicated($post_id)) {
@@ -562,7 +561,6 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     /// Gets the prospects and prints each one in a table
-    // TODO: category
     function printProspects($currentPage) {
       echo '<div class="wrap">';
 
