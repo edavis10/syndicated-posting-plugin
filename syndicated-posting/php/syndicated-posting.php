@@ -692,9 +692,12 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           <tr class="<?php echo $css_class;?>" id="post-<?php echo $post['ID'] ?>">
           <td><input type="checkbox" name="delete[]" value="<?php echo $post['ID'];?>" </td>
           <td style="font-weight:bold">
+     <?php if ($this->lastPostId < $post['ID']) { 
+        echo '<img src="' . get_bloginfo('wpurl') . '/wp-content/plugins/syndicated-posting/images/new-post.png" alt="(New Post)" title="(New Post)" />';
+     }?> 
              <a href='<?php echo $post_meta['syndicated_source_link'] ?>' target="_blank">
                <?php echo $post_meta['syndicated_source_title'] ?>
-        </a><?php if ($this->lastPostId < $post['ID']) { echo "NEW";}?> 
+             </a>
           </td>
           <td><?php echo $post['post_date'] ?></td>
 	  <td><a href='<?php echo $post_meta['syndicated_link'] ?>' target="_blank"><?php echo $post['post_title'] ?></a></td>

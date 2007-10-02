@@ -13,3 +13,5 @@ under "Manage" > "Syndication"
 Syndicated Posting was co-developed by Eric Davis of Little Stream 
 Software and Peter Chester of Shane and Peter Inc.
 
+New post icon provided by Tom M:
+   http://strawbee.com/2005/11/06/tiny-little-icons/
