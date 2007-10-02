@@ -54,6 +54,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
       // Check if we are going to show the admin page or another page (only syndication page)
       if ($this->syndicatedPageRequested()) {
+        $this->setCategory($this->getCategoryIdFromRequest($_GET));
         // Another page
         $this->syndicateFeedItem($_GET['id']);
 
@@ -484,7 +485,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     /// Prints the admin page
     function printAdminPage($currentPage) {
       // Find what category is currently viewed
-      $this->setCategory($this->getCategoryIdFromRequest());
+      $this->setCategory($this->getCategoryIdFromRequest($_POST));
 
       $this->printSettings($category);
       $this->printProspects($currentPage);
@@ -543,6 +544,9 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       } else {
         // Copy the feed item to a post with metadata
         $new_post_id = $this->copyFeedItemToPost($post_id);
+        // Set the category
+        wp_set_post_categories($new_post_id, array($this->getCategoryRawId()));
+
         // Mark the feed item as syndicated
         $this->markFeedItemAsSyndicated($post_id);
         // Redirect to the new post
@@ -659,7 +663,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 	  <td><?php echo $post_meta['syndicated_author'] ?></td>
 	  <td><a class="edit" rel="permalink" href='<?php echo $post_meta['syndicated_link']?>' target="_blank">View</a></td>
           <td>
-            <a class="edit" href="<?php echo $this->url;?>&action=syndicate&id=<?php echo $post['ID']; ?>">
+            <a class="edit" href="<?php echo $this->url;?>&action=syndicate&id=<?php echo $post['ID']; ?>&category=<?php echo $this->getCategoryRawId();?>">
               Syndicate
             </a>
           </td> 
@@ -830,10 +834,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     /// Gets the category id from the passed in data or the 'Uncategorized' category if no
-    ///  post data was found
-    function getCategoryIdFromRequest() {
-      if (isset($_POST['category']) && preg_match($this->digitRegex,$_POST['category'])) {
-        return $_POST['category'];
+    ///  data was found.  Parameter is $_GET or $_POST
+    function getCategoryIdFromRequest($request) {
+      if (isset($request['category']) && preg_match($this->digitRegex,$request['category'])) {
+        return $request['category'];
       } else {
         return get_cat_ID('Uncategorized');
       }
