@@ -1,5 +1,12 @@
 <?php
 ////
+//// Constants
+////
+if ( !defined('SYNDICATED_COOKIE')) {
+  define('SYNDICATED_COOKIE','wordpress_syndicated_posting_' . COOKIEHASH);
+ }
+
+////
 //// Class to hold the logic of this plugin
 ////
 if (!class_exists("SyndicatedPostingPlugin")) {
@@ -85,7 +92,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         } else {
           // Nothing
         }
-        $this->setLastSeenItem();
+        $this->getLastSeenFromCookie();
         $this->printAdminPage($currentPage);  
       } // END page check
     }
@@ -186,6 +193,25 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       }
 
       return $c;
+    }
+
+    /// Add a cookie to track the last post a user has seens
+    function addCookie() {
+      global $user;
+      $user_data = get_option("syndicated_user_" . $user->ID);
+      if (empty($user_data)) {
+        $user_data = array( "last_post" => 0 );
+      }
+      $this->lastPostId = $user_data['last_post'];
+      // TODO: should do based on sessions and not page loading
+      setcookie(SYNDICATED_COOKIE, $this->lastPostId);
+      $user_data['last_post'] = $this->getTopId();
+      update_option("syndicated_user_" . $user->ID, $user_data);
+    }
+
+    /// Remove the cookie
+    function removeCookie() {
+      setcookie(SYNDICATED_COOKIE, '', time() - 10*365*24*60*60);
     }
 
     ////
@@ -477,17 +503,14 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     }
 
-    function setLastSeenItem() {
-      $user = wp_get_current_user();
-      $user_data = get_option("syndicated_user_" . $user->ID);
-      if (empty($user_data)) {
-        $user_data = array( "last_post" => 0 );
-      }
-      $this->lastPostId = $user_data['last_post'];
-      // TODO: should do based on sessions and not page loading
-      $user_data['last_post'] = $this->getTopId();
-      update_option("syndicated_user_" . $user->ID, $user_data);
+    function getLastSeenFromCookie() {
+      foreach($_COOKIE as $name => $value) {
+        // Look for the cookie
+        if ($name == (SYNDICATED_COOKIE)){
+          $this->lastPostId = $value;
+        }
 
+      }
     }
 
     function getTopId(){
@@ -924,6 +947,8 @@ if (isset($sp_plugin)) {
   add_action('admin_menu', 'SyndicatedPostingPlugin_admin');
   add_action('admin_head',  array(&$sp_plugin,'addHtmlHead'));
   add_action('save_post',  array(&$sp_plugin,'saveMetaFromEdit'));
+  add_action('wp_login',  array(&$sp_plugin,'addCookie'));
+  add_action('wp_logout',  array(&$sp_plugin,'removeCookie'));
   // Filters
   add_filter('the_content', array(&$sp_plugin,'addOriginalSource'));
   add_filter('the_editor', array(&$sp_plugin,'addAdminSourceInformation'));
