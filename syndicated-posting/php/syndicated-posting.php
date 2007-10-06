@@ -539,7 +539,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Prints the admin page
     function printAdminPage($currentPage) {
-      $this->printSettings($category);
+      $this->printSettings();
       $this->printProspects($currentPage);
     } 
 
@@ -744,7 +744,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     }
 
     /// Prints the settings form for the search terms and feeds
-    function printSettings($category) {
+    function printSettings() {
  ?>
 <div class="wrap">
     <h2>Feeds &amp; Search Terms</h2>
