@@ -50,4 +50,11 @@ task :upload => [:zip] do
   puts "File is at http://www.littlestreamsoftware.com/images/assets/syndicated-posting.zip"
 end
 
+desc "Purge the wp_posts table for testing"
+task :purge_db do 
+  db = ENV['DB'] || 'wordpress'
+  user = ENV['DBUSER'] || 'root'
+  system("echo 'TRUNCATE TABLE wp_posts;' | mysql -u #{user} -p #{db}")
+end
+
 task :default => [:copy]
