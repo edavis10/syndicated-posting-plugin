@@ -150,10 +150,6 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
         $c .= $content;
 
-        // Only display if both of these actully have content
-        if (!empty($meta['syndicated_link']) && !empty($meta['syndicated_source_link'])) {
-          $c .= '<p><a href="' . $meta['syndicated_link'] . '" target="_blank">' .$meta['syndicated_source_title'] . '</a></p>';
-        }
       } else {
         $c = $content;
       }
