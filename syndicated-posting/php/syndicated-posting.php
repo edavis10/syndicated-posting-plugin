@@ -737,7 +737,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
               if ($pagination == $content_page) {
                 echo "<strong>" . $content_page . "</strong> ";
               } else {
-                echo "<a href='" . $this->url ."&action=show&syndication-page=".$content_page."'>" .$content_page . "</a> ";
+                echo "<a href='" . $this->url ."&action=show&syndication-page=".$content_page."&category=" . $this->getCategoryRawId() . "'>" .$content_page . "</a> ";
               }
             }
           echo "</p>";
