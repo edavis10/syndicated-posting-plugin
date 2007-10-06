@@ -156,6 +156,22 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       return $c;
     }
 
+    /// Filter for post_link to use the origional source link for syndicated posts
+    function changeTitleLink($link) {
+      global $id;
+        
+      if (!empty($id) && $meta = $this->isSyndicatedPost($id)) {
+        $source_link = $link;
+
+        if (!empty($meta['syndicated_link'])) {
+          $source_link = $meta['syndicated_link'];          
+        }
+        return $source_link;
+      } else {
+        return $link;
+        }
+    }
+
     /// Filter for the admin panel for posted content to add the input boxes to change
     ///  the custom data
     function addAdminSourceInformation($content='') {
@@ -952,6 +968,7 @@ if (isset($sp_plugin)) {
   add_action('wp_logout',  array(&$sp_plugin,'removeCookie'));
   // Filters
   add_filter('the_content', array(&$sp_plugin,'addOriginalSource'));
+  add_filter('post_link', array(&$sp_plugin,'changeTitleLink'));
   add_filter('the_editor', array(&$sp_plugin,'addAdminSourceInformation'));
  }
 ?>
