@@ -19,7 +19,7 @@ task :remove do
 end
 
 desc "Zip of the folder for release"
-task :zip => [:clean] do
+task :zip => [:clean, :doc] do
   require 'zip/zip'
   require 'zip/zipfilesystem'
   
