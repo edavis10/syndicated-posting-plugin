@@ -57,4 +57,10 @@ task :purge_db do
   system("echo 'TRUNCATE TABLE wp_posts;' | mysql -u #{user} -p #{db}")
 end
 
+desc "Create the HTML docs from the txt"
+task :doc do 
+  system("markdown #{SRC_FOLDER}/syndicated-posting/README.txt > #{SRC_FOLDER}/syndicated-posting/README.html")
+end
+
+
 task :default => [:copy]
