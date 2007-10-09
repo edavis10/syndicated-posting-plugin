@@ -215,8 +215,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         $user_data = array( "last_post" => 0 );
       }
       $this->lastPostId = $user_data['last_post'];
-      // TODO: should do based on sessions and not page loading
-      setcookie(SYNDICATED_COOKIE, $this->lastPostId);
+
+      setcookie(SYNDICATED_COOKIE, $this->lastPostId, time() + 31536000);
       $user_data['last_post'] = $this->getTopId();
       update_option("syndicated_user_" . $user->ID, $user_data);
     }
