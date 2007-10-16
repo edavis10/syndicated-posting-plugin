@@ -21,7 +21,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     var $digitRegex = "#[0-9]+#";
     var $lastPostId = 0;
     // USE the getter/setter provided
-    private $category = '';
+    var $category = '';
 
     // Constructor
     function SyndicatedPostingPlugin() {
