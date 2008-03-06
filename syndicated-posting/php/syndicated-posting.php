@@ -539,8 +539,8 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
     /// Prints the admin page
     function printAdminPage($currentPage) {
-      $this->printSettings();
       $this->printProspects($currentPage);
+      $this->printSettings();
     } 
 
     /// Prints the option page
@@ -747,8 +747,13 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     function printSettings() {
  ?>
 <div class="wrap">
-    <h2>Feeds &amp; Search Terms</h2>
-    <form method="post" action="<?php echo $this->url; ?>" style="width:50%; float:left;">
+  <h2>Settings</h2>
+  <a onclick="$('feed-settings').toggle()" style="cursor:pointer">Show Feeds</a>
+  <a onclick="$('search-settings').toggle()" style="cursor:pointer">Show Search</a>
+</div>
+<div id="feed-settings" class="wrap" style="display:none;">
+    <h2>Feeds</h2>
+    <form method="post" action="<?php echo $this->url; ?>" style="width:100%;">
       <fieldset>
         <label for="spFeedUrls">Enter <strong>feed URLs</strong>, one per line or comma-separated</label>
         <textarea name="spFeedUrls" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$this->options['feed_urls']), 'SyndicatedPostingPlugin') ?></textarea>
@@ -758,8 +763,10 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         </div>
       </fieldset>
     </form>
-
-    <form method="post" action="<?php echo $this->url; ?>"  style="width:50%; float:left;">
+  </div>
+<div id="search-settings" class="wrap" style="display:none;">
+  <h2>Search Terms</h2>
+    <form method="post" action="<?php echo $this->url; ?>"  style="width:100%;">
       <fieldset>
         <label for="spSearchPhrases">Enter <strong>search phrases</strong>, one per line or comma-separated</label>
         <textarea name="spSearchPhrases" style="width: 100%; height: 100px;"><?php _e(apply_filters('format_to_edit',$this->searchPhrasesForCategory()), 'SyndicatedPostingPlugin') ?></textarea>
@@ -782,9 +789,6 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         </table>
       </fieldset>
     </form>
-
-<br style="clear: both;"/>
-
 </div>
 <?php  
     }
@@ -944,6 +948,8 @@ if (!function_exists("SyndicatedPostingPlugin_admin")) {
       // Level 7 so Admins and Editors can use this
       add_options_page('Syndication Posting', 'Syndication', 7, basename(__FILE__), array(&$sp_plugin, 'handleOptionRequest'));
     }
+
+    wp_enqueue_script('prototype');
 
   }
  }
