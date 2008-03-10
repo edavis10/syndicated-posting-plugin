@@ -646,19 +646,14 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       // Set the category
       wp_set_post_categories($post_id, array($this->getCategoryRawId()));
 
-        // Redirect to the new post
-        $redirect = get_option('siteurl') . '/wp-admin/post.php?action=edit&post=' . $post_id;
-        ?>
-          <a href="<?php echo $redirect ?>">Redirecting to your post</a>
-             <script type="text/javascript">
-             <!-- 
+      // Redirect to the new post
+      $redirect = get_option('siteurl') . '/wp-admin/post.php?action=edit&post=' . $post_id;
+      ?>
+        <a href="<?php echo $redirect ?>">Redirecting to your post</a>
+           <script type="text/javascript">
              window.location = "<?php echo $redirect ?>"
-      
-             -->
-             </script>
-             <?php
-
-               //      }
+           </script>
+           <?php
     }
 
     /// Gets the prospects and prints each one in a table
@@ -826,7 +821,7 @@ function validate(form) {
           <input type='hidden' value='<?php echo $this->getCategoryRawId();?>' name='category' />
 
         <div class="submit" style="text-align:left">
-          <input type="submit" name="update_syndicatedPostingPluginSettings" value="<?php _e('Syndicate this post', 'SyndicatedPostingPlugin') ?>" />
+          <input type="submit" name="AddNewItem" value="<?php _e('Syndicate this post', 'SyndicatedPostingPlugin') ?>" />
         </div>
       </fieldset>
     </form>
@@ -974,7 +969,7 @@ function validate(form) {
 
     /// Check the request to see if a new item is being added by hand
     function syndicatedNewItemRequested() {
-      if (isset($_POST['action']) && $_POST['action'] == 'syndicateAdd') {
+      if (isset($_POST['action']) && $_POST['action'] == 'syndicateAdd' && strlen($_POST['syndicated_source_title']) > 0) {
         return true;
       } else {
         return false;
