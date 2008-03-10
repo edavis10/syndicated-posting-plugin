@@ -1029,6 +1029,62 @@ function validate(form) {
       return $this->options['search_phrases'][$this->getCategory()];
     }
 
+    /// Template tag functions
+    function getSyndicatedPosts() {
+          global $wpdb;
+
+          $query = " 
+          SELECT wposts.* 
+          FROM $wpdb->posts wposts, $wpdb->postmeta wpostmeta
+          WHERE wposts.ID = wpostmeta.post_id 
+            AND wpostmeta.meta_key = 'syndicated' 
+            AND wpostmeta.meta_value = 'true' 
+            AND wposts.post_status = 'publish' 
+            AND wposts.post_type = 'post' 
+            AND wposts.post_date <= NOW() 
+          ORDER BY wposts.post_date DESC
+          LIMIT 10;
+          ";
+
+          return $wpdb->get_results($query, OBJECT);
+    }
+
+    function getNonSyndicatedPosts($badCats=NULL) {
+          global $wpdb;
+
+          if (!empty($badCats)) {
+            $filterOut = "
+              AND p.id NOT IN
+                (SELECT post_id 
+                 FROM `wp_post2cat`
+                 WHERE category_id IN (".join(',',$badCats)."))";
+          } else {
+            $filterOut = '';
+          }
+
+          $query = " 
+          SELECT DISTINCT p.* FROM `wp_posts` as p 
+            LEFT JOIN `wp_postmeta` as m 
+                ON p.ID = m.post_id
+          WHERE p.post_status = 'publish' 
+            AND p.post_type = 'post' 
+            AND p.post_date <= NOW() 
+            AND p.id NOT IN
+              (SELECT m.post_id
+              FROM `wp_posts` as p 
+              LEFT JOIN `wp_postmeta` as m 
+                ON p.ID = m.post_id
+              WHERE 
+                p.post_status = 'publish' 
+                AND p.post_type = 'post' 
+                AND p.post_date <= NOW() 
+                AND m.meta_key = 'syndicated' 
+                AND m.meta_value = 'true')" . $filterOut ."
+          ORDER BY p.post_date DESC 
+          LIMIT 5;";
+          return $wpdb->get_results($query, OBJECT);
+    }
+
   } // End class
  }
 
@@ -1087,4 +1143,19 @@ if (isset($sp_plugin)) {
   add_filter('post_link', array(&$sp_plugin,'changeTitleLink'));
   add_filter('the_editor', array(&$sp_plugin,'addAdminSourceInformation'));
  }
+
+/// Template tags
+function the_syndicated_posts() {
+  if (!isset($sp_plugin) && class_exists("SyndicatedPostingPlugin")) {
+    $sp_plugin = new SyndicatedPostingPlugin();
+  }
+  return $sp_plugin->getSyndicatedPosts();
+}
+
+function the_nonsyndicated_posts() {
+  if (!isset($sp_plugin) && class_exists("SyndicatedPostingPlugin")) {
+    $sp_plugin = new SyndicatedPostingPlugin();
+  }
+  return $sp_plugin->getNonSyndicatedPosts();
+}
 ?>

@@ -86,3 +86,7 @@ Syndicated Posting was co-developed by [Eric Davis of Little Stream
 Software](http://www.littlestreamsoftware.com) and [Peter Chester of Shane and Peter Inc.](http://www.shaneandpeter.com)
 
 New post icon provided by [Tom M](http://strawbee.com/2005/11/06/tiny-little-icons/)
+
+
+TODO: foreach (the_syndicated_posts() as $post); setup_postdata($post);
+TODO: foreach (the_nonsyndicated_posts() as $post); setup_postdata($post);
