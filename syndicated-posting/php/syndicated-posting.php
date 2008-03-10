@@ -832,19 +832,7 @@ function validate(form) {
     /// Prints the settings form for the search terms and feeds
     function printSettings() {
  ?>
-<div class="wrap">
-  <h2>Settings</h2>
-  <a onclick="$('feed-settings').toggle()" style="cursor:pointer">Show Feeds</a>
-  <a onclick="$('search-settings').toggle()" style="cursor:pointer">Show Search</a>
-</div>
-<?php
-      if (strlen($this->options['feed_urls']) > 0) {
-        $feedStyle = "display:none;"; // Hide if not empty
-      } else {
-        $feedStyle = '';
-      }
-?>
-<div id="feed-settings" class="wrap" style="<?php echo $feedStyle;?>">
+<div id="feed-settings" class="wrap">
     <h2>Feeds</h2>
     <form method="post" action="<?php echo $this->url; ?>" style="width:100%;">
       <fieldset>
@@ -857,14 +845,7 @@ function validate(form) {
       </fieldset>
     </form>
   </div>
-<?php
-      if (strlen($this->searchPhrasesForCategory()) > 0) {
-        $searchStyle = "display:none;"; // Hide if not empty
-      } else {
-        $searchStyle = '';
-      }
-?>
-<div id="search-settings" class="wrap" style="<?php echo $searchStyle ?>">
+<div id="search-settings" class="wrap">
   <h2>Search Terms</h2>
     <form method="post" action="<?php echo $this->url; ?>"  style="width:100%;">
       <fieldset>
