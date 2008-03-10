@@ -798,7 +798,7 @@ function validate(form) {
 }
 </script>
 <div id="add-feed-item" class="wrap">
-    <h2>Syndicate Single Prospect</h2>
+    <h2>Manually Add an Article</h2>
     <form method="post" action="<?php echo $this->url;?>" style="width:100%;" onsubmit="return validate(this)">
       <fieldset>
           <p>
