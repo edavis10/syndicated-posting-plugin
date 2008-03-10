@@ -751,7 +751,14 @@ if (!class_exists("SyndicatedPostingPlugin")) {
   <a onclick="$('feed-settings').toggle()" style="cursor:pointer">Show Feeds</a>
   <a onclick="$('search-settings').toggle()" style="cursor:pointer">Show Search</a>
 </div>
-<div id="feed-settings" class="wrap" style="display:none;">
+<?php
+      if (strlen($this->options['feed_urls']) > 0) {
+        $feedStyle = "display:none;"; // Hide if not empty
+      } else {
+        $feedStyle = '';
+      }
+?>
+<div id="feed-settings" class="wrap" style="<?php echo $feedStyle;?>">
     <h2>Feeds</h2>
     <form method="post" action="<?php echo $this->url; ?>" style="width:100%;">
       <fieldset>
@@ -764,7 +771,14 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       </fieldset>
     </form>
   </div>
-<div id="search-settings" class="wrap" style="display:none;">
+<?php
+      if (strlen($this->searchPhrasesForCategory()) > 0) {
+        $searchStyle = "display:none;"; // Hide if not empty
+      } else {
+        $searchStyle = '';
+      }
+?>
+<div id="search-settings" class="wrap" style="<?php echo $searchStyle ?>">
   <h2>Search Terms</h2>
     <form method="post" action="<?php echo $this->url; ?>"  style="width:100%;">
       <fieldset>
