@@ -66,6 +66,9 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         // Another page
         $this->syndicateFeedItem($_GET['id']);
 
+      } elseif ($this->syndicatedNewItemRequested()){
+        // Check if a new syndication was added
+        $this->syndicateNewItem($_POST);
       } else {
         // Admin page will be shown
 
@@ -540,6 +543,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     /// Prints the admin page
     function printAdminPage($currentPage) {
       $this->printProspects($currentPage);
+      $this->printAdd();
       $this->printSettings();
     } 
 
@@ -615,6 +619,48 @@ if (!class_exists("SyndicatedPostingPlugin")) {
       }
     }
 
+    function syndicateNewItem($data) {
+      $post = new SyndicatedPost();
+
+      if (isset($data['syndicated_source_title'])) {
+        $post->post_title = $data['syndicated_source_title'];
+        $post->meta_source_title = $data['syndicated_source_title'];
+      }
+      if (isset($data['syndicated_link'])) {
+        $post->meta_link = $data['syndicated_link'];
+      }
+      if (isset($data['syndicated_author'])) {
+        $post->meta_author = $data['syndicated_author'];
+      }
+      if (isset($data['syndicated_source_link'])) {
+        $post->meta_source_link = $data['syndicated_source_link'];
+      }
+
+      $post_id = wp_insert_post($post);
+      add_post_meta($post_id,'syndicated','true',true);
+      add_post_meta($post_id,'syndicated_author',$post->meta_author,true);
+      add_post_meta($post_id,'syndicated_link',$post->meta_link,true);
+      add_post_meta($post_id,'syndicated_source_title',$post->meta_source_title,true);
+      add_post_meta($post_id,'syndicated_source_link',$post->meta_source_link,true);
+
+      // Set the category
+      wp_set_post_categories($post_id, array($this->getCategoryRawId()));
+
+        // Redirect to the new post
+        $redirect = get_option('siteurl') . '/wp-admin/post.php?action=edit&post=' . $post_id;
+        ?>
+          <a href="<?php echo $redirect ?>">Redirecting to your post</a>
+             <script type="text/javascript">
+             <!-- 
+             window.location = "<?php echo $redirect ?>"
+      
+             -->
+             </script>
+             <?php
+
+               //      }
+    }
+
     /// Gets the prospects and prints each one in a table
     function printProspects($currentPage) {
       echo '<div class="wrap">';
@@ -666,7 +712,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
   <input type="hidden" name="action" value="bulk-delete" />
    <div class="submit" style="text-align:left">
     <input type="submit" value="Delete Checked" name="delete_checked" />
-  </div
+  </div>
   <table class="widefat" id="prospects">
     <thead>
       <tr>
@@ -702,7 +748,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
 
 ?>        
         <tr class="<?php echo $css_class;?>" id="post-<?php echo $post['ID'] ?>" <?php if ($this->lastPostId < $post['ID']) { echo "style='background-color:#99ff99;'";}?>>
-          <td><input type="checkbox" name="delete[]" value="<?php echo $post['ID'];?>" </td>
+          <td><input type="checkbox" name="delete[]" value="<?php echo $post['ID'];?>" /></td>
           <td style="font-weight:bold">
              <a href='<?php echo $post_meta['syndicated_source_link'] ?>' target="_blank">
                <?php echo $post_meta['syndicated_source_title'] ?>
@@ -741,6 +787,51 @@ if (!class_exists("SyndicatedPostingPlugin")) {
               }
             }
           echo "</p>";
+    }
+
+    /// Prints the form to manually add a feed item
+    function printAdd() {
+?>
+<script type="text/javascript">
+function validate(form) {
+    if(form.syndicated_source_title.value.replace(/\s/g,'') == '') {
+        window.alert("You need to enter a title in order to syndicate this post.");
+        form.syndicated_source_title.focus();
+        return false;
+    }
+    return true;
+}
+</script>
+<div id="add-feed-item" class="wrap">
+    <h2>Add Item</h2>
+    <form method="post" action="<?php echo $this->url;?>" style="width:100%;" onsubmit="return validate(this)">
+      <fieldset>
+          <p>
+            <label for='syndicated_source_title'><strong>Source Publication Title</strong> (Required) </label><br />
+            <input id='syndicated_source_title' type='text' value='' name='syndicated_source_title' class='syndication-input' />
+          </p>
+          <p>
+            <label for='syndicated_source_link'>Source Publication URL</label><br />
+            <input id='syndicated_source_link' type='text' value='' name='syndicated_source_link' class='syndication-input' />
+          </p>
+          <p>
+            <label for='syndicated_author'>Author</label><br />
+            <input id='syndicated_author' type='text' value='' name='syndicated_author' class='syndication-input' />
+          </p>
+          <p>
+            <label for='syndicated_link'>Article URL</label><br />
+            <input id='syndicated_link' type='text' value='' name='syndicated_link' class='syndication-input' />
+          </p>
+          <input type='hidden' value='syndicateAdd' name='action' />
+          <input type='hidden' value='<?php echo $this->getCategoryRawId();?>' name='category' />
+
+        <div class="submit" style="text-align:left">
+          <input type="submit" name="update_syndicatedPostingPluginSettings" value="<?php _e('Syndicate this post', 'SyndicatedPostingPlugin') ?>" />
+        </div>
+      </fieldset>
+    </form>
+  </div>
+<?php
     }
 
     /// Prints the settings form for the search terms and feeds
@@ -880,6 +971,16 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         return false;
       }
     }
+
+    /// Check the request to see if a new item is being added by hand
+    function syndicatedNewItemRequested() {
+      if (isset($_POST['action']) && $_POST['action'] == 'syndicateAdd') {
+        return true;
+      } else {
+        return false;
+      }
+    }
+
 
     /// Check the request to see if a bulk delete action is requested
     function bulkDeleteRequested() {
