@@ -79,6 +79,26 @@ The second workflow is that of the administrator who is wanting to syndicate a p
   * the peramalink is linked to the source peramalink for the post.
   * the content of the post is prefixed with a short message showing where the post was originally published at.
 
+## Template Tags ##
+
+There are two template tags included with this plugin.
+
+### List of Non-syndicated posts
+
+`the_nonsyndicated_posts()` This template tag will return a list of the non-syndicated posts.  It takes one optional parameter for an array of category id's to exclude from the results.
+
+Example to replace `the_loop`:
+
+     foreach (the_nonsyndicated_posts() as $post); setup_postdata($post);
+
+### List of Syndicated posts
+
+`the_syndicated_posts()` This template tag will return a list of the syndicated posts.
+
+Example to replace `the_loop`:
+
+     foreach (the_syndicated_posts() as $post); setup_postdata($post);
+
 
 ## Credits ##
 
@@ -86,7 +106,3 @@ Syndicated Posting was co-developed by [Eric Davis of Little Stream
 Software](http://www.littlestreamsoftware.com) and [Peter Chester of Shane and Peter Inc.](http://www.shaneandpeter.com)
 
 New post icon provided by [Tom M](http://strawbee.com/2005/11/06/tiny-little-icons/)
-
-
-TODO: foreach (the_syndicated_posts() as $post); setup_postdata($post);
-TODO: foreach (the_nonsyndicated_posts() as $post); setup_postdata($post);
