@@ -851,26 +851,19 @@ function validate(form) {
       <fieldset>
         <table width="100%">
           <tr>
-            <td width="30%" align="left">
-              <label for="category" style="font-weight:bold">Search category:</label>
-            </td>
-            <td width="70%" align="left">
-              <label for="spSearchPhrases">Enter your <strong>search phrases</strong>, comma-separated</label>
+            <td width="100%" align="left" colspan="2">
+              <label for="spSearchPhrases">Select a Category and then enter your search phrases for that category. (comma-separated)</label>
             </td>
           </tr>
           <tr>
-            <td width="30%" align="left">
+            <td width="100%" align="left">
               <p>
-              <select name="category" id="category" onchange="javascript:this.form.submit();">
+                <select name="category" id="category" onchange="javascript:this.form.submit();">
                 <?php $this->printCategorySelect($this->getCategoryRawId()); ?>
-              </select>
-              <input type="hidden" name="current_category" value="<?php echo $this->getCategory(); ?>" />
-            </p>
-            </td>
-            <td width="70%" align="left">
-              <p>
-              <input id="spSearchPhrases" name="spSearchPhrases" style="width: 100%;" value="<?php _e(apply_filters('format_to_edit',$this->searchPhrasesForCategory()), 'SyndicatedPostingPlugin') ?>" />
-            </p>
+                </select>
+                <input id="spSearchPhrases" name="spSearchPhrases" style="width: 80%" value="<?php _e(apply_filters('format_to_edit',$this->searchPhrasesForCategory()), 'SyndicatedPostingPlugin') ?>" />
+                <input type="hidden" name="current_category" value="<?php echo $this->getCategory(); ?>" />
+              </p>
             </td>
           </tr>
         </table>
