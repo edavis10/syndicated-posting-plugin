@@ -1133,10 +1133,10 @@ function the_syndicated_posts() {
   return $sp_plugin->getSyndicatedPosts();
 }
 
-function the_nonsyndicated_posts() {
+function the_nonsyndicated_posts($excludedCategoryIds=NULL) {
   if (!isset($sp_plugin) && class_exists("SyndicatedPostingPlugin")) {
     $sp_plugin = new SyndicatedPostingPlugin();
   }
-  return $sp_plugin->getNonSyndicatedPosts();
+  return $sp_plugin->getNonSyndicatedPosts($excludedCategoryIds);
 }
 ?>
