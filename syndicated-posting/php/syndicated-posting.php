@@ -659,13 +659,14 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     /// Gets the prospects and prints each one in a table
     function printProspects($currentPage) {
       echo '<div class="wrap">';
-
-      $this->printProspectsHead();
+      echo '<h2>Syndication Prospects</h2>';
 
       $feed_posts = $this->getFeedItems($this->itemLimit($currentPage));
 
       if (!empty($feed_posts) && is_array($feed_posts)) {
         // Found posts
+        $this->printProspectsHead();
+
         $css_class = '';
         foreach ($feed_posts as $post) {
 
@@ -676,15 +677,13 @@ if (!class_exists("SyndicatedPostingPlugin")) {
           
           $this->printFeedItem($post, $post_meta, $css_class);
         }
+
+        // Close the prospects table
+        $this->printProspectsFoot();
       } else {
         // No posts
-        echo '<tr class="">';
-        echo '  <td colspan="7">No Prospects found.</td>';
-        echo '</tr>';
-      }
-      
-      // Close the prospects table
-      $this->printProspectsFoot();
+        echo '<div id="none">No Prospects found.</div>';
+      }      
 
       $this->setNumberOfContentPages();
 
@@ -699,7 +698,6 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     /// Print the opening of the Prospects table
     function printProspectsHead() {
 ?>
-  <h2>Syndication Prospects</h2>
   <script type="text/javascript">
         <?php $this->printBulkDeleteJavaScript(); ?>
   </script>
