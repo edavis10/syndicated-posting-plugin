@@ -4,7 +4,7 @@ require "fileutils"
 require 'rake/clean'
 CLEAN.include('**/semantic.cache','./syndicated-posting.zip')
 
-PLUGIN_FOLDER = '/home/edavis/dev/Business/Customers/Shane-and-Peter/earthzine/wp-content/plugins'
+PLUGIN_FOLDER = '/var/www/blog1/wp-content/plugins'
 SRC_FOLDER = '/home/edavis/dev/Business/Customers/Shane-and-Peter/syndication-plugin/trunk'
 ZIP_FILE = SRC_FOLDER + "/syndicated-posting.zip"
 
@@ -46,8 +46,9 @@ end
 
 desc "Upload zip file to server"
 task :upload => [:zip] do
-  system("scp -oPort=44444 #{ZIP_FILE} littlestreamsoftware.com:/home/websites/littlestreamsoftware/shared/uploaded-images/")
-  puts "File is at http://www.littlestreamsoftware.com/images/assets/syndicated-posting.zip"
+  dest = 'downloads.littlestreamsoftware.com/syndicated-posting/'
+  system("scp -oPort=44444 #{ZIP_FILE} littlestreamsoftware.com:/home/websites/#{dest}")
+  puts "File is at http://#{dest}syndicated-posting.zip"
 end
 
 desc "Purge the wp_posts table for testing"
