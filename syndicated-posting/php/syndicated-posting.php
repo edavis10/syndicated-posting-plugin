@@ -636,6 +636,9 @@ if (!class_exists("SyndicatedPostingPlugin")) {
         $post->meta_source_link = $data['syndicated_source_link'];
       }
 
+      // Set the post to be a WordPress post and not a syndication post
+      $post->post_type = 'post';
+
       $post_id = wp_insert_post($post);
       add_post_meta($post_id,'syndicated','true',true);
       add_post_meta($post_id,'syndicated_author',$post->meta_author,true);
