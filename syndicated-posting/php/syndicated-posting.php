@@ -381,7 +381,7 @@ if (!class_exists("SyndicatedPostingPlugin")) {
     ///  add them to application
     function pollFeeds() {
 
-      require(ABSPATH . WPINC . '/rss.php');
+      require_once(ABSPATH . WPINC . '/rss.php');
 
       $this->getAdminOptions();
 
