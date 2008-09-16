@@ -1,0 +1,11 @@
+Thanks go to the following people for patches and contributions:
+
+Eric Davis of Little Stream Software
+- Project Maintainer
+
+Peter Chester of Shane and Peter, Inc
+- Project Maintainer
+- Project sponsership
+
+Shane Pearlman of Shane and Peter, Inc
+- Project sponsership
